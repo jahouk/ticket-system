@@ -1,0 +1,46 @@
+
+# user roles, must do first
+INSERT INTO `USER_ROLE` ( `description`, `name`, `sort_order`) VALUES ('Admin User', 'admin', '99'), ('Customer / End-User', 'user', '1'), ('Support Tech User', 'tech', '10');
+
+# ticket statuses, needed before tickets
+INSERT INTO `STATUS` (`status`, `sort_order`) VALUES('Open by Customer', '1'),('Assigned to Tech', '2');
+INSERT INTO `STATUS` (`status`, `sort_order`) VALUES('Waiting on Customer', '3'),('Escalated to Vender', '99');
+INSERT INTO `STATUS` (`status`, `sort_order`) VALUES('Closed Pending Customer', '5'),('Closed by Customer', '6');
+
+
+
+# Add companies
+INSERT INTO `name` ( `name`, `website`, `address_id`, `site_id`)VALUES ('Tech Company', 'www.techcompany.com', NULL, NULL),('Customer Company', 'www.customercompany.com', NULL, NULL);
+
+# Add addressed
+INSERT INTO `address` (`dtype`, `address1`, `address2`, `city`, `state`, `zip`, `company_company_id`)VALUES('', '111 Main', NULL, 'Anytown', 'IL', '62220', '1'),('', '112 Main', NULL, 'Anytown', 'IL', '62220', '2');
+
+# Add users
+INSERT INTO `user` ( `active`, `password`, `username`, `company_company_id`, `role_role_id`, `user_info_user_info_id`)VALUES(NULL, '$2a$10$5/sqOlCC2rvoTHDT2wzhF.IxfBK4SiPp8/ChNihJXVUQS0Lb1FTJO', 'admin', '1', '1', NULL),(NULL, '$2a$10$5/sqOlCC2rvoTHDT2wzhF.IxfBK4SiPp8/ChNihJXVUQS0Lb1FTJO', 'tech', '1', '3', NULL),(NULL, '$2a$10$5/sqOlCC2rvoTHDT2wzhF.IxfBK4SiPp8/ChNihJXVUQS0Lb1FTJO', 'customer', '2', '2', NULL);
+
+# Add Sites
+INSERT INTO `site` (`fax`, `phone`, `address_id`, `company_id`, `user_id`) VALUES('618-555-1213', '618-555-1212', '1', '1', '3'),('618-555-1213', '618-555-1212', '2', '2', '2');
+
+
+# Add Offices
+INSERT INTO `office` ( `office`, `site_id`) VALUES('Tech Office', '1'),('Receptionist Office', '2');
+
+
+# Add user_info
+INSERT INTO `user_info` (`can_text`, `cell_phone`, `company_user_name`, `email`, `fname`, `lname`, `phone`, `title`, `office_id`, `user_id`)VALUES(NULL, NULL, 'tech', 'tech@techcompany.com', 'John', 'Tech', '618-555-1214', 'Tech', '1', '3'),(NULL, NULL, 'customer', '', 'Jim', 'Customer', '618-555-1215', 'Owner', '2', '2');
+
+
+# Update Tech  Company
+UPDATE `name` SET `address_id` = '1', `site_id` = '1' WHERE `name`.`company_id` = 1;
+
+# Update Customer Company
+UPDATE `name` SET `address_id` = '2', `site_id` = '2' WHERE `name`.`company_id` = 2;
+
+
+# Add Computers
+INSERT INTO `computer` (`name`, `office_office_id`) VALUES('Workstation1', '1'),('John_PC', '2');
+
+
+# Add Computer Specs (Ram)
+INSERT INTO `computer_spec` ( `sort`, `name`, `value`, `computer_computer_id`) VALUES('5', 'RAM', '16GB', '1'),('5', 'RAM', '5GB', '2');
+

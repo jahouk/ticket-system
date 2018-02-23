@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments :: head"></head>
+
+<body class="container">
+
+<nav th:replace="fragments :: navigation"></nav>
+
+<h1 th:text="${title}">Default Title</h1>
+<p>Customer View</p>
+<hr />
+<h3>Welcome <span th:text="${user.username}"></span></h3>
+<h4>From <span th:text="${company.companyInfo.name}"></span></h4>
+</body>
+</html>

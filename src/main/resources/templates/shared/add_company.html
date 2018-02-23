@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments :: head"></head>
+
+<body class="container">
+
+<h1 th:text="${title}">Default Title</h1>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <form autocomplete="off" action="#" th:action="${action}"
+                  th:object="${addCompanyForm}" method="post" class="form-horizontal"
+                  role="form">
+                <h2>Setup Company</h2>
+
+                <fieldset>
+                    <legend>Company Info:</legend>
+                    <div class="col-sm-9">
+                        <input type="text" th:field="*{companyName}" placeholder="Company Name"
+                               class="form-control" th:value="${addCompanyForm.companyName}" /> <label
+                            th:if="${#fields.hasErrors('companyName')}" th:errors="*{companyName}"
+                            class="validation-message"></label>
+                    </div>
+                    <div class="col-sm-9">
+                        <input type="text" th:field="*{billingAddress1}" placeholder="Billing Address 1"
+                               class="form-control" th:value="${addCompanyForm.billingAddress1}" /> <label
+                            th:if="${#fields.hasErrors('billingAddress1')}" th:errors="*{billingAddress1}"
+                            class="validation-message"></label>
+                    </div>
+                    <div class="col-sm-9">
+                        <input type="text" th:field="*{billingAddress2}" placeholder="Billing Address 2"
+                               class="form-control" th:value="${addCompanyForm.billingAddress2}" /> <label
+                            th:if="${#fields.hasErrors('billingAddress2')}" th:errors="*{billingAddress2}"
+                            class="validation-message"></label>
+                    </div>
+                    <div class="col-sm-9">
+                        <input type="text" th:field="*{billingAddressCity}" placeholder="Billing Address City"
+                               class="form-control" th:value="${addCompanyForm.billingAddressCity}" /> <label
+                            th:if="${#fields.hasErrors('billingAddressCity')}" th:errors="*{billingAddressCity}"
+                            class="validation-message"></label>
+                    </div>
+                    <div class="col-sm-9">
+                        <input type="text" th:field="*{billingAddressState}" placeholder="Billing Address State"
+                               class="form-control" th:value="${addCompanyForm.billingAddressState}" /> <label
+                            th:if="${#fields.hasErrors('billingAddressState')}" th:errors="*{billingAddressState}"
+                            class="validation-message"></label>
+                    </div>
+                    <div class="col-sm-9">
+                        <input type="text" th:field="*{billingAddressZip}" placeholder="Billing Address Zip"
+                               class="form-control" th:value="${addCompanyForm.billingAddressZip}" /> <label
+                            th:if="${#fields.hasErrors('billingAddressZip')}" th:errors="*{billingAddressZip}"
+                            class="validation-message"></label>
+                    </div>
+
+                    <div class="col-sm-9">
+                            <input type="text" th:field="*{site}" placeholder="Site Name"
+                                   class="form-control" th:value="${addCompanyForm.site}" /> <label
+                                th:if="${#fields.hasErrors('site')}" th:errors="*{site}"
+                                class="validation-message"></label>
+                        </div>
+                    <div class="col-sm-9">
+                        <input type="text" th:field="*{streetAddress1}" placeholder="Site Address 1"
+                               class="form-control" th:value="${addCompanyForm.streetAddress1}" /> <label
+                            th:if="${#fields.hasErrors('streetAddress1')}" th:errors="*{streetAddress1}"
+                            class="validation-message"></label>
+                    </div>
+                    <div class="col-sm-9">
+                        <input type="text" th:field="*{streetAddress2}" placeholder="Site Address 2"
+                               class="form-control" th:value="${addCompanyForm.streetAddress2}" /> <label
+                            th:if="${#fields.hasErrors('streetAddress2')}" th:errors="*{streetAddress2}"
+                            class="validation-message"></label>
+                    </div>
+                    <div class="col-sm-9">
+                        <input type="text" th:field="*{streetAddressCity}" placeholder="Site Address City"
+                               class="form-control" th:value="${addCompanyForm.streetAddressCity}" /> <label
+                            th:if="${#fields.hasErrors('streetAddressCity')}" th:errors="*{streetAddressCity}"
+                            class="validation-message"></label>
+                    </div>
+                    <div class="col-sm-9">
+                        <input type="text" th:field="*{streetAddressState}" placeholder="Site Address State"
+                               class="form-control" th:value="${addCompanyForm.streetAddressState}" /> <label
+                            th:if="${#fields.hasErrors('streetAddressState')}" th:errors="*{streetAddressState}"
+                            class="validation-message"></label>
+                    </div>
+                    <div class="col-sm-9">
+                        <input type="text" th:field="*{streetAddressZip}" placeholder="Site Address Zip"
+                               class="form-control" th:value="${addCompanyForm.streetAddressZip}" /> <label
+                            th:if="${#fields.hasErrors('streetAddressZip')}" th:errors="*{streetAddressZip}"
+                            class="validation-message"></label>
+                    </div>
+                    <div class="col-sm-9">
+                        <input type="text" th:field="*{companyPhone}" placeholder="Site/Company Main Phone"
+                               class="form-control" th:value="${addCompanyForm.companyPhone}" /> <label
+                            th:if="${#fields.hasErrors('companyPhone')}" th:errors="*{companyPhone}"
+                            class="validation-message"></label>
+                    </div>
+                    <div class="col-sm-9">
+                        <input type="text" th:field="*{fax}" placeholder="Site/Company Fax"
+                               class="form-control" th:value="${addCompanyForm.fax}" /> <label
+                            th:if="${#fields.hasErrors('fax')}" th:errors="*{fax}"
+                            class="validation-message"></label>
+                    </div>
+
+                    <div class="col-sm-9">
+                        <input type="text" th:field="*{website}" placeholder="Company Website"
+                               class="form-control" th:value="${addCompanyForm.website}" /> <label
+                            th:if="${#fields.hasErrors('website')}" th:errors="*{website}"
+                            class="validation-message"></label>
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend>User Info:</legend>
+                    <div class="form-group">
+                        <div class="col-sm-9">
+                            <input type="text" th:field="*{fname}" placeholder="First Name"
+                                   class="form-control" th:value="${addCompanyForm.fname}" /> <label
+                                th:if="${#fields.hasErrors('fname')}" th:errors="*{fname}"
+                                class="validation-message"></label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-9">
+                            <input type="text" th:field="*{lname}" placeholder="Last Name"
+                                   class="form-control" th:value="${addCompanyForm.lname}" /> <label
+                                th:if="${#fields.hasErrors('lname')}" th:errors="*{lname}"
+                                class="validation-message"></label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-9">
+                            <input type="text" th:field="*{username}" placeholder="Username"
+                                   class="form-control" th:value="${addCompanyForm.username}" /> <label
+                                th:if="${#fields.hasErrors('username')}" th:errors="*{username}"
+                                class="validation-message"></label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-9">
+                            <input type="password" th:field="*{password}"
+                                   placeholder="Password" class="form-control" />
+                            <label
+                                    th:if="${#fields.hasErrors('password')}" th:errors="*{password}"
+                                    class="validation-message"></label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-9">
+                            <input type="text" th:field="*{office}" placeholder="Office Number or Room"
+                                   class="form-control" th:value="${addCompanyForm.office}" /> <label
+                                th:if="${#fields.hasErrors('office')}" th:errors="*{office}"
+                                class="validation-message"></label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-9">
+                            <input type="text" th:field="*{companyUsername}" placeholder="Company Username"
+                                   class="form-control" th:value="${addCompanyForm.companyUsername}" /> <label
+                                th:if="${#fields.hasErrors('companyUsername')}" th:errors="*{companyUsername}"
+                                class="validation-message"></label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-9">
+                            <input type="email" th:field="*{email}" placeholder="Email"
+                                   class="form-control" th:value="${addCompanyForm.email}" /> <label
+                                th:if="${#fields.hasErrors('email')}" th:errors="*{email}"
+                                class="validation-message"></label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-9">
+                            <input type="text" th:field="*{userPhone}" placeholder="Phone"
+                                   class="form-control" th:value="${addCompanyForm.userPhone}" /> <label
+                                th:if="${#fields.hasErrors('userPhone')}" th:errors="*{userPhone}"
+                                class="validation-message"></label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-9">
+                            <input type="text" th:field="*{cellPhone}" placeholder="Cell Phone"
+                                   class="form-control" th:value="${addCompanyForm.cellPhone}" /> <label
+                                th:if="${#fields.hasErrors('cellPhone')}" th:errors="*{cellPhone}"
+                                class="validation-message"></label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-9">
+                            <label th:laberfor="*{canText}">Can Text</label>
+                            <input type="checkbox" th:field="*{canText}" placeholder="Can Text"
+                                   class="form-control" /> <label
+                                th:if="${#fields.hasErrors('canText')}" th:errors="*{canText}"
+                                class="validation-message"></label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-9">
+                            <input type="text" th:field="*{title}" placeholder="Title"
+                                   class="form-control" th:value="${addCompanyForm.title}" /> <label
+                                th:if="${#fields.hasErrors('title')}" th:errors="*{title}"
+                                class="validation-message"></label>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <div class="form-group">
+                    <div class="col-sm-9">
+                        <button type="submit" class="btn btn-primary btn-block">Setup Company</button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
