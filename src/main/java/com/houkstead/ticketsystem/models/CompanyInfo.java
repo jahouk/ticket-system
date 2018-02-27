@@ -14,7 +14,7 @@ public class CompanyInfo {
     @Column(name = "company_info_id")
     private int id;                         // autonumber
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Company company;                // Company
 
     @NotEmpty(message="*Company Name is required")

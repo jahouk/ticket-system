@@ -4,6 +4,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.Set;
 
 @Entity
 @Table(name = "SITE",uniqueConstraints = @UniqueConstraint(columnNames = "site_id", name = "SITE_PK_CONSTRAINT"))
@@ -36,6 +37,10 @@ public class Site {
 
     @ManyToOne
     private Company company;
+
+    @OneToMany
+    @JoinColumn(foreignKey = @ForeignKey(name="FK_OFFICE_SITE"))
+    private Set<Office> offices;
 
     // Constructors -----------------------------------------------------------
 
@@ -111,5 +116,9 @@ public class Site {
     public void setSite(String site) {
         this.site = site;
     }
+
+    // Site Offices
+    public Set<Office> getOffices(){return offices;}
+
 }
 

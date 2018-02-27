@@ -6,6 +6,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 
 @Entity
@@ -27,9 +28,9 @@ public class Office {
     @Column(name="office")
     private String office;    // Physical Location of Office by Description or Room Number
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(foreignKey=@ForeignKey(name="FK_COMPUTER_OFFICE"))
-    private List<Computer> computers = new ArrayList<>(); // List of computers in this office
+    private Set<Computer> computers; // List of computers in this office
 
 
     // Constructors -----------------------------------------------------------
@@ -66,7 +67,7 @@ public class Office {
     }
 
     // List of Computers
-    public List<Computer> getComputers() {
+    public Set<Computer> getComputers() {
         return computers;
     }
 

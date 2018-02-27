@@ -6,6 +6,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Set;
 
 
 @Entity
@@ -22,13 +23,13 @@ public class Computer {
     @Column(name = "name", nullable = false)
     private String name;                // Workstation Name or ID
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(foreignKey=@ForeignKey(name="FK_COMPUTER_SPEC_COMPUTER"))
-    private List<ComputerSpec> specs;   // list of specs about the computer
+    private Set<ComputerSpec> specs;   // list of specs about the computer
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(foreignKey=@ForeignKey(name="FK_TICKET_COMPUTER"))
-    private List<Ticket> tickets;
+    private Set<Ticket> tickets;
 
     @ManyToOne
     private Company company;            // what company owns the computer
@@ -70,7 +71,7 @@ public class Computer {
     }
 
     // Specs
-    public List<ComputerSpec> getSpecs() {
+    public Set<ComputerSpec> getSpecs() {
         return specs;
     }
 
@@ -80,7 +81,7 @@ public class Computer {
 
     // Tickets
 
-    public List<Ticket> getTickets() {
+    public Set<Ticket> getTickets() {
         return tickets;
     }
 }

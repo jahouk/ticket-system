@@ -3,6 +3,7 @@ package com.houkstead.ticketsystem.models;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "ROLE",uniqueConstraints = @UniqueConstraint(columnNames = "role_id", name = "ROLE_PK_CONSTRAINT"))
@@ -22,9 +23,9 @@ public class Role {
     @Column(name = "sort_order")
     private int sortOrder;      // Sort order for forms
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(foreignKey=@ForeignKey(name="FK_USER_ROLE"))
-    private List<User> Users = new ArrayList<>();
+    private Set<User> Users;
 
 
     // Constructors -----------------------------------------------------------
@@ -70,7 +71,7 @@ public class Role {
         this.sortOrder = sortOrder;
     }
 
-    public List<User> getUsers() {
+    public Set<User> getUsers() {
         return Users;
     }
 

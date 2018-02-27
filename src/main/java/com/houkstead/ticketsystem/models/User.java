@@ -21,7 +21,7 @@ public class User {
     @NotNull
     private String username;            // system username
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private UserInfo userInfo;          // ID of User Info
 
     @Column(name = "password")

@@ -7,6 +7,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "STATUS",uniqueConstraints = @UniqueConstraint(columnNames = "status_id", name = "STATUS_PK_CONSTRAINT"))
@@ -25,9 +26,9 @@ public class Status {
     @Column(name = "sort_order")
     private int sortOrder;          // sort order for displaying
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(foreignKey=@ForeignKey(name="FK_TICKET_STATUS"))
-    private List<Ticket> tickets = new ArrayList<>();   // Tickets that belong to this status
+    private Set<Ticket> tickets;   // Tickets that belong to this status
 
     // Constructors -----------------------------------------------------------
 
@@ -61,5 +62,8 @@ public class Status {
     public void setSortOrder(int sortOrder) {
         this.sortOrder = sortOrder;
     }
+
+    // Tickets
+    public Set<Ticket> getTickets(){return tickets;}
 }
 

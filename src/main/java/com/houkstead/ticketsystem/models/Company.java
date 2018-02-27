@@ -18,29 +18,29 @@ public class Company {
     @Column(name = "company_id")
     private int id;                     // autonumber
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(foreignKey=@ForeignKey(name="FK_COMPANY_INFO_COMPANY"))
     private CompanyInfo companyInfo;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(foreignKey=@ForeignKey(name="FK_ADDRESS_COMPANY"))
-    private List<Address> addresses = new ArrayList<>();
+    private Set<Address> addresses;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(foreignKey=@ForeignKey(name="FK_COMPUTER_COMPANY"))
-    private List<Computer> computers = new ArrayList<>();
+    private Set<Computer> computers;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(foreignKey=@ForeignKey(name="FK_SITE_COMPANY"))
-    private List<Site> sites = new ArrayList<>();
+    private Set<Site> sites;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(foreignKey=@ForeignKey(name="FK_TICKET_COMPANY"))
-    private List<Ticket> tickets = new ArrayList<>();
+    private Set<Ticket> tickets;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(foreignKey=@ForeignKey(name="FK_USER_COMPANY"))
-    private List<User> users = new ArrayList<>();
+    private Set<User> users;
 
     // Constructors -----------------------------------------------------------
 
@@ -62,27 +62,27 @@ public class Company {
     }
 
     // Addresses
-    public List<Address> getAddresses(){
+    public Set<Address> getAddresses(){
         return this.addresses;
     }
 
     // Computers
-    public List<Computer> getComputers(){
+    public Set<Computer> getComputers(){
         return computers;
     }
 
     // Sites
-    public List<Site> getSites(){
+    public Set<Site> getSites(){
         return sites;
     }
 
     // Tickets
-    public List<Ticket> getTickets(){
+    public Set<Ticket> getTickets(){
         return tickets;
     }
 
     // Users
-    public List<User> getUsers(){
+    public Set<User> getUsers(){
         return users;
     }
 

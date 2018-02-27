@@ -42,8 +42,6 @@ public class Address {
     @Column(name = "zip", nullable = false)
     private String zip;         // zip
 
-
-
     @ManyToOne
     private Company company;
 
