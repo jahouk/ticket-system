@@ -8,35 +8,27 @@
 <div class="container-fluid">
     <div class="row content">
         <div class="col-sm-9">
-            <p><strong>All Customers</strong></p>
-            <table>
-                <tr th:each="company : ${companies}">
-                    <td th:unless="${company.id} == ${techCompany.id}">
-                        <a th:href="@{|/tech/${company.id}|}" th:text="${company.companyInfo.name}">1</a>
-                    </td>
-                </tr>
-            </table>
 
-            <hr />
+            <p><strong>Tickets</strong></p>
+            <p th:unless="${company.tickets} and ${company.tickets.size()}">No tickets found<br/></p>
 
-            <p><strong>All Tickets</strong></p>
-            <p th:unless="${tickets} and ${tickets.size()}">No tickets found<br/></p>
-
-            <table th:if="${tickets} and ${tickets.size()}"  class="table">
+            <table th:if="${company.tickets} and ${company.tickets.size()}"  class="table">
                 <thead>
                 <th>Ticket #</th>
                 <th>Description</th>
                 <th>Owner</th>
                 <th>Status</th>
                 </thead>
-                <tr th:each="ticket : ${tickets}">
-                    <td><a th:href="@{|/${ticket.company.id}/ticket/${ticket.id}|}" th:text="${ticket.id}"></a></td>
-                    <td th:text="${ticket.company.companyInfo.name}"></td>
+                <tr th:each="ticket : ${company.tickets}">
+                    <td><a th:href="@{|/ticket/${ticket.id}|}" th:text="${ticket.id}"></a></td>
                     <td th:text="${ticket.description}"></td>
                     <td th:text="${ticket.owner.userid}"></td>
                     <td th:text="${ticket.status.name}"></td>
                 </tr>
             </table>
+            <p><a th:href="@{|/tech/add_ticket/${company.id}|}" >Add Ticket</a></p>
+
+
         </div>
 
         <div th:replace="fragments/techFragments:: side-navigation" class="col-sm-3 sidenav" >

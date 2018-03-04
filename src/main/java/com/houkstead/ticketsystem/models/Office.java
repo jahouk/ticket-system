@@ -18,9 +18,8 @@ public class Office {
     @Column(name = "office_id")
     private int id;             // auto-number
 
-    @ManyToOne
-    @JoinColumn(name="site_id")
-    @NotNull
+    @ManyToOne(cascade = CascadeType.DETACH)
+    @JoinColumn(name = "site_id",foreignKey=@ForeignKey(name="FK_SITE_OFFICE"))
     private Site site;          // Physical Location of the building
 
     @NotEmpty(message="*Location Description/Name is required")
@@ -28,9 +27,8 @@ public class Office {
     @Column(name="office")
     private String office;    // Physical Location of Office by Description or Room Number
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(foreignKey=@ForeignKey(name="FK_COMPUTER_OFFICE"))
-    private Set<Computer> computers; // List of computers in this office
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval=true)
+    private List<Computer> computers; // List of computers in this office
 
 
     // Constructors -----------------------------------------------------------
@@ -48,7 +46,7 @@ public class Office {
         return id;
     }
 
-    // Site
+    // SitesController
     public Site getSite() {
         return site;
     }
@@ -67,8 +65,12 @@ public class Office {
     }
 
     // List of Computers
-    public Set<Computer> getComputers() {
+    public List<Computer> getComputers() {
         return computers;
+    }
+
+    public void addComputer(Computer computer){
+        computers.add(computer);
     }
 
 }

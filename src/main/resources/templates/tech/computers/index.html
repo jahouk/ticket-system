@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments/techFragments :: head"></head>
+
+<body class="container">
+<div th:replace="fragments/techFragments :: masthead"></div>
+
+<div class="container-fluid">
+    <div class="row content">
+        <div class="col-sm-9">
+
+            <p><strong>Computers</strong></p>
+            <p th:unless="${company.computers} and ${company.computers.size()}">No computers found<br/></p>
+
+            <table th:if="${company.computers} and ${company.computers.size()}"  class="table">
+                <thead>
+                <th>Computer</th>
+                <th>Office</th>
+                <th>Site</th>
+                <th>&nbsp;</th>
+                </thead>
+                <tr th:each="computer : ${company.computers}">
+                    <td><a th:href="@{|/tech/${company.id}/computers/${computer.id}|}" th:text="${computer.name}"></a></td>
+                    <td th:text="${computer.office.office}"></td>
+                    <td th:text="${computer.office.site.site}"></td>
+                    <td><a th:href="@{|/tech/${company.id}/computer/edit_computer/${computer.id}|}">Edit</a></td>
+                </tr>
+            </table>
+            <p><a th:href="@{|/tech/${company.id}/computer/add_computer|}" >Add Computer</a></p>
+
+        </div>
+
+        <div th:replace="fragments/techFragments:: side-navigation" class="col-sm-3 sidenav" >
+        </div>
+    </div>
+</div>
+
+<footer th:replace="fragments/techFragments:: footer"></footer>
+</body>
+</html>

@@ -24,12 +24,12 @@ public class CompanyInfo {
     @Column(name = "website")
     private String website;                 // Website
 
-    @ManyToOne
-    @JoinColumn(foreignKey=@ForeignKey(name="FK_ADDRESS_COMPANY_INFO"))
+    @ManyToOne(cascade = CascadeType.DETACH)
+    @JoinColumn(name="address_id", foreignKey=@ForeignKey(name="FK_ADDRESS_COMPANY_INFO"))
     private Address billingAddress;         // billing address
 
-    @ManyToOne
-    @JoinColumn(foreignKey=@ForeignKey(name="FK_SITE_COMPANY_INFO"))
+    @ManyToOne(cascade = CascadeType.DETACH)
+    @JoinColumn(name="site_id", foreignKey=@ForeignKey(name="FK_SITE_COMPANY_INFO"))
     private Site primarySite;               // primary site for companye
 
 

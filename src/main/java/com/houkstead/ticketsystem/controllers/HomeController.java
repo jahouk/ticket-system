@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 
 
-@Controller
+@Controller("HomeController")
 @RequestMapping("/")
 public class HomeController {
 
@@ -42,7 +42,7 @@ public class HomeController {
             return "redirect:tech";
         }
         else{
-            // There's a problem, and we should logout the user and direct to login
+            // There's a problem, and we should logout the users and direct to login
             return "redirect:logout";
         }
     }

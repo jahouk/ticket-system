@@ -52,6 +52,9 @@ public class SetupController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private TechCompanyRepository techCompanyRepository;
+
     @RequestMapping(value="", method = RequestMethod.GET)
     public String setup(Model model){
         /*
@@ -83,7 +86,7 @@ public class SetupController {
             model.addAttribute("title","Tech Company and Admin User Setup");
             model.addAttribute("action", "/setup/");
 
-            return "shared/add_company";
+            return "setup/add_company";
         }else{
             // if setup redirect to home
             return "redirect:/";
@@ -95,13 +98,18 @@ public class SetupController {
                           Errors errors,
                           Model model){
         Company company = null;
+
+        Address billingAddress = null;
+        Address streetAddress = null;
+
         CompanyInfo companyInfo = null;
         User user = null;
         Site site = null;
         Office office = null;
-        Address billingAddress = null;
-        Address streetAddress = null;
+
         UserInfo userInfo = null;
+
+
 
         // Still verifying that the database has not been configured for tech company
         if(companyRepository.findAll().isEmpty() && userService.findAll().isEmpty()){
@@ -110,14 +118,14 @@ public class SetupController {
                 model.addAttribute("title","Tech Company and Admin User Setup");
                 model.addAttribute("action", "/setup/");
 
-                return "shared/add_company";
+                return "setup/add_company";
             }
             else {
                 /*
                 The creation order
                 Add Tech Company
                  - Add addresses
-                 - Add admin user
+                 - Add admin users
                  - Add site
                  - Add office
                  - Add user_info
@@ -132,7 +140,7 @@ public class SetupController {
                 // duplicateAddressCheck checks all addresses in a company
                 // and either returns the address that's already created or creates
                 // a new address.
-                billingAddress = duplicateAddressCheck( new TestAddress(
+                billingAddress =duplicateAddressCheck( new TestAddress(
                                 addCompanyForm.getBillingAddress1(),
                                 addCompanyForm.getBillingAddress2(),
                                 addCompanyForm.getBillingAddressCity(),
@@ -154,7 +162,10 @@ public class SetupController {
                         companyRepository
                 );
 
-
+                company.addAddress(billingAddress);
+                if(billingAddress.getId() != streetAddress.getId()){
+                    company.addAddress(streetAddress);
+                }
 
 
 
@@ -170,7 +181,8 @@ public class SetupController {
                 user = userService.findUserByUsername(addCompanyForm.getUsername());
 
 
-                // Create Site
+
+                // Create SitesController & Office
                 site = createSite(new Site(
                         addCompanyForm.getSite(),
                         company,
@@ -181,9 +193,10 @@ public class SetupController {
                         siteRepository
                 );
 
-
-                // Office
                 office = createOffice(new Office(site, addCompanyForm.getOffice()), officeRepository);
+
+                site.addOffice(office);
+                company.addSite(site);
 
 
                 // User_Info
@@ -201,7 +214,8 @@ public class SetupController {
                 ), userInfoRepository);
 
 
-                // Create CompanyInfo (Site, Billing Address)
+
+                // Create CompanyInfo (SitesController, Billing Address)
                 companyInfo = createCompanyInfo(new CompanyInfo(
                                 addCompanyForm.getCompanyName(),
                                 company,
@@ -210,15 +224,19 @@ public class SetupController {
                                 addCompanyForm.getWebsite()
                         ),
                         companyInfoRepository);
-
-                // Update Company (CompanyInfo)
                 company.setCompanyInfo(companyInfo);
-                companyRepository.save(company);
+
 
                 // update User (User Info)
                 user.setUserInfo(userInfo);
                 user.setPassword(addCompanyForm.getPassword());
                 userService.saveUser(user);
+                company.addUser(user);
+
+                companyRepository.save(company);
+
+                // Update techCompany
+                techCompanyRepository.save(new TechCompany(company));
 
                 model.addAttribute("addCompanyForm", addCompanyForm);
                 model.addAttribute("title","Tech Company and Admin User Setup");

@@ -10,7 +10,7 @@ public class AddCompanyForm {
     Order of creating entries
            Add Tech Company (just relationships)
              - Add address
-             - Add admin user
+             - Add admin users
              - Add site
              - Add company_info
              - Add office
@@ -79,7 +79,7 @@ public class AddCompanyForm {
 
     //-------------------------------------------------------------------------
     // SITE FIELDS
-    @NotEmpty(message = "*Site must have a name")
+    @NotEmpty(message = "*SitesController must have a name")
     private String site;                // site name
 
     @NotEmpty(message = "*Main Company Phone Number Required")

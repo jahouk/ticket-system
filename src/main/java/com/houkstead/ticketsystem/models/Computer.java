@@ -5,6 +5,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -23,18 +24,18 @@ public class Computer {
     @Column(name = "name", nullable = false)
     private String name;                // Workstation Name or ID
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(foreignKey=@ForeignKey(name="FK_COMPUTER_SPEC_COMPUTER"))
-    private Set<ComputerSpec> specs;   // list of specs about the computer
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval=true)
+    private List<ComputerSpec> specs = new ArrayList<ComputerSpec>();   // list of specs about the computer
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(foreignKey=@ForeignKey(name="FK_TICKET_COMPUTER"))
-    private Set<Ticket> tickets;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval=true)
+    private List<Ticket> tickets = new ArrayList<Ticket>();
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.DETACH)
+    @JoinColumn(name = "company_id", foreignKey=@ForeignKey(name="FK_COMPANY_COMPUTER"))
     private Company company;            // what company owns the computer
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.DETACH)
+    @JoinColumn(name = "office_id", foreignKey=@ForeignKey(name="FK_OFFICE_COMPUTER"))
     private Office office;              // where the computer is physically located
 
     // Constructors -----------------------------------------------------------
@@ -71,17 +72,21 @@ public class Computer {
     }
 
     // Specs
-    public Set<ComputerSpec> getSpecs() {
+    public List<ComputerSpec> getSpecs() {
         return specs;
     }
 
-    public void setSpec(ComputerSpec computerSpec) {
+    public void addComputerSpec(ComputerSpec computerSpec){
         specs.add(computerSpec);
     }
 
     // Tickets
 
-    public Set<Ticket> getTickets() {
+    public List<Ticket> getTickets() {
         return tickets;
+    }
+
+    public void addTicket(Ticket ticket){
+        tickets.add(ticket);
     }
 }

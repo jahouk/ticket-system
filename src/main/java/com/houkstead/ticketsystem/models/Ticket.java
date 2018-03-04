@@ -24,10 +24,10 @@ public class Ticket {
     private Timestamp created;      // Created Timestamp
 
     @Column(name="closed")
-    private Timestamp closed;       // Timestamp of when end user closes ticket
+    private Timestamp closed;       // Timestamp of when end users closes ticket
 
-    @ManyToOne
-    @NotNull
+    @ManyToOne(cascade = CascadeType.DETACH)
+    @JoinColumn(name = "status_id", foreignKey=@ForeignKey(name="FK_STATUS_TICKET"))
     private Status status;          // Status that ticket belongs to
 
     @Column(name="title")
@@ -40,19 +40,20 @@ public class Ticket {
     @NotNull
     private String description;     // Full Description
 
-    @ManyToOne
-    @NotNull
+    @ManyToOne(cascade = CascadeType.DETACH)
+    @JoinColumn(name = "computer_id", foreignKey=@ForeignKey(name="FK_COMPUTER_TICKET"))
     private Computer computer;      // The affected computer which then tells the site and company
 
-    @OneToMany
-    @JoinColumn(foreignKey=@ForeignKey(name="FK_TICKET_UPDATE_TICKET"))
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval=true)
     private List<TicketUpdate> updates = new ArrayList<>();     // Updates by tech or customer
 
-    @ManyToOne
-    @JoinColumn(foreignKey=@ForeignKey(name="FK_TICKET_UPDATE_USER"))
+    @ManyToOne(cascade = CascadeType.DETACH)
+    @JoinColumn(name = "user_id", foreignKey=@ForeignKey(name="FK_USER_TICKET"))
     private User owner;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.DETACH)
+    @JoinColumn(name = "company_id", foreignKey=@ForeignKey(name="FK_COMPANY_TICKET"))
+
     private Company company;
 
 

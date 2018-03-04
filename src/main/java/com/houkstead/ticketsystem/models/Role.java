@@ -15,7 +15,7 @@ public class Role {
     private int id;             // autonumber
 
     @Column(name = "role")
-    private String role;        // role name (i.e. user, admin)
+    private String role;        // role name (i.e. users, admin)
 
     @Column(name = "description")
     private String description; // description in case roles become complex
@@ -23,9 +23,8 @@ public class Role {
     @Column(name = "sort_order")
     private int sortOrder;      // Sort order for forms
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(foreignKey=@ForeignKey(name="FK_USER_ROLE"))
-    private Set<User> Users;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval=true)
+    private List<User> users = new ArrayList<User>();
 
 
     // Constructors -----------------------------------------------------------
@@ -71,8 +70,12 @@ public class Role {
         this.sortOrder = sortOrder;
     }
 
-    public Set<User> getUsers() {
-        return Users;
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void addUser(User user){
+        users.add(user);
     }
 
 }

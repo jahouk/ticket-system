@@ -20,7 +20,7 @@ public class SetupUtilities {
         return status;
     }
 
-    //todo
+
     public static Company createCompany(Company company, CompanyRepository companyRepository) {
         companyRepository.save(company);
         System.out.println("COMPANY: " + company.getId() + " added to database");

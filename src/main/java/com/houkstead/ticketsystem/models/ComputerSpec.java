@@ -15,7 +15,8 @@ public class ComputerSpec {
     @Column(name = "computer_spec_id")
     private int id;             // autonumber
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.DETACH)
+    @JoinColumn(name = "computer_id", foreignKey=@ForeignKey(name="FK_COMPUTER_COMPUTER_SPEC"))
     private Computer computer;  // owning computer
 
     @NotEmpty

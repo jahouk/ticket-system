@@ -9,19 +9,61 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
-
-
 </head>
+
 <body>
-<div th:fragment="welcome">
-<h4 th:inline="text">Welcome [[${user.userInfo.fname}]] [[${user.userInfo.lname}]] ([[${user.username}]])</h4>
+<div th:fragment="masthead">
+    <h1 th:text="${techCompany.companyInfo.name}"></h1>
+    <hr />
+    <nav>
+        <a href="/">Home</a> |
+        <a href="/logout">Logout</a>
+    </nav>
+    <hr />
+    <h3 th:if="${company}"><a th:href="@{|/tech/${company.id}|}" th:text="${company.companyInfo.name}"></a></h3>
 </div>
 
-<nav th:fragment="navigation">
-    <a href="/">Home</a> |
-    <a href="/logout">Logout</a>
-</nav>
+<div th:fragment="side-navigation" class="col-sm-3 sidenav" >
+    <div th:if="${isAdmin}">
+        <h4>Admin Links</h4>
+        <p><a href="/admin/add_company">Add Company</a></p>
+        <p><a href="/admin/techs">Add/Edit Tech</a></p>
+        <p>&nbsp;</p>
+    </div>
+    <div>
+        <h4>Tech Links</h4>
+        <p th:if="${company}">
+            <a th:href="@{|/tech/${company.id}/sites/add_site/|}" >Add Site</a>
+        </p>
+        <p th:if="${company}">
+            <a th:href="@{|/tech/${company.id}/users/add_user/|}" >Add User</a>
+        </p>
+        <p th:if="${company}">
+            <a th:href="@{|/tech/${company.id}/tickets/add_ticket/|}" >Add Ticket</a>
+        </p>
+        <p th:if="${company}">
+            <a th:href="@{|/tech/${company.id}/computers/add_computer/|}" >Add Computer</a>
+        </p>
+        <p>&nbsp;</p>
+        <p th:if="${company}">
+            <a th:href="@{|/tech/${company.id}/sites/|}" >Sites</a>
+        </p>
+        <p th:if="${company}">
+            <a th:href="@{|/tech/${company.id}/users|}" >Users</a>
+        </p>
+        <p th:if="${company}">
+            <a th:href="@{|/tech/${company.id}/tickets/|}" >Tickets</a>
+        </p>
+        <p th:if="${company}">
+            <a th:href="@{|/tech/${company.id}/computers/|}" >Computers</a>
+        </p>
+        <p>&nbsp;</p>
+    </div>
+</div>
+
+<footer class="container-fluid" th:fragment="footer">
+    <p>2018 &copy; <a href="http://houkstead.com">Houkstead</a></p>
+</footer>
 
 </body>
 </html>
