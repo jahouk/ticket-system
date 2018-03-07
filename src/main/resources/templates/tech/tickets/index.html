@@ -20,14 +20,13 @@
                 <th>Status</th>
                 </thead>
                 <tr th:each="ticket : ${company.tickets}">
-                    <td><a th:href="@{|/ticket/${ticket.id}|}" th:text="${ticket.id}"></a></td>
+                    <td><a th:href="@{|tech/${company.id}/ticket/${ticket.id}|}" th:text="${ticket.id}"></a></td>
                     <td th:text="${ticket.description}"></td>
-                    <td th:text="${ticket.owner.userid}"></td>
-                    <td th:text="${ticket.status.name}"></td>
+                    <td th:text="@{|${ticket.owner.userInfo.fname} ${ticket.owner.userInfo.lname}|}"></td>
+                    <td th:text="${ticket.status.status}"></td>
                 </tr>
             </table>
             <p><a th:href="@{|/tech/add_ticket/${company.id}|}" >Add Ticket</a></p>
-
 
         </div>
 

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments/techFragments :: head"></head>
+
+<body class="container">
+<div th:replace="fragments/techFragments :: masthead"></div>
+
+<div class="container-fluid">
+    <div class="row content">
+        <div class="col-sm-9">
+            <form autocomplete="off"
+                  th:object="${addSiteForm}" method="post" class="form-horizontal"
+                  role="form">
+                <fieldset>
+                    <legend>Edit Site Info:</legend>
+                    <div class="col-sm-9">
+                        <input type="text" th:field="*{site}" placeholder="Site Name"
+                               class="form-control" th:value="${addSiteForm.site}" /> <label
+                            th:if="${#fields.hasErrors('site')}" th:errors="*{site}"
+                            class="validation-message"></label>
+                    </div>
+                    <div class="col-sm-9">
+                        <input type="text" th:field="*{streetAddress1}" placeholder="Site Address 1"
+                               class="form-control" th:value="${addSiteForm.streetAddress1}" /> <label
+                            th:if="${#fields.hasErrors('streetAddress1')}" th:errors="*{streetAddress1}"
+                            class="validation-message"></label>
+                    </div>
+                    <div class="col-sm-9">
+                        <input type="text" th:field="*{streetAddress2}" placeholder="Site Address 2"
+                               class="form-control" th:value="${addSiteForm.streetAddress2}" /> <label
+                            th:if="${#fields.hasErrors('streetAddress2')}" th:errors="*{streetAddress2}"
+                            class="validation-message"></label>
+                    </div>
+                    <div class="col-sm-9">
+                        <input type="text" th:field="*{streetAddressCity}" placeholder="Site Address City"
+                               class="form-control" th:value="${addSiteForm.streetAddressCity}" /> <label
+                            th:if="${#fields.hasErrors('streetAddressCity')}" th:errors="*{streetAddressCity}"
+                            class="validation-message"></label>
+                    </div>
+                    <div class="col-sm-9">
+                        <input type="text" th:field="*{streetAddressState}" placeholder="Site Address State"
+                               class="form-control" th:value="${addSiteForm.streetAddressState}" /> <label
+                            th:if="${#fields.hasErrors('streetAddressState')}" th:errors="*{streetAddressState}"
+                            class="validation-message"></label>
+                    </div>
+                    <div class="col-sm-9">
+                        <input type="text" th:field="*{streetAddressZip}" placeholder="Site Address Zip"
+                               class="form-control" th:value="${addSiteForm.streetAddressZip}" /> <label
+                            th:if="${#fields.hasErrors('streetAddressZip')}" th:errors="*{streetAddressZip}"
+                            class="validation-message"></label>
+                    </div>
+                    <div class="col-sm-9">
+                        <input type="text" th:field="*{companyPhone}" placeholder="Site Main Phone"
+                               class="form-control" th:value="${addSiteForm.companyPhone}" /> <label
+                            th:if="${#fields.hasErrors('companyPhone')}" th:errors="*{companyPhone}"
+                            class="validation-message"></label>
+                    </div>
+                    <div class="col-sm-9">
+                        <input type="text" th:field="*{fax}" placeholder="Site Fax"
+                               class="form-control" th:value="${addSiteForm.fax}" /> <label
+                            th:if="${#fields.hasErrors('fax')}" th:errors="*{fax}"
+                            class="validation-message"></label>
+                    </div>
+                    <div class="col-sm-9">
+                        <label th:for="siteContact">Site Contact</label>
+                        <select name="siteContact">
+                            <option th:if="${addSiteForm.siteContact.id == user.id}"
+                                    th:each="user : ${company.users}"
+                                    th:text="@{|${user.userInfo.fname} ${user.userInfo.lname}|}"
+                                    th:value="${user.id}"
+                                    selected="selected">
+                            </option>
+                            <option th:unless="${addSiteForm.siteContact.id == user.id}"
+                                    th:each="user : ${company.users}"
+                                    th:text="@{|${user.userInfo.fname} ${user.userInfo.lname}|}"
+                                    th:value="${user.id}">
+                            </option>
+                        </select>
+                    </div>
+                </fieldset>
+
+                <div class="form-group">
+                    <div class="col-sm-9">
+                        <button type="submit" class="btn btn-primary btn-block">Edit Site</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<footer th:replace="fragments/techFragments:: footer"></footer>
+</body>
+</html>

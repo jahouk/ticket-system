@@ -29,7 +29,7 @@ public class ComputerSpec {
     @Column(name = "value", nullable = false)
     private String specValue;   // value of spec
 
-    @NotEmpty
+
     @Column(name = "sort", nullable = false)
     private int sortValue;      // sort value for displaying results (grouping)
 

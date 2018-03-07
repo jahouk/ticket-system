@@ -192,4 +192,35 @@ public class AdminController {
             return "redirect:/tech";
         }
     }
+
+    @RequestMapping(value = "techs", method = RequestMethod.GET)
+    public String viewAllTechs(Model model) {
+
+
+        return "admin/view_all_techs";
+    }
+
+
+    @RequestMapping(value = "techs/add_tech", method = RequestMethod.GET)
+    public String addTech(Model model) {
+
+
+        return "admin/view_all_techs";
+    }
+
+    @RequestMapping(value = "techs/edit_tech", method = RequestMethod.GET)
+    public String editTech(Model model) {
+
+
+        return "admin/view_all_techs";
+    }
+
+    @RequestMapping(value = "tech/{tech_id}", method = RequestMethod.GET)
+    public String viewTech(Model model) {
+
+
+        return "admin/view_all_techs";
+    }
+
+
 }

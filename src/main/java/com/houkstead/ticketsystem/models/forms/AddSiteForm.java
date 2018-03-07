@@ -1,5 +1,6 @@
 package com.houkstead.ticketsystem.models.forms;
 
+import com.houkstead.ticketsystem.models.User;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -37,10 +38,32 @@ public class AddSiteForm {
 
     private String fax;         // site fax number
 
+    private User siteContact; // Site User from list
+
     //-------------------------------------------------------------------------
     // Constructors
 
     public AddSiteForm() {
+    }
+
+    public AddSiteForm(String streetAddress1,
+                       String streetAddress2,
+                       String streetAddressCity,
+                       String streetAddressState,
+                       String streetAddressZip,
+                       String site,
+                       String companyPhone,
+                       String fax,
+                       User siteContact) {
+        setStreetAddress1(streetAddress1);
+        setStreetAddress2(streetAddress2);
+        setStreetAddressCity(streetAddressCity);
+        setStreetAddressState(streetAddressState);
+        setStreetAddressZip(streetAddressZip);
+        setSite(site);
+        setCompanyPhone(companyPhone);
+        setFax(fax);
+        setSiteContact(siteContact);
     }
 
     //-------------------------------------------------------------------------
@@ -108,5 +131,13 @@ public class AddSiteForm {
 
     public void setFax(String fax) {
         this.fax = fax;
+    }
+
+    public User getSiteContact() {
+        return siteContact;
+    }
+
+    public void setSiteContact(User siteContact) {
+        this.siteContact = siteContact;
     }
 }

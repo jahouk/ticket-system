@@ -20,13 +20,13 @@
                     <th>Status</th>
                 </thead>
                 <tr th:each="ticket : ${company.tickets}">
-                    <td><a th:href="@{|/ticket/${ticket.id}|}" th:text="${ticket.id}"></a></td>
+                    <td><a th:href="@{|/tech/${company.id}/tickets/${ticket.id}|}" th:text="${ticket.id}"></a></td>
                     <td th:text="${ticket.description}"></td>
-                    <td th:text="${ticket.owner.userid}"></td>
-                    <td th:text="${ticket.status.name}"></td>
+                    <td th:text="@{|${ticket.owner.userInfo.fname} ${ticket.owner.userInfo.lname}|}"></td>
+                    <td th:text="${ticket.status.status}"></td>
                 </tr>
             </table>
-            <p><a th:href="@{|/tech/add_ticket/${company.id}|}" >Add Ticket</a></p>
+            <p><a th:href="@{|/tech/${company.id}/tickets/add_ticket|}" >Add Ticket</a></p>
 
             <hr />
 
@@ -41,13 +41,13 @@
                 <th>Edit</th>
                 </thead>
                 <tr th:each="companyUser : ${company.users}">
-                    <td th:text="${companyUser.username}"></td>
+                    <td><a th:href="@{|/tech/${company.id}/users/${companyUser.id}|}" th:text="${companyUser.username}"></a></td>
                     <td th:text="${companyUser.userInfo.fname}"></td>
                     <td th:text="${companyUser.userInfo.lname}"></td>
-                    <td><a th:href="@{|/users/${companyUser.id}|}">Edit</a></td>
+                    <td><a th:href="@{|tech/${company.id}/users/${companyUser.id}|}">Edit</a></td>
                 </tr>
             </table>
-            <p><a th:href="@{|/tech/add_user/${company.id}|}" >Add User</a></p>
+            <p><a th:href="@{|/tech/${company.id}/users/add_user|}" >Add User</a></p>
 
             <hr />
 
@@ -65,16 +65,16 @@
                 <th>&nbsp;</th>
                 </thead>
                 <tr th:each="site : ${company.sites}">
-                    <td><a th:href="@{|/sites/${site.id}|}" th:text="${site.site}"></a></td>
+                    <td><a th:href="@{|/tech/${company.id}/sites/${site.id}|}" th:text="${site.site}"></a></td>
                     <td th:text="${site.address.address1}"></td>
                     <td th:text="${site.address.city}"></td>
                     <td th:text="${site.address.state}"></td>
                     <td th:text="${site.phone}"></td>
                     <td th:text="@{|${site.siteContact.userInfo.fname} ${site.siteContact.userInfo.lname}|}"></td>
-                    <td><a th:href="@{|/sites/edit_site/${site.id}|}">Edit</a></td>
+                    <td><a th:href="@{|/tech/${company.id}/sites/${site.id}/edit_site|}">Edit</a></td>
                 </tr>
             </table>
-            <p><a th:href="@{|/tech/add_site/${company.id}|}" >Add Site</a></p>
+            <p><a th:href="@{|/tech/${company.id}/sites/add_site|}" >Add Site</a></p>
 
             <hr />
 
@@ -89,13 +89,13 @@
                 <th>&nbsp;</th>
                 </thead>
                 <tr th:each="computer : ${company.computers}">
-                    <td><a th:href="@{|/computers/${computer.id}|}" th:text="${computer.name}"></a></td>
+                    <td><a th:href="@{|/tech/${company.id}/computers/${computer.id}|}" th:text="${computer.name}"></a></td>
                     <td th:text="${computer.office.office}"></td>
                     <td th:text="${computer.office.site.site}"></td>
-                    <td><a th:href="@{|/computers/edit_computer/${computer.id}|}">Edit</a></td>
+                    <td><a th:href="@{|/tech/${company.id}/computers/${computer.id}/edit_computer|}">Edit</a></td>
                 </tr>
             </table>
-            <p><a th:href="@{|/tech/add_computer/${company.id}|}" >Add Computer</a></p>
+            <p><a th:href="@{|/tech/${company.id}/computers/add_computer|}" >Add Computer</a></p>
 
             <hr />
 

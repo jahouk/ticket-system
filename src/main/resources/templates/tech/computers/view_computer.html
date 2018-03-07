@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments/techFragments :: head"></head>
+
+<body class="container">
+<div th:replace="fragments/techFragments :: masthead"></div>
+
+<div class="container-fluid">
+    <div class="row content">
+        <div class="col-sm-9">
+            <p th:inline="text">Computer: [[${computer.name}]]</p>
+            <p th:inline="text">Site: [[${computer.office.site.site}]]</p>
+            <p th:inline="text">Office: [[${computer.office.office}]]</p>
+            <p>&nbsp;</p>
+            <table>
+                <tr>
+                    <th>Spec&nbsp;</th>
+                    <th>Value</th>
+                </tr>
+                <tr th:each="spec : ${computer.specs}">
+                    <td th:text="${spec.specName}"></td>
+                    <td th:text="${spec.specValue}"></td>
+                </tr>
+            </table>
+            <p>&nbsp;</p>
+            <form autocomplete="off" method="post" class="form-horizontal" role="form">
+                <fieldset>
+                    <div class="form-group">
+                        <div class="col-sm-9">
+                            <input type="text" name="specName" placeholder="Spec Name" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-9">
+                            <input type="text" name="specValue" placeholder="Spec Value" class="form-control" />
+                        </div>
+                    </div> <div class="form-group">
+                    <div class="col-sm-9">
+                        <button type="submit" class="btn btn-primary btn-block">Add Spec</button>
+                    </div>
+                </div>
+                </fieldset>
+            </form>
+        </div>
+        <div th:replace="fragments/techFragments:: side-navigation" class="col-sm-3 sidenav" >
+        </div>
+    </div>
+</div>
+
+
+<footer th:replace="fragments/techFragments:: footer"></footer>
+</body>
+</html>

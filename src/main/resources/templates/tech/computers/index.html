@@ -23,10 +23,10 @@
                     <td><a th:href="@{|/tech/${company.id}/computers/${computer.id}|}" th:text="${computer.name}"></a></td>
                     <td th:text="${computer.office.office}"></td>
                     <td th:text="${computer.office.site.site}"></td>
-                    <td><a th:href="@{|/tech/${company.id}/computer/edit_computer/${computer.id}|}">Edit</a></td>
+                    <td><a th:href="@{|/tech/${company.id}/computer/${computer.id}/edit_computer|}">Edit</a></td>
                 </tr>
             </table>
-            <p><a th:href="@{|/tech/${company.id}/computer/add_computer|}" >Add Computer</a></p>
+            <p><a th:href="@{|/tech/${company.id}/computers/add_computer|}" >Add Computer</a></p>
 
         </div>
 

@@ -1,5 +1,6 @@
 package com.houkstead.ticketsystem.models;
 
+import com.houkstead.ticketsystem.models.forms.AddTicketForm;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
@@ -70,7 +71,15 @@ public class Ticket {
         setDescription(description);
         setComputer(computer);
 
-        setCreated(new Timestamp(now()));
+        setCreated(new Timestamp(System.currentTimeMillis()));
+    }
+
+    public Ticket(AddTicketForm addTicketForm, Status status){
+        this(addTicketForm.getOwner(),
+                status,
+                addTicketForm.getTitle(),
+                addTicketForm.getDescription(),
+                addTicketForm.getComputer());
     }
 
     // Start of Getters and Setters -------------------------------------------

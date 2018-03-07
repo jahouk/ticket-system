@@ -24,16 +24,16 @@
                 <th>&nbsp;</th>
                 </thead>
                 <tr th:each="site : ${company.sites}">
-                    <td><a th:href="@{|/sites/${site.id}|}" th:text="${site.site}"></a></td>
+                    <td><a th:href="@{|/tech/${company.id}/sites/${site.id}|}" th:text="${site.site}"></a></td>
                     <td th:text="${site.address.address1}"></td>
                     <td th:text="${site.address.city}"></td>
                     <td th:text="${site.address.state}"></td>
                     <td th:text="${site.phone}"></td>
                     <td th:text="@{|${site.siteContact.userInfo.fname} ${site.siteContact.userInfo.lname}|}"></td>
-                    <td><a th:href="@{|/sites/edit_site/${site.id}|}">Edit</a></td>
+                    <td><a th:href="@{|/tech/${company.id}/sites/${site.id}/edit_site|}">Edit</a></td>
                 </tr>
             </table>
-            <p><a th:href="@{|/tech/add_site/${company.id}|}" >Add Site</a></p>
+            <p><a th:href="@{|/tech/${company.id}/sites/add_site|}" >Add Site</a></p>
 
 
         </div>

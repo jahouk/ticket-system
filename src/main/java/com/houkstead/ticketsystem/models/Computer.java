@@ -1,5 +1,7 @@
 package com.houkstead.ticketsystem.models;
 
+import com.houkstead.ticketsystem.models.forms.AddComputerForm;
+import com.houkstead.ticketsystem.models.forms.AddUserForm;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -45,6 +47,10 @@ public class Computer {
     public Computer(String name, Office office){
         setName(name);
         setOffice(office);
+    }
+
+    public Computer(AddComputerForm addComputerForm){
+        this(addComputerForm.getName(), addComputerForm.getOffice());
     }
 
     // Start of Getters and Setters -------------------------------------------

@@ -33,29 +33,16 @@
     <div>
         <h4>Tech Links</h4>
         <p th:if="${company}">
-            <a th:href="@{|/tech/${company.id}/sites/add_site/|}" >Add Site</a>
+            <a th:href="@{|/tech/${company.id}/tickets/|}">Tickets</a>
         </p>
         <p th:if="${company}">
-            <a th:href="@{|/tech/${company.id}/users/add_user/|}" >Add User</a>
+            <a th:href="@{|/tech/${company.id}/sites/|}">Sites</a>
         </p>
         <p th:if="${company}">
-            <a th:href="@{|/tech/${company.id}/tickets/add_ticket/|}" >Add Ticket</a>
+            <a th:href="@{|/tech/${company.id}/users|}">Users</a>
         </p>
         <p th:if="${company}">
-            <a th:href="@{|/tech/${company.id}/computers/add_computer/|}" >Add Computer</a>
-        </p>
-        <p>&nbsp;</p>
-        <p th:if="${company}">
-            <a th:href="@{|/tech/${company.id}/sites/|}" >Sites</a>
-        </p>
-        <p th:if="${company}">
-            <a th:href="@{|/tech/${company.id}/users|}" >Users</a>
-        </p>
-        <p th:if="${company}">
-            <a th:href="@{|/tech/${company.id}/tickets/|}" >Tickets</a>
-        </p>
-        <p th:if="${company}">
-            <a th:href="@{|/tech/${company.id}/computers/|}" >Computers</a>
+            <a th:href="@{|/tech/${company.id}/computers/|}">Computers</a>
         </p>
         <p>&nbsp;</p>
     </div>
