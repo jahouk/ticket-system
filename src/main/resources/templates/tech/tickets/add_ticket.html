@@ -23,11 +23,11 @@
                         </select>
                     </div>
                     <div class="col-sm-9">
-                        <label th:for="computer">Computer</label>
-                        <select name="computer">
-                            <option th:each="computer : ${company.computers}"
-                                    th:text="@{|${computer.name} in ${computer.office.office} at ${computer.office.site.site}|}"
-                                    th:value="${computer.id}"></option>
+                        <label th:for="asset">Asset (Computer)</label>
+                        <select name="asset">
+                            <option th:each="asset : ${company.assets}"
+                                    th:text="@{|${asset.name} in ${asset.office.office} at ${asset.office.site.site}|}"
+                                    th:value="${asset.id}"></option>
                         </select>
                     </div>
 

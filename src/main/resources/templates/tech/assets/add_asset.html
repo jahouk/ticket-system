@@ -9,26 +9,26 @@
     <div class="row content">
         <div class="col-sm-9">
             <form autocomplete="off"
-                  th:object="${addComputerForm}" method="post" class="form-horizontal"
+                  th:object="${addAssetForm}" method="post" class="form-horizontal"
                   role="form">
                 <fieldset>
-                    <legend>Add Computer:</legend>
+                    <legend>Add Asset (Computers):</legend>
                     <div class="col-sm-9">
-                        <input type="text" th:field="*{name}" placeholder="Computer Name"
-                               class="form-control" th:value="${addComputerForm.name}" /> <label
+                        <input type="text" th:field="*{name}" placeholder="Asset Name"
+                               class="form-control" th:value="${addAssetForm.name}" /> <label
                             th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
                             class="validation-message"></label>
                     </div>
                     <div class="col-sm-9">
                         <label th:for="offices">Office</label>
                         <select name="office">
-                            <option th:if="${addComputerForm.office == office }"
+                            <option th:if="${addAssetForm.office == office }"
                                     th:each="office : ${offices}"
                                     th:text="@{|${office.office} at ${office.site.site}|}"
                                     th:value="${office.id}"
                                     selected="selected">
                             </option>
-                            <option th:unless="${office == addComputerForm.office}"
+                            <option th:unless="${office == addAssetForm.office}"
                                     th:each="office : ${offices}"
                                     th:text="@{|${office.office} at ${office.site.site}|}"
                                     th:value="${office.id}">
@@ -39,7 +39,7 @@
 
                 <div class="form-group">
                     <div class="col-sm-9">
-                        <button type="submit" class="btn btn-primary btn-block">Update Computer</button>
+                        <button type="submit" class="btn btn-primary btn-block">Add Asset</button>
                     </div>
                 </div>
             </form>

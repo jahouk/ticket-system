@@ -78,24 +78,24 @@
 
             <hr />
 
-            <p><strong>Computers</strong></p>
-            <p th:unless="${company.computers} and ${company.computers.size()}">No computers found<br/></p>
+            <p><strong>Assets (Computers)</strong></p>
+            <p th:unless="${company.assets} and ${company.assets.size()}">No assets found<br/></p>
 
-            <table th:if="${company.computers} and ${company.computers.size()}"  class="table">
+            <table th:if="${company.assets} and ${company.assets.size()}"  class="table">
                 <thead>
-                <th>Computer</th>
+                <th>asset</th>
                 <th>Office</th>
                 <th>Site</th>
                 <th>&nbsp;</th>
                 </thead>
-                <tr th:each="computer : ${company.computers}">
-                    <td><a th:href="@{|/tech/${company.id}/computers/${computer.id}|}" th:text="${computer.name}"></a></td>
-                    <td th:text="${computer.office.office}"></td>
-                    <td th:text="${computer.office.site.site}"></td>
-                    <td><a th:href="@{|/tech/${company.id}/computers/${computer.id}/edit_computer|}">Edit</a></td>
+                <tr th:each="asset : ${company.assets}">
+                    <td><a th:href="@{|/tech/${company.id}/assets/${asset.id}|}" th:text="${asset.name}"></a></td>
+                    <td th:text="${asset.office.office}"></td>
+                    <td th:text="${asset.office.site.site}"></td>
+                    <td><a th:href="@{|/tech/${company.id}/assets/${asset.id}/edit_asset|}">Edit</a></td>
                 </tr>
             </table>
-            <p><a th:href="@{|/tech/${company.id}/computers/add_computer|}" >Add Computer</a></p>
+            <p><a th:href="@{|/tech/${company.id}/assets/add_asset|}" >Add Asset</a></p>
 
             <hr />
 

@@ -4,9 +4,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 
 @Entity
@@ -28,7 +26,7 @@ public class Office {
     private String office;    // Physical Location of Office by Description or Room Number
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval=true)
-    private List<Computer> computers; // List of computers in this office
+    private List<Asset> assets; // List of assets in this office
 
 
     // Constructors -----------------------------------------------------------
@@ -64,13 +62,13 @@ public class Office {
         this.office = office;
     }
 
-    // List of Computers
-    public List<Computer> getComputers() {
-        return computers;
+    // List of Assets
+    public List<Asset> getAssets() {
+        return assets;
     }
 
-    public void addComputer(Computer computer){
-        computers.add(computer);
+    public void addAsset(Asset asset){
+        assets.add(asset);
     }
 
 }

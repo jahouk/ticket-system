@@ -1,24 +1,24 @@
 package com.houkstead.ticketsystem.models.forms;
 
-import com.houkstead.ticketsystem.models.Computer;
+import com.houkstead.ticketsystem.models.Asset;
 import com.houkstead.ticketsystem.models.Office;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
-public class AddComputerForm {
+public class AddAssetForm {
 
-    @NotEmpty(message="*Computer's name is required")
+    @NotEmpty(message="*Asset's name is required")
     @Length(max = 40)
     private String name;                // Workstation Name or ID
 
     private Office office;
 
-    public AddComputerForm() {
+    public AddAssetForm() {
     }
 
-    public AddComputerForm(Computer computer){
-        setName(computer.getName());
-        setOffice(computer.getOffice());
+    public AddAssetForm(Asset asset){
+        setName(asset.getName());
+        setOffice(asset.getOffice());
     }
 
     public Office getOffice() {

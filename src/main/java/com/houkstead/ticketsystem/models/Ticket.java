@@ -9,8 +9,6 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.apache.tomcat.jni.Time.now;
-
 @Entity
 @Table(name = "TICKET",uniqueConstraints = @UniqueConstraint(columnNames = "ticket_id", name = "TICKET_PK_CONSTRAINT"))
 public class Ticket {
@@ -42,8 +40,8 @@ public class Ticket {
     private String description;     // Full Description
 
     @ManyToOne(cascade = CascadeType.DETACH)
-    @JoinColumn(name = "computer_id", foreignKey=@ForeignKey(name="FK_COMPUTER_TICKET"))
-    private Computer computer;      // The affected computer which then tells the site and company
+    @JoinColumn(name = "asset_id", foreignKey=@ForeignKey(name="FK_ASSET_TICKET"))
+    private Asset asset;      // The affected asset which then tells the site and company
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval=true)
     private List<TicketUpdate> updates = new ArrayList<>();     // Updates by tech or customer
@@ -63,13 +61,13 @@ public class Ticket {
     public Ticket(){}
 
     public Ticket(User owner, Status status, String title, String description,
-                  Computer computer){
+                  Asset asset){
 
         setOwner(owner);
         setStatus(status);
         setTitle(title);
         setDescription(description);
-        setComputer(computer);
+        setAsset(asset);
 
         setCreated(new Timestamp(System.currentTimeMillis()));
     }
@@ -79,7 +77,7 @@ public class Ticket {
                 status,
                 addTicketForm.getTitle(),
                 addTicketForm.getDescription(),
-                addTicketForm.getComputer());
+                addTicketForm.getAsset());
     }
 
     // Start of Getters and Setters -------------------------------------------
@@ -133,13 +131,13 @@ public class Ticket {
         this.description = description;
     }
 
-    // Computer
-    public Computer getComputer() {
-        return computer;
+    // Asset
+    public Asset getAsset() {
+        return asset;
     }
 
-    public void setComputer(Computer computer) {
-        this.computer = computer;
+    public void setAsset(Asset asset) {
+        this.asset = asset;
     }
 
     // Updates

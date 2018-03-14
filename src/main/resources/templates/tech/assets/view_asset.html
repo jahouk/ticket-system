@@ -8,16 +8,16 @@
 <div class="container-fluid">
     <div class="row content">
         <div class="col-sm-9">
-            <p th:inline="text">Computer: [[${computer.name}]]</p>
-            <p th:inline="text">Site: [[${computer.office.site.site}]]</p>
-            <p th:inline="text">Office: [[${computer.office.office}]]</p>
+            <p th:inline="text">Asset: [[${asset.name}]]</p>
+            <p th:inline="text">Site: [[${asset.office.site.site}]]</p>
+            <p th:inline="text">Office: [[${asset.office.office}]]</p>
             <p>&nbsp;</p>
             <table>
                 <tr>
                     <th>Spec&nbsp;</th>
                     <th>Value</th>
                 </tr>
-                <tr th:each="spec : ${computer.specs}">
+                <tr th:each="spec : ${asset.specs}">
                     <td th:text="${spec.specName}"></td>
                     <td th:text="${spec.specValue}"></td>
                 </tr>

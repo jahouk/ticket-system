@@ -38,7 +38,7 @@ UPDATE `name` SET `address_id` = '2', `site_id` = '2' WHERE `name`.`company_id` 
 
 
 # Add Computers
-INSERT INTO `computer` (`name`, `office_office_id`) VALUES('Workstation1', '1'),('John_PC', '2');
+INSERT INTO `asset` (`name`, `office_office_id`) VALUES('Workstation1', '1'),('John_PC', '2');
 
 
 # Add Computer Specs (Ram)

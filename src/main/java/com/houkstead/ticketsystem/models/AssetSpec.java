@@ -4,20 +4,19 @@ import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "COMPUTER_SPEC",uniqueConstraints = @UniqueConstraint(columnNames = "computer_spec_id", name = "COMPUTER_SPEC_PK_CONSTRAINT"))
-public class ComputerSpec {
+@Table(name = "ASSET_SPEC",uniqueConstraints = @UniqueConstraint(columnNames = "asset_spec_id", name = "ASSET_SPEC_PK_CONSTRAINT"))
+public class AssetSpec {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "computer_spec_id")
+    @Column(name = "asset_spec_id")
     private int id;             // autonumber
 
     @ManyToOne(cascade = CascadeType.DETACH)
-    @JoinColumn(name = "computer_id", foreignKey=@ForeignKey(name="FK_COMPUTER_COMPUTER_SPEC"))
-    private Computer computer;  // owning computer
+    @JoinColumn(name = "asset_id", foreignKey=@ForeignKey(name="FK_ASSET_ASSET_SPEC"))
+    private Asset asset;  // owning asset
 
     @NotEmpty
     @Length(max = 40)
@@ -35,18 +34,18 @@ public class ComputerSpec {
 
     // Constructors -----------------------------------------------------------
 
-    public ComputerSpec(){}
+    public AssetSpec(){}
 
-    public ComputerSpec(Computer computer, String name, String value,
-                        int sort){
-        setComputer(computer);
+    public AssetSpec(Asset asset, String name, String value,
+                     int sort){
+        setAsset(asset);
         setSpecName(name);
         setSpecValue(value);
         setSortValue(sort);
     }
 
-    public ComputerSpec(Computer computer, String name, String value){
-        this(computer, name, value, 100);
+    public AssetSpec(Asset asset, String name, String value){
+        this(asset, name, value, 100);
     }
 
     // Start of Getters and Setters -------------------------------------------
@@ -55,13 +54,13 @@ public class ComputerSpec {
         return id;
     }
 
-    // Computer
-    public Computer getComputer() {
-        return computer;
+    // Asset
+    public Asset getAsset() {
+        return asset;
     }
 
-    public void setComputer(Computer computer) {
-        this.computer = computer;
+    public void setAsset(Asset asset) {
+        this.asset = asset;
     }
 
     // SpecName

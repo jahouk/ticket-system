@@ -1,13 +1,8 @@
 package com.houkstead.ticketsystem.models;
 
-import org.hibernate.validator.constraints.NotEmpty;
-
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "COMPANY",uniqueConstraints = @UniqueConstraint(columnNames = "company_id", name = "COMPANY_PK_CONSTRAINT"))
@@ -27,7 +22,7 @@ public class Company {
     private List<Address> addresses = new ArrayList<Address>();
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval=true)
-    private List<Computer> computers = new ArrayList<Computer>();
+    private List<Asset> assets = new ArrayList<Asset>();
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval=true)
     private List<Site> sites = new ArrayList<Site>();
@@ -66,13 +61,13 @@ public class Company {
         addresses.add(address);
     }
 
-    // Computers
-    public List<Computer> getComputers(){
-        return computers;
+    // Assets
+    public List<Asset> getAssets(){
+        return assets;
     }
 
-    public void addComputer(Computer computer){
-        computers.add(computer);
+    public void addAsset(Asset asset){
+        assets.add(asset);
     }
 
     // Sites

@@ -20,7 +20,7 @@
             <hr />
 
             <p><strong>All Tickets</strong></p>
-            <p th:unless="${tickets} and ${tickets.size()}">No tickets found<br/></p>
+            <p th:unless="${tickets} and ${tickets.size()}">Yay! No open tickets found<br/></p>
 
             <table th:if="${tickets} and ${tickets.size()}"  class="table">
                 <thead>
@@ -31,8 +31,8 @@
                 <th>Status</th>
                 </thead>
                 <tr th:each="ticket : ${tickets}">
-                    <td><a th:href="@{|/tech/${ticket.computer.office.site.company.id}/tickets/${ticket.id}|}" th:text="${ticket.id}"></a></td>
-                    <td th:text="${ticket.computer.office.site.company.companyInfo.name}"></td>
+                    <td><a th:href="@{|/tech/${ticket.asset.office.site.company.id}/tickets/${ticket.id}|}" th:text="${ticket.id}"></a></td>
+                    <td th:text="${ticket.asset.office.site.company.companyInfo.name}"></td>
                     <td th:text="${ticket.description}"></td>
                     <td th:text="@{|${ticket.owner.userInfo.fname} ${ticket.owner.userInfo.lname}|}"></td>
                     <td th:text="${ticket.status.status}"></td>

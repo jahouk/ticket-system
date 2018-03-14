@@ -2,11 +2,9 @@ package com.houkstead.ticketsystem.controllers.Tech;
 
 
 import com.houkstead.ticketsystem.UserService;
-import com.houkstead.ticketsystem.models.Company;
-import com.houkstead.ticketsystem.models.TechCompany;
-import com.houkstead.ticketsystem.models.Ticket;
-import com.houkstead.ticketsystem.models.User;
+import com.houkstead.ticketsystem.models.*;
 import com.houkstead.ticketsystem.models.forms.AddTicketForm;
+import com.houkstead.ticketsystem.models.forms.AddTicketUpdateForm;
 import com.houkstead.ticketsystem.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -20,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.validation.Valid;
+
 import java.util.List;
 
 import static com.houkstead.ticketsystem.utilities.SecurityUtilities.isAdmin;
@@ -47,6 +46,9 @@ public class TicketsController {
 
     @Autowired
     private TicketRepository ticketRepository;
+
+    @Autowired
+    private TicketUpdateRepository ticketUpdateRepository;
 
     @RequestMapping(value="", method = RequestMethod.GET)
     public String index(Model model, @PathVariable int companyId){
@@ -132,7 +134,7 @@ public class TicketsController {
 
     // This will display a specific site view and add offie from inline form
     @RequestMapping(value="/{ticketId}", method = RequestMethod.GET)
-    public String siteView(
+    public String ticketView(
             Model model,
             @PathVariable int companyId,
             @PathVariable int ticketId){
@@ -146,7 +148,7 @@ public class TicketsController {
         if(!isTech(user, roleRepository) ||
                 myCompany == null ||
                 myCompany.getId() == techCompany.getId() ||
-                myCompany.getId() != myTicket.getComputer().getOffice().getSite().getCompany().getId()) {
+                myCompany.getId() != myTicket.getAsset().getOffice().getSite().getCompany().getId()) {
             return "redirect:/";
         }
 
@@ -160,5 +162,80 @@ public class TicketsController {
         return "tech/tickets/view_ticket";
     }
 
+    @RequestMapping(value="/{ticketId}/add_update", method = RequestMethod.GET)
+    public String addUpdate(
+            Model model,
+            @PathVariable int companyId,
+            @PathVariable int ticketId) {
+        Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
+        Company myCompany = companyRepository.findOne(companyId);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.findUserByUsername(auth.getName());
+        Ticket myTicket = ticketRepository.findOne(ticketId);
+        AddTicketUpdateForm addTicketUpdateForm = new AddTicketUpdateForm();
+        List<Status> statuses = statusRepository.findAll();
+
+        // Programatically verify that this is a tech and not tech company
+        if(!isTech(user, roleRepository) ||
+                myCompany == null ||
+                myCompany.getId() == techCompany.getId() ||
+                myCompany.getId() != myTicket.getAsset().getOffice().getSite().getCompany().getId()) {
+            return "redirect:/";
+        }
+
+        model.addAttribute("user",user);
+        model.addAttribute("isAdmin", isAdmin(user, roleRepository));
+        model.addAttribute("company", myCompany);
+        model.addAttribute("ticket", myTicket);
+        model.addAttribute("techCompany", techCompany);
+        model.addAttribute("statuses", statuses);
+        model.addAttribute("addTicketUpdateForm", addTicketUpdateForm);
+
+        return "tech/tickets/add_ticket_update";
+
+    }
+
+    @RequestMapping(value="/{ticketId}/add_update", method = RequestMethod.POST)
+    public String addUpdate(
+            @ModelAttribute @Valid AddTicketUpdateForm addTicketUpdateForm,
+            Errors errors,
+            Model model,
+            @PathVariable int companyId,
+            @PathVariable int ticketId) {
+        Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
+        Company myCompany = companyRepository.findOne(companyId);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.findUserByUsername(auth.getName());
+        Ticket myTicket = ticketRepository.findOne(ticketId);
+        List<Status> statuses = statusRepository.findAll();
+
+        // Programatically verify that this is a tech and not tech company
+        if(!isTech(user, roleRepository) ||
+                myCompany == null ||
+                myCompany.getId() == techCompany.getId() ||
+                myCompany.getId() != myTicket.getAsset().getOffice().getSite().getCompany().getId()) {
+            return "redirect:/";
+        } else if (errors.hasErrors()) {
+            model.addAttribute("user",user);
+            model.addAttribute("isAdmin", isAdmin(user, roleRepository));
+            model.addAttribute("company", myCompany);
+            model.addAttribute("ticket", myTicket);
+            model.addAttribute("techCompany", techCompany);
+            model.addAttribute("statuses", statuses);
+            model.addAttribute("addTicketUpdateForm", addTicketUpdateForm);
+
+            return "tech/tickets/add_tickets";
+        } else {
+            TicketUpdate newTicketUpdate =
+                    new TicketUpdate(myTicket, user, addTicketUpdateForm);
+            ticketUpdateRepository.save(newTicketUpdate);
+            myTicket.setStatus(addTicketUpdateForm.getStatus());
+            myTicket.addUpdate(newTicketUpdate);
+            ticketRepository.save(myTicket);
+
+            return "redirect:/tech/" + myCompany.getId() + "/tickets/" + myTicket.getId();
+        }
+
+    }
 }
 

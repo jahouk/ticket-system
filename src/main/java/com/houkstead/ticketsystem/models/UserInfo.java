@@ -22,7 +22,7 @@ public class UserInfo {
 
     @Column(name="company_user_name")
     private String companyUserName;     // User's Login Name at their company /
-    // company computer
+
 
     @Column(name = "fname")
     @NotEmpty(message = "*First name is required")

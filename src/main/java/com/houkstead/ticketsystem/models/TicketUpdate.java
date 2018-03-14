@@ -1,5 +1,6 @@
 package com.houkstead.ticketsystem.models;
 
+import com.houkstead.ticketsystem.models.forms.AddTicketUpdateForm;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
@@ -43,9 +44,17 @@ public class TicketUpdate {
                         String description ){
         setTicket(ticket);
         setUser(user);
-        setTimestamp(new Timestamp(now()));
+        setTimestamp(new Timestamp(System.currentTimeMillis()));
         setUpdateTitle(title);
         setUpdateDescription(description);
+    }
+
+    public TicketUpdate(Ticket ticket, User user, AddTicketUpdateForm addTicketUpdateForm){
+        setTicket(ticket);
+        setUser(user);
+        setTimestamp(new Timestamp(System.currentTimeMillis()));
+        setUpdateTitle(addTicketUpdateForm.getUpdateTitle());
+        setUpdateDescription(addTicketUpdateForm.getUpdateDescription());
     }
 
     // Start of Getters and Setters -------------------------------------------

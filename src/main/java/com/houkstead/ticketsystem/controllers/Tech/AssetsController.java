@@ -3,7 +3,7 @@ package com.houkstead.ticketsystem.controllers.Tech;
 
 import com.houkstead.ticketsystem.UserService;
 import com.houkstead.ticketsystem.models.*;
-import com.houkstead.ticketsystem.models.forms.AddComputerForm;
+import com.houkstead.ticketsystem.models.forms.AddAssetForm;
 import com.houkstead.ticketsystem.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -21,9 +21,9 @@ import static com.houkstead.ticketsystem.utilities.SecurityUtilities.isAdmin;
 import static com.houkstead.ticketsystem.utilities.SecurityUtilities.isTech;
 import static com.houkstead.ticketsystem.utilities.SiteUtilities.getTechCompany;
 
-@Controller("tech computers")
-@RequestMapping("tech/{companyId}/computers")
-public class ComputersController {
+@Controller("tech assets")
+@RequestMapping("tech/{companyId}/assets")
+public class AssetsController {
 
     @Autowired
     private UserService userService;
@@ -38,13 +38,13 @@ public class ComputersController {
     private RoleRepository roleRepository;
 
     @Autowired
-    private ComputerRepository computerRepository;
+    private AssetRepository assetRepository;
 
     @Autowired
     private OfficeRepository officeRepository;
 
     @Autowired
-    private ComputerSpecRepository computerSpecRepository;
+    private AssetSpecRepository assetSpecRepository;
 
     @RequestMapping(value="", method = RequestMethod.GET)
     public String index(Model model, @PathVariable int companyId){
@@ -62,26 +62,26 @@ public class ComputersController {
         model.addAttribute("isAdmin", isAdmin(user, roleRepository));
         model.addAttribute("company", myCompany);
         model.addAttribute("techCompany", techCompany);
-        return "tech/computers/index";
+        return "tech/assets/index";
     }
 
 
     //
-    @RequestMapping(value="/{computerId}", method = RequestMethod.GET)
-    public String viewComputer(Model model,
+    @RequestMapping(value="/{assetId}", method = RequestMethod.GET)
+    public String viewasset(Model model,
                                @PathVariable int companyId,
-                               @PathVariable int computerId){
+                               @PathVariable int assetId){
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
         Company myCompany = companyRepository.findOne(companyId);
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findUserByUsername(auth.getName());
-        Computer myComputer = computerRepository.findOne(computerId);
+        Asset myAsset = assetRepository.findOne(assetId);
 
         // Programatically verify that this is a tech
         if(!isTech(user, roleRepository) ||
                 myCompany == null ||
                 myCompany.getId() == techCompany.getId() ||
-                myCompany.getId() != myComputer.getOffice().getSite().getCompany().getId()) {
+                myCompany.getId() != myAsset.getOffice().getSite().getCompany().getId()) {
             return "redirect:/";
         }
 
@@ -89,21 +89,21 @@ public class ComputersController {
         model.addAttribute("isAdmin", isAdmin(user, roleRepository));
         model.addAttribute("company", myCompany);
         model.addAttribute("techCompany", techCompany);
-        model.addAttribute("computer", myComputer);
-        return "tech/computers/view_computer";
+        model.addAttribute("asset", myAsset);
+        return "tech/assets/view_asset";
     }
 
 
-    // Add Computer
-    @RequestMapping(value="/add_computer", method = RequestMethod.GET)
-    public String addComputer(
+    // Add Asset
+    @RequestMapping(value="/add_asset", method = RequestMethod.GET)
+    public String addasset(
             Model model,
             @PathVariable int companyId){
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
         Company myCompany = companyRepository.findOne(companyId);
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findUserByUsername(auth.getName());
-        AddComputerForm addComputerForm = new AddComputerForm();
+        AddAssetForm addAssetForm = new AddAssetForm();
         List<Office> myOffices = new ArrayList<Office>();
 
         for (Site site: myCompany.getSites()) {
@@ -123,16 +123,16 @@ public class ComputersController {
         model.addAttribute("isAdmin", isAdmin(user, roleRepository));
         model.addAttribute("company", myCompany);
         model.addAttribute("offices", myOffices);
-        model.addAttribute("addComputerForm", addComputerForm);
+        model.addAttribute("addAssetForm", addAssetForm);
         model.addAttribute("techCompany", techCompany);
 
-        return "tech/computers/add_computer";
+        return "tech/assets/add_asset";
     }
 
     // This will display a specific site view and add office from inline form
-    @RequestMapping(value="/add_computer", method = RequestMethod.POST)
-    public String addComputer(
-            @ModelAttribute @Valid AddComputerForm addComputerForm,
+    @RequestMapping(value="/add_asset", method = RequestMethod.POST)
+    public String addasset(
+            @ModelAttribute @Valid AddAssetForm addAssetForm,
             Errors errors,
             Model model,
             @PathVariable int companyId
@@ -159,33 +159,32 @@ public class ComputersController {
             model.addAttribute("isAdmin", isAdmin(user, roleRepository));
             model.addAttribute("company", myCompany);
             model.addAttribute("offices", myOffices);
-            model.addAttribute("addComputerForm", addComputerForm);
+            model.addAttribute("addAssetForm", addAssetForm);
             model.addAttribute("techCompany", techCompany);
 
-            return "tech/computers/add_computer";
+            return "tech/assets/add_asset";
         } else {
-            Computer addComputer = new Computer(addComputerForm);
-            computerRepository.save(addComputer);
-            myCompany.addComputer(addComputer);
+            Asset addAsset = new Asset(addAssetForm);
+            assetRepository.save(addAsset);
+            myCompany.addAsset(addAsset);
             companyRepository.save(myCompany);
 
-            return "redirect:/tech/" + myCompany.getId() + "/computers";
+            return "redirect:/tech/" + myCompany.getId() + "/assets";
         }
     }
 
-
-    // Edit Computer
-    @RequestMapping(value="{computerId}/edit_computer", method = RequestMethod.GET)
-    public String editComputer(
+    // Edit Asset
+    @RequestMapping(value="{assetId}/edit_asset", method = RequestMethod.GET)
+    public String editasset(
             Model model,
             @PathVariable int companyId,
-            @PathVariable int computerId){
+            @PathVariable int assetId){
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
         Company myCompany = companyRepository.findOne(companyId);
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findUserByUsername(auth.getName());
-        Computer myComputer = computerRepository.findOne(computerId);
-        AddComputerForm addComputerForm = new AddComputerForm(myComputer);
+        Asset myAsset = assetRepository.findOne(assetId);
+        AddAssetForm addAssetForm = new AddAssetForm(myAsset);
         List<Office> myOffices = new ArrayList<Office>();
 
         for (Site site: myCompany.getSites()) {
@@ -198,7 +197,7 @@ public class ComputersController {
         if(!isTech(user, roleRepository) ||
                 myCompany == null ||
                 myCompany.getId() == techCompany.getId() ||
-                myComputer.getOffice().getSite().getCompany().getId() != myCompany.getId()){
+                myAsset.getOffice().getSite().getCompany().getId() != myCompany.getId()){
             return "redirect:/";
         }
 
@@ -206,26 +205,26 @@ public class ComputersController {
         model.addAttribute("isAdmin", isAdmin(user, roleRepository));
         model.addAttribute("company", myCompany);
         model.addAttribute("offices", myOffices);
-        model.addAttribute("addComputerForm", addComputerForm);
+        model.addAttribute("addAssetForm", addAssetForm);
         model.addAttribute("techCompany", techCompany);
 
-        return "tech/computers/edit_computer";
+        return "tech/assets/edit_asset";
     }
 
     // This will display a specific site view and add offie from inline form
-    @RequestMapping(value="{computerId}/edit_computer", method = RequestMethod.POST)
-    public String editComputer(
-            @ModelAttribute @Valid AddComputerForm addComputerForm,
+    @RequestMapping(value="{assetId}/edit_asset", method = RequestMethod.POST)
+    public String editasset(
+            @ModelAttribute @Valid AddAssetForm addAssetForm,
             Errors errors,
             Model model,
             @PathVariable int companyId,
-            @PathVariable int computerId
+            @PathVariable int assetId
     ) {
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
         Company myCompany = companyRepository.findOne(companyId);
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findUserByUsername(auth.getName());
-        Computer myComputer = computerRepository.findOne(computerId);
+        Asset myAsset = assetRepository.findOne(assetId);
         List<Office> myOffices = new ArrayList<Office>();
 
         for (Site site: myCompany.getSites()) {
@@ -238,61 +237,61 @@ public class ComputersController {
         if (!isTech(user, roleRepository) ||
                 myCompany == null ||
                 myCompany.getId() == techCompany.getId() ||
-                myComputer.getOffice().getSite().getCompany().getId() != myCompany.getId()) {
+                myAsset.getOffice().getSite().getCompany().getId() != myCompany.getId()) {
             return "redirect:/";
         } else if (errors.hasErrors()) {
             model.addAttribute("user", user);
             model.addAttribute("isAdmin", isAdmin(user, roleRepository));
             model.addAttribute("company", myCompany);
             model.addAttribute("offices", myOffices);
-            model.addAttribute("addComputerForm", addComputerForm);
+            model.addAttribute("addAssetForm", addAssetForm);
             model.addAttribute("techCompany", techCompany);
 
-            return "tech/computers/edit_computer";
+            return "tech/assets/edit_asset";
         } else {
-            if(!addComputerForm.getName().equals(myComputer.getName())){
-                myComputer.setName(addComputerForm.getName());
+            if(!addAssetForm.getName().equals(myAsset.getName())){
+                myAsset.setName(addAssetForm.getName());
             }
 
-            if(addComputerForm.getOffice().getId() != myComputer.getOffice().getId()){
-                myComputer.setOffice(officeRepository.findOne(addComputerForm.getOffice().getId()));
+            if(addAssetForm.getOffice().getId() != myAsset.getOffice().getId()){
+                myAsset.setOffice(officeRepository.findOne(addAssetForm.getOffice().getId()));
             }
 
-            computerRepository.save(myComputer);
+            assetRepository.save(myAsset);
             companyRepository.save(myCompany);
 
-            return "redirect:/tech/" + myCompany.getId() + "/computers";
+            return "redirect:/tech/" + myCompany.getId() + "/assets";
         }
     }
 
 
-    @RequestMapping(value="/{computerId}", method = RequestMethod.POST)
-    public String viewComputer(Model model,
+    @RequestMapping(value="/{assetId}", method = RequestMethod.POST)
+    public String viewasset(Model model,
                                @PathVariable int companyId,
-                               @PathVariable int computerId,
+                               @PathVariable int assetId,
                                @RequestParam String specName,
                                @RequestParam String specValue) {
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
         Company myCompany = companyRepository.findOne(companyId);
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findUserByUsername(auth.getName());
-        Computer myComputer = computerRepository.findOne(computerId);
+        Asset myAsset = assetRepository.findOne(assetId);
 
         // Programatically verify that this is a tech
         if (!isTech(user, roleRepository) ||
                 myCompany == null ||
                 myCompany.getId() == techCompany.getId() ||
-                myCompany.getId() != myComputer.getOffice().getSite().getCompany().getId()) {
+                myCompany.getId() != myAsset.getOffice().getSite().getCompany().getId()) {
             return "redirect:/";
         }
 
-        ComputerSpec myComputerSpec = new ComputerSpec(myComputer, specName, specValue);
-        computerSpecRepository.save(myComputerSpec);
-        myComputer.addComputerSpec(myComputerSpec);
-        computerRepository.save(myComputer);
+        AssetSpec myAssetSpec = new AssetSpec(myAsset, specName, specValue);
+        assetSpecRepository.save(myAssetSpec);
+        myAsset.addAssetSpec(myAssetSpec);
+        assetRepository.save(myAsset);
         companyRepository.save(myCompany);
 
-        return "redirect:/tech/" + myCompany.getId() + "/computers/"+myComputer.getId();
+        return "redirect:/tech/" + myCompany.getId() + "/assets/"+ myAsset.getId();
     }
 
 

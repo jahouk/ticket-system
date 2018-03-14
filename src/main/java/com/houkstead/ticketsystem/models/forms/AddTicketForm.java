@@ -1,6 +1,6 @@
 package com.houkstead.ticketsystem.models.forms;
 
-import com.houkstead.ticketsystem.models.Computer;
+import com.houkstead.ticketsystem.models.Asset;
 import com.houkstead.ticketsystem.models.User;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -12,7 +12,7 @@ public class AddTicketForm {
         @NotEmpty(message = "*Title is required")
         private String description;     // Full Description
 
-        private Computer computer;      // The affected computer which then tells the site and company
+        private Asset asset;      // The affected asset which then tells the site and company
 
         private User owner;
 
@@ -39,12 +39,12 @@ public class AddTicketForm {
         this.description = description;
     }
 
-    public Computer getComputer() {
-        return computer;
+    public Asset getAsset() {
+        return asset;
     }
 
-    public void setComputer(Computer computer) {
-        this.computer = computer;
+    public void setAsset(Asset asset) {
+        this.asset = asset;
     }
 
     public User getOwner() {
