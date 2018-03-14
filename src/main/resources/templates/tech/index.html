@@ -1,46 +1,50 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org/">
-<head th:replace="techFragments :: head"></head>
+<head th:replace="fragments/techFragments :: head"></head>
 
 <body class="container">
-<div th:replace="techFragments :: welcome"></div>
-<nav th:replace="techFragments :: navigation"></nav>
+<div th:replace="fragments/techFragments :: masthead"></div>
 
 <div class="container-fluid">
     <div class="row content">
         <div class="col-sm-9">
+            <p><strong>All Customers</strong></p>
             <table>
                 <tr th:each="company : ${companies}">
-                    <td th:text="${company.companyInfo.name}">1</td>
+                    <td th:unless="${company.id} == ${techCompany.id}">
+                        <a th:href="@{|/tech/${company.id}|}" th:text="${company.companyInfo.name}">1</a>
+                    </td>
+                </tr>
+            </table>
+
+            <hr />
+
+            <p><strong>All Tickets</strong></p>
+            <p th:unless="${tickets} and ${tickets.size()}">Yay! No open tickets found<br/></p>
+
+            <table th:if="${tickets} and ${tickets.size()}"  class="table">
+                <thead>
+                <th>Ticket #</th>
+                <th>Company</th>
+                <th>Description</th>
+                <th>Owner</th>
+                <th>Status</th>
+                </thead>
+                <tr th:each="ticket : ${tickets}">
+                    <td><a th:href="@{|/tech/${ticket.asset.office.site.company.id}/tickets/${ticket.id}|}" th:text="${ticket.id}"></a></td>
+                    <td th:text="${ticket.asset.office.site.company.companyInfo.name}"></td>
+                    <td th:text="${ticket.description}"></td>
+                    <td th:text="@{|${ticket.owner.userInfo.fname} ${ticket.owner.userInfo.lname}|}"></td>
+                    <td th:text="${ticket.status.status}"></td>
                 </tr>
             </table>
         </div>
 
-        <div class="col-sm-3 sidenav">
-
-            <ul>
-                <li>Company</li>
-                <ul>
-                    <li>Site</li>
-                    <li>User</li>
-                    <li>Computer</li>
-                </ul>
-                <li>Status</li>
-                <li>Tech</li>
-            </ul>
+        <div th:replace="fragments/techFragments:: side-navigation" class="col-sm-3 sidenav" >
         </div>
     </div>
 </div>
-<p>&nbsp;</p>
 
-
-
-<p>&nbsp;</p>
-
-<p><a href="/admin/add_company">Add Company</a></p>
-
-<footer class="container-fluid">
-    <p>Footer Text</p>
-</footer>
+<footer th:replace="fragments/techFragments:: footer"></footer>
 </body>
 </html>

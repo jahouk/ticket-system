@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments/techFragments :: head"></head>
+
+<body class="container">
+<div th:replace="fragments/techFragments :: masthead"></div>
+
+<div class="container-fluid">
+    <div class="row content">
+        <div class="col-sm-9">
+            <div class="row">
+                <div class="col-sm-6">
+                    <p th:inline="text">Owner: [[${ticket.owner.userInfo.fname}]] [[${ticket.owner.userInfo.lname}]]<br />
+                        Email/Username: [[${ticket.owner.username}]]<br />
+                        Company Username: [[${ticket.owner.userInfo.companyUserName}]]</p>
+                </div>
+                <div class="col-sm-6">
+                    <p th:inline="text">Company Phone: [[${ticket.owner.userInfo.phone}]]<br />
+                        Cell Phone: [[${ticket.owner.userInfo.cellphone}]]<br/>
+                        Office: [[${ticket.owner.userInfo.office.office}]]</p>
+                </div>
+            </div>
+            <div class="row">
+                <h5 th:inline="text">Ticket#: [[${ticket.id}]]</h5>
+                <p th:inline="text">Created: [[${ticket.created}]]<br/>
+                    Status: [[${ticket.status.status}]]</p>
+            </div>
+            <div class="row">
+                <p th:inline="text">Title: [[${ticket.title}]]</p>
+                <p th:inline="text">Description: [[${ticket.description}]]</p>
+            </div>
+            <div class="row">
+                <h5>Ticket Updates</h5>
+                <p><a th:href="@{|/tech/${company.id}/tickets/${ticket.id}/add_update|}">Update ticket</a></p>
+
+                <div th:if="${ticket.updates} and ${ticket.updates.size()}">
+
+                    <div class="row" th:each="update : ${ticket.updates}">
+                        <hr />
+                        <div class="col-sm-8">
+                            <p th:inline="text">Title: [[${update.updateTitle}]]</p>
+                            <p th:inline="text">Description: [[${update.updateDescription}]]</p>
+                        </div>
+                        <div class="col-sm-3">
+                        <p th:inline="text">User: [[${update.user.username}]]</p>
+
+                        <p th:inline="text">Timestamp: [[${update.timestamp}]]</p>
+                        </div>
+                    </div>
+                    <hr />
+
+                    <p><a th:href="@{|/tech/${company.id}/tickets/${ticket.id}/add_update|}">Update ticket</a></p>
+                </div>
+
+                <div th:unless="${ticket.updates} and ${ticket.updates.size()}">
+                    <p>No ticket updates</p>
+                    <p>&nbsp;</p>
+                    <p><a th:href="@{|/tech/${company.id}/tickets/${ticket.id}/add_update|}">Update ticket</a></p>
+                </div>
+            </div>
+        </div>
+        <div th:replace="fragments/techFragments:: side-navigation" class="col-sm-3 sidenav" >
+        </div>
+    </div>
+</div>
+
+
+<footer th:replace="fragments/techFragments:: footer"></footer>
+</body>
+</html>

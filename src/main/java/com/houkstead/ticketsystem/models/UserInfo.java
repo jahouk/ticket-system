@@ -18,11 +18,11 @@ public class UserInfo {
 
     @OneToOne
     @JoinColumn(foreignKey=@ForeignKey(name="FK_USER_USER_INFO"))
-    private User userId;                // Link to the user
+    private User userId;                // Link to the users
 
     @Column(name="company_user_name")
     private String companyUserName;     // User's Login Name at their company /
-    // company computer
+
 
     @Column(name = "fname")
     @NotEmpty(message = "*First name is required")
@@ -40,8 +40,8 @@ public class UserInfo {
     @NotNull
     private String email;               // email address
 
-    @ManyToOne
-    @JoinColumn(foreignKey=@ForeignKey(name="FK_OFFICE_USER_INFO"))
+    @ManyToOne(cascade = CascadeType.DETACH)
+    @JoinColumn(name="office_id", foreignKey=@ForeignKey(name="FK_OFFICE_USER_INFO"))
     private Office office;              // Office Location, which also then has
     // company/site info
 

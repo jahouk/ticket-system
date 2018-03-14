@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments/techFragments :: head"></head>
+
+<body class="container">
+<div th:replace="fragments/techFragments :: masthead"></div>
+
+<div class="container-fluid">
+    <div class="row content">
+        <div class="col-sm-9">
+
+            <p><strong>Tickets</strong></p>
+            <p th:unless="${company.tickets} and ${company.tickets.size()}">No tickets found<br/></p>
+
+            <table th:if="${company.tickets} and ${company.tickets.size()}"  class="table">
+                <thead>
+                <th>Ticket #</th>
+                <th>Description</th>
+                <th>Owner</th>
+                <th>Status</th>
+                </thead>
+                <tr th:each="ticket : ${company.tickets}">
+                    <td><a th:href="@{|tech/${company.id}/ticket/${ticket.id}|}" th:text="${ticket.id}"></a></td>
+                    <td th:text="${ticket.description}"></td>
+                    <td th:text="@{|${ticket.owner.userInfo.fname} ${ticket.owner.userInfo.lname}|}"></td>
+                    <td th:text="${ticket.status.status}"></td>
+                </tr>
+            </table>
+            <p><a th:href="@{|/tech/add_ticket/${company.id}|}" >Add Ticket</a></p>
+
+        </div>
+
+        <div th:replace="fragments/techFragments:: side-navigation" class="col-sm-3 sidenav" >
+        </div>
+    </div>
+</div>
+
+<footer th:replace="fragments/techFragments:: footer"></footer>
+</body>
+</html>

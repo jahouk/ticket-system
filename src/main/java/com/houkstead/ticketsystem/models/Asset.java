@@ -1,49 +1,53 @@
 package com.houkstead.ticketsystem.models;
 
+import com.houkstead.ticketsystem.models.forms.AddAssetForm;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 
 @Entity
-@Table(name = "COMPUTER",uniqueConstraints = @UniqueConstraint(columnNames = "computer_id", name = "COMPUTER_PK_CONSTRAINT"))
-public class Computer {
+@Table(name = "ASSET",uniqueConstraints = @UniqueConstraint(columnNames = "asset_id", name = "ASSET_PK_CONSTRAINT"))
+public class Asset {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "computer_id")
+    @Column(name = "asset_id")
     private int id;                     // Auto Number
 
-    @NotEmpty(message="*Computer's name is required")
+    @NotEmpty(message="*Asset's name is required")
     @Length(max = 40)
     @Column(name = "name", nullable = false)
     private String name;                // Workstation Name or ID
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(foreignKey=@ForeignKey(name="FK_COMPUTER_SPEC_COMPUTER"))
-    private Set<ComputerSpec> specs;   // list of specs about the computer
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval=true)
+    private List<AssetSpec> specs = new ArrayList<AssetSpec>();   // list of specs about the computer
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(foreignKey=@ForeignKey(name="FK_TICKET_COMPUTER"))
-    private Set<Ticket> tickets;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval=true)
+    private List<Ticket> tickets = new ArrayList<Ticket>();
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.DETACH)
+    @JoinColumn(name = "company_id", foreignKey=@ForeignKey(name="FK_COMPANY_ASSET"))
     private Company company;            // what company owns the computer
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.DETACH)
+    @JoinColumn(name = "office_id", foreignKey=@ForeignKey(name="FK_OFFICE_ASSET"))
     private Office office;              // where the computer is physically located
 
     // Constructors -----------------------------------------------------------
 
-    public Computer(){}
+    public Asset(){}
 
-    public Computer(String name, Office office){
+    public Asset(String name, Office office){
         setName(name);
         setOffice(office);
+    }
+
+    public Asset(AddAssetForm addAssetForm){
+        this(addAssetForm.getName(), addAssetForm.getOffice());
     }
 
     // Start of Getters and Setters -------------------------------------------
@@ -71,17 +75,21 @@ public class Computer {
     }
 
     // Specs
-    public Set<ComputerSpec> getSpecs() {
+    public List<AssetSpec> getSpecs() {
         return specs;
     }
 
-    public void setSpec(ComputerSpec computerSpec) {
-        specs.add(computerSpec);
+    public void addAssetSpec(AssetSpec assetSpec){
+        specs.add(assetSpec);
     }
 
     // Tickets
 
-    public Set<Ticket> getTickets() {
+    public List<Ticket> getTickets() {
         return tickets;
+    }
+
+    public void addTicket(Ticket ticket){
+        tickets.add(ticket);
     }
 }

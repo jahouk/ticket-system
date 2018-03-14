@@ -4,6 +4,9 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -19,28 +22,28 @@ public class Site {
     @NotNull
     private String site;
 
-    @ManyToOne
-    @JoinColumn(foreignKey=@ForeignKey(name="FK_ADDRESS_SITE"))
+    @ManyToOne(cascade = CascadeType.DETACH)
+    @JoinColumn(name="address_id", foreignKey=@ForeignKey(name="FK_ADDRESS_SITE"))
     private Address address;    // street address
 
     @Column(name = "phone")
-    @NotEmpty(message = "*Site Phone Number Required")
+    @NotEmpty(message = "*SitesController Phone Number Required")
     @NotNull
     private String phone;       // site phone number
 
     @Column(name = "fax")
     private String fax;         // site fax number
 
-    @ManyToOne
-    @JoinColumn(foreignKey=@ForeignKey(name="FK_USER_SITE"))
+    @ManyToOne(cascade = CascadeType.DETACH)
+    @JoinColumn(name="user_id", foreignKey=@ForeignKey(name="FK_USER_SITE"))
     private User siteContact;   // site Main Contact
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.DETACH)
+    @JoinColumn(name="company_id", foreignKey=@ForeignKey(name="FK_COMPANY_SITE"))
     private Company company;
 
-    @OneToMany
-    @JoinColumn(foreignKey = @ForeignKey(name="FK_OFFICE_SITE"))
-    private Set<Office> offices;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval=true)
+    private List<Office> offices = new ArrayList<Office>();
 
     // Constructors -----------------------------------------------------------
 
@@ -108,7 +111,7 @@ public class Site {
         this.siteContact = siteContact;
     }
 
-    // Site (name)
+    // SitesController (name)
     public String getSite() {
         return site;
     }
@@ -117,8 +120,13 @@ public class Site {
         this.site = site;
     }
 
-    // Site Offices
-    public Set<Office> getOffices(){return offices;}
+    // SitesController Offices
+    public List<Office> getOffices(){return offices;}
+
+    public void addOffice(Office office){
+        offices.add(office);
+    }
+
 
 }
 

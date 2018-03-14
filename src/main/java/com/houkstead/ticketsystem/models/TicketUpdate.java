@@ -1,5 +1,6 @@
 package com.houkstead.ticketsystem.models;
 
+import com.houkstead.ticketsystem.models.forms.AddTicketUpdateForm;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
@@ -16,12 +17,13 @@ public class TicketUpdate {
     @Column(name = "ticket_update_id")
     private int id;                     // autonumber
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.DETACH)
+    @JoinColumn(name="ticket_id", foreignKey=@ForeignKey(name="FK_TICKET_TICKET_UPDATE"))
     private Ticket ticket;              // owning ticket
 
-    @ManyToOne
-    @JoinColumn(foreignKey=@ForeignKey(name="FK_USER_TICKET_UPDATE"))
-    private User user;                  // user who is doing update
+    @ManyToOne(cascade = CascadeType.DETACH)
+    @JoinColumn(name="user_id", foreignKey=@ForeignKey(name="FK_USER_TICKET_UPDATE"))
+    private User user;                  // users who is doing update
 
     @Column(name = "timestamp")
     private Timestamp timestamp;        // timestamp of update
@@ -42,9 +44,17 @@ public class TicketUpdate {
                         String description ){
         setTicket(ticket);
         setUser(user);
-        setTimestamp(new Timestamp(now()));
+        setTimestamp(new Timestamp(System.currentTimeMillis()));
         setUpdateTitle(title);
         setUpdateDescription(description);
+    }
+
+    public TicketUpdate(Ticket ticket, User user, AddTicketUpdateForm addTicketUpdateForm){
+        setTicket(ticket);
+        setUser(user);
+        setTimestamp(new Timestamp(System.currentTimeMillis()));
+        setUpdateTitle(addTicketUpdateForm.getUpdateTitle());
+        setUpdateDescription(addTicketUpdateForm.getUpdateDescription());
     }
 
     // Start of Getters and Setters -------------------------------------------

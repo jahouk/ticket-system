@@ -4,9 +4,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 
 @Entity
@@ -18,9 +16,8 @@ public class Office {
     @Column(name = "office_id")
     private int id;             // auto-number
 
-    @ManyToOne
-    @JoinColumn(name="site_id")
-    @NotNull
+    @ManyToOne(cascade = CascadeType.DETACH)
+    @JoinColumn(name = "site_id",foreignKey=@ForeignKey(name="FK_SITE_OFFICE"))
     private Site site;          // Physical Location of the building
 
     @NotEmpty(message="*Location Description/Name is required")
@@ -28,9 +25,8 @@ public class Office {
     @Column(name="office")
     private String office;    // Physical Location of Office by Description or Room Number
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(foreignKey=@ForeignKey(name="FK_COMPUTER_OFFICE"))
-    private Set<Computer> computers; // List of computers in this office
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval=true)
+    private List<Asset> assets; // List of assets in this office
 
 
     // Constructors -----------------------------------------------------------
@@ -48,7 +44,7 @@ public class Office {
         return id;
     }
 
-    // Site
+    // SitesController
     public Site getSite() {
         return site;
     }
@@ -66,9 +62,13 @@ public class Office {
         this.office = office;
     }
 
-    // List of Computers
-    public Set<Computer> getComputers() {
-        return computers;
+    // List of Assets
+    public List<Asset> getAssets() {
+        return assets;
+    }
+
+    public void addAsset(Asset asset){
+        assets.add(asset);
     }
 
 }

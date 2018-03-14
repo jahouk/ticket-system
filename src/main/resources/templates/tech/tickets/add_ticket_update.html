@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments/techFragments :: head"></head>
+
+<body class="container">
+<div th:replace="fragments/techFragments :: masthead"></div>
+
+<div class="container-fluid">
+    <div class="row content">
+        <div class="col-sm-9">
+            <form autocomplete="off"
+                  th:object="${addTicketUpdateForm}" method="post" class="form-horizontal"
+                  role="form">
+                <fieldset>
+                    <legend th:inline="text">Update Ticket [[${ticket.id}]]:</legend>
+                    <div class="col-sm-9">
+                        <input type="text" th:field="*{updateTitle}" placeholder="Update Title"
+                               class="form-control" th:value="${addTicketUpdateForm.updateTitle}" /> <label
+                            th:if="${#fields.hasErrors('updateTitle')}" th:errors="*{updateTitle}"
+                            class="validation-message"></label>
+                    </div>
+                    <div class="col-sm-9">
+                        <input type="text" th:field="*{updateDescription}" placeholder="Update Description"
+                               class="form-control" th:value="${addTicketUpdateForm.updateDescription}" /> <label
+                            th:if="${#fields.hasErrors('updateDescription')}" th:errors="*{updateDescription}"
+                            class="validation-message"></label>
+                    </div>
+                    <div class="col-sm-9">
+                        <select name="status">
+                            <option th:each="status : ${statuses}"
+                                    th:text="${status.status}"
+                                    th:value="${status.id}"></option>
+                        </select>
+                    </div>
+
+                </fieldset>
+
+                <div class="form-group">
+                    <div class="col-sm-9">
+                        <button type="submit" class="btn btn-primary btn-block">Add Ticket Update</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<footer th:replace="fragments/techFragments:: footer"></footer>
+</body>
+</html>

@@ -36,8 +36,9 @@ public class User {
     @Column(name = "active")
     private Integer active;
 
-    @ManyToOne
-    private Company company;            // Company that owns user
+    @ManyToOne(cascade = CascadeType.DETACH)
+    @JoinColumn(name="company_id", foreignKey=@ForeignKey(name="FK_COMPANY_USER"))
+    private Company company;            // Company that owns users
 
     // Constructors -----------------------------------------------------------
     public User(){}

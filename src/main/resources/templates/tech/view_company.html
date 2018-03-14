@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments/techFragments :: head"></head>
+
+<body class="container">
+<div th:replace="fragments/techFragments :: masthead"></div>
+
+<div class="container-fluid">
+    <div class="row content">
+        <div class="col-sm-9">
+
+            <p><strong>Tickets</strong></p>
+            <p th:unless="${company.tickets} and ${company.tickets.size()}">No tickets found<br/></p>
+
+            <table th:if="${company.tickets} and ${company.tickets.size()}"  class="table">
+                <thead>
+                    <th>Ticket #</th>
+                    <th>Description</th>
+                    <th>Owner</th>
+                    <th>Status</th>
+                </thead>
+                <tr th:each="ticket : ${company.tickets}">
+                    <td><a th:href="@{|/tech/${company.id}/tickets/${ticket.id}|}" th:text="${ticket.id}"></a></td>
+                    <td th:text="${ticket.description}"></td>
+                    <td th:text="@{|${ticket.owner.userInfo.fname} ${ticket.owner.userInfo.lname}|}"></td>
+                    <td th:text="${ticket.status.status}"></td>
+                </tr>
+            </table>
+            <p><a th:href="@{|/tech/${company.id}/tickets/add_ticket|}" >Add Ticket</a></p>
+
+            <hr />
+
+            <p><strong>Users</strong></p>
+            <p th:unless="${company.users} and ${company.users.size()}">No users found<br/></p>
+
+            <table th:if="${company.users} and ${company.users.size()}"  class="table">
+                <thead>
+                <th>Username</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Edit</th>
+                </thead>
+                <tr th:each="companyUser : ${company.users}">
+                    <td><a th:href="@{|/tech/${company.id}/users/${companyUser.id}|}" th:text="${companyUser.username}"></a></td>
+                    <td th:text="${companyUser.userInfo.fname}"></td>
+                    <td th:text="${companyUser.userInfo.lname}"></td>
+                    <td><a th:href="@{|tech/${company.id}/users/${companyUser.id}|}">Edit</a></td>
+                </tr>
+            </table>
+            <p><a th:href="@{|/tech/${company.id}/users/add_user|}" >Add User</a></p>
+
+            <hr />
+
+            <p><strong>Sites</strong></p>
+            <p th:unless="${company.sites} and ${company.sites.size()}">No sites found<br/></p>
+
+            <table th:if="${company.sites} and ${company.sites.size()}"  class="table">
+                <thead>
+                <th>Site Name</th>
+                <th>Street Address 1</th>
+                <th>City</th>
+                <th>State</th>
+                <th>Phone</th>
+                <th>Contact</th>
+                <th>&nbsp;</th>
+                </thead>
+                <tr th:each="site : ${company.sites}">
+                    <td><a th:href="@{|/tech/${company.id}/sites/${site.id}|}" th:text="${site.site}"></a></td>
+                    <td th:text="${site.address.address1}"></td>
+                    <td th:text="${site.address.city}"></td>
+                    <td th:text="${site.address.state}"></td>
+                    <td th:text="${site.phone}"></td>
+                    <td th:text="@{|${site.siteContact.userInfo.fname} ${site.siteContact.userInfo.lname}|}"></td>
+                    <td><a th:href="@{|/tech/${company.id}/sites/${site.id}/edit_site|}">Edit</a></td>
+                </tr>
+            </table>
+            <p><a th:href="@{|/tech/${company.id}/sites/add_site|}" >Add Site</a></p>
+
+            <hr />
+
+            <p><strong>Assets (Computers)</strong></p>
+            <p th:unless="${company.assets} and ${company.assets.size()}">No assets found<br/></p>
+
+            <table th:if="${company.assets} and ${company.assets.size()}"  class="table">
+                <thead>
+                <th>asset</th>
+                <th>Office</th>
+                <th>Site</th>
+                <th>&nbsp;</th>
+                </thead>
+                <tr th:each="asset : ${company.assets}">
+                    <td><a th:href="@{|/tech/${company.id}/assets/${asset.id}|}" th:text="${asset.name}"></a></td>
+                    <td th:text="${asset.office.office}"></td>
+                    <td th:text="${asset.office.site.site}"></td>
+                    <td><a th:href="@{|/tech/${company.id}/assets/${asset.id}/edit_asset|}">Edit</a></td>
+                </tr>
+            </table>
+            <p><a th:href="@{|/tech/${company.id}/assets/add_asset|}" >Add Asset</a></p>
+
+            <hr />
+
+
+
+        </div>
+
+        <div th:replace="fragments/techFragments:: side-navigation" class="col-sm-3 sidenav" >
+        </div>
+    </div>
+</div>
+
+<footer th:replace="fragments/techFragments:: footer"></footer>
+</body>
+</html>

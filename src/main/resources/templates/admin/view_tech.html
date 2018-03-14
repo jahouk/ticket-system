@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments/techFragments :: head"></head>
+
+<body class="container">
+<div th:replace="fragments/techFragments :: masthead"></div>
+
+<div class="container-fluid">
+    <div class="row content">
+        <div class="col-sm-9">
+            <p><strong>Tech</strong></p>
+            <p th:inline="text">Name: [[${myUser.userInfo.fname}]]
+                [[${myUser.userInfo.lname}]]</p>
+            <p th:inline="text">Username: [[${myUser.username}]]</p>
+            <p th:inline="text">Title: [[${myUser.userInfo.title}]]</p>
+            <p th:inline="text">Email: [[${myUser.userInfo.email}]]</p>
+            <p th:inline="text">Site: [[${myUser.userInfo.office.site.site}]]</p>
+            <p th:inline="text">Office: [[${myUser.userInfo.office.office}]]</p>
+            <p th:inline="text">Office Phone: [[${myUser.userInfo.phone}]]</p>
+            <p th:inline="text">Cell Phone: [[${myUser.userInfo.cellphone}]]</p>
+            <p>&nbsp;</p>
+            <p><a th:href="@{|/tech/${company.id}/users/${myUser.id}/edit_user/|}" >Edit User</a></p>
+        </div>
+
+
+        <div th:replace="fragments/techFragments:: side-navigation" class="col-sm-3 sidenav" >
+        </div>
+    </div>
+</div>
+
+<footer th:replace="fragments/techFragments:: footer"></footer>
+</body>
+</html>

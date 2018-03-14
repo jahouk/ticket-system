@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
-import javax.persistence.EntityManagerFactory;
+
 
 @Configuration
 public class WebMvcConfig extends WebMvcConfigurerAdapter {
@@ -18,8 +18,5 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         return bCryptPasswordEncoder;
     }
 
-    @Bean
-    public SessionFactory sessionFactory(HibernateEntityManagerFactory hemf) {
-        return hemf.getSessionFactory();
-    }
+
 }

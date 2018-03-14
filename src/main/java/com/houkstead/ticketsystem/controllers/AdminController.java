@@ -56,7 +56,7 @@ public class AdminController {
     @RequestMapping(value = "add_company", method = RequestMethod.GET)
     public String addCompany(Model model) {
         //Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        //User user = userService.findUserByUsername(auth.getName());
+        //User users = userService.findUserByUsername(auth.getName());
 
         AddCompanyForm addCompanyForm = new AddCompanyForm();
         model.addAttribute("addCompanyForm", addCompanyForm);
@@ -64,7 +64,7 @@ public class AdminController {
         model.addAttribute("title", "Setup New Customer Company");
         model.addAttribute("action", "/admin/add_company");
 
-        return "shared/add_company";
+        return "admin/add_company";
     }
 
     @RequestMapping(value = "add_company", method = RequestMethod.POST)
@@ -78,7 +78,7 @@ public class AdminController {
             model.addAttribute("title", "Setup Customer Company");
             model.addAttribute("action", "/admin/add_company");
 
-            return "shared/add_company";
+            return "admin/add_company";
         } else {
             Company company = null;
             CompanyInfo companyInfo = null;
@@ -120,6 +120,12 @@ public class AdminController {
                     companyRepository
             );
 
+            company.addAddress(billingAddress);
+            if(billingAddress.getId() != streetAddress.getId()){
+                company.addAddress(streetAddress);
+            }
+
+
             // Create admin User
             userService.saveUser(new User(
                     addCompanyForm.getUsername(),
@@ -132,7 +138,7 @@ public class AdminController {
             user = userService.findUserByUsername(addCompanyForm.getUsername());
 
 
-            // Create Site
+            // Create SitesController
             site = createSite(new Site(
                             addCompanyForm.getSite(),
                             company,
@@ -143,9 +149,10 @@ public class AdminController {
                     siteRepository
             );
 
-
-            // Office
             office = createOffice(new Office(site, addCompanyForm.getOffice()), officeRepository);
+
+            site.addOffice(office);
+            company.addSite(site);
 
 
             // User_Info
@@ -163,7 +170,7 @@ public class AdminController {
             ), userInfoRepository);
 
 
-            // Create CompanyInfo (Site, Billing Address)
+            // Create CompanyInfo (SitesController, Billing Address)
             companyInfo = createCompanyInfo(new CompanyInfo(
                             addCompanyForm.getCompanyName(),
                             company,
@@ -172,21 +179,48 @@ public class AdminController {
                             addCompanyForm.getWebsite()
                     ),
                     companyInfoRepository);
-
-            // Update Company (CompanyInfo)
             company.setCompanyInfo(companyInfo);
-            companyRepository.save(company);
 
             // update User (User Info)
             user.setUserInfo(userInfo);
             user.setPassword(addCompanyForm.getPassword());
             userService.saveUser(user);
+            company.addUser(user);
 
-            //model.addAttribute("addCompanyForm", addCompanyForm);
-            //model.addAttribute("title","Tech Company and Admin User Setup");
-            //model.addAttribute("message", "Setup was successful");
+            companyRepository.save(company);
 
             return "redirect:/tech";
         }
     }
+
+    @RequestMapping(value = "techs", method = RequestMethod.GET)
+    public String viewAllTechs(Model model) {
+
+
+        return "admin/view_all_techs";
+    }
+
+
+    @RequestMapping(value = "techs/add_tech", method = RequestMethod.GET)
+    public String addTech(Model model) {
+
+
+        return "admin/view_all_techs";
+    }
+
+    @RequestMapping(value = "techs/edit_tech", method = RequestMethod.GET)
+    public String editTech(Model model) {
+
+
+        return "admin/view_all_techs";
+    }
+
+    @RequestMapping(value = "tech/{tech_id}", method = RequestMethod.GET)
+    public String viewTech(Model model) {
+
+
+        return "admin/view_all_techs";
+    }
+
+
 }

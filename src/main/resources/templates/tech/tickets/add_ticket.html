@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments/techFragments :: head"></head>
+
+<body class="container">
+<div th:replace="fragments/techFragments :: masthead"></div>
+
+<div class="container-fluid">
+    <div class="row content">
+        <div class="col-sm-9">
+            <form autocomplete="off"
+                  th:object="${addTicketForm}" method="post" class="form-horizontal"
+                  role="form">
+                <fieldset>
+                    <legend>Add Ticket:</legend>
+
+                    <div class="col-sm-9">
+                        <label th:for="owner">Owner</label>
+                        <select name="owner">
+                            <option th:each="user : ${company.users}"
+                                    th:text="@{|${user.userInfo.fname} ${user.userInfo.lname}|}"
+                                    th:value="${user.id}"></option>
+                        </select>
+                    </div>
+                    <div class="col-sm-9">
+                        <label th:for="asset">Asset (Computer)</label>
+                        <select name="asset">
+                            <option th:each="asset : ${company.assets}"
+                                    th:text="@{|${asset.name} in ${asset.office.office} at ${asset.office.site.site}|}"
+                                    th:value="${asset.id}"></option>
+                        </select>
+                    </div>
+
+
+                    <div class="col-sm-9">
+                        <input type="text" th:field="*{title}" placeholder="Title"
+                               class="form-control" th:value="${addTicketForm.title}" /> <label
+                            th:if="${#fields.hasErrors('title')}" th:errors="*{title}"
+                            class="validation-message"></label>
+                    </div>
+                    <div class="col-sm-9">
+                        <input type="text" th:field="*{description}" placeholder="Description"
+                               class="form-control" th:value="${addTicketForm.description}" /> <label
+                            th:if="${#fields.hasErrors('description')}" th:errors="*{description}"
+                            class="validation-message"></label>
+                    </div>
+                </fieldset>
+
+                <div class="form-group">
+                    <div class="col-sm-9">
+                        <button type="submit" class="btn btn-primary btn-block">Add Ticket</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<footer th:replace="fragments/techFragments:: footer"></footer>
+</body>
+</html>

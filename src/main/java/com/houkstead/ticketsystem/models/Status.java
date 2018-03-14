@@ -26,9 +26,8 @@ public class Status {
     @Column(name = "sort_order")
     private int sortOrder;          // sort order for displaying
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(foreignKey=@ForeignKey(name="FK_TICKET_STATUS"))
-    private Set<Ticket> tickets;   // Tickets that belong to this status
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval=true)
+    private List<Ticket> tickets = new ArrayList<Ticket>();   // Tickets that belong to this status
 
     // Constructors -----------------------------------------------------------
 
@@ -64,6 +63,10 @@ public class Status {
     }
 
     // Tickets
-    public Set<Ticket> getTickets(){return tickets;}
+    public List<Ticket> getTickets(){return tickets;}
+
+    public void addTicket(Ticket ticket){
+        tickets.add(ticket);
+    }
 }
 

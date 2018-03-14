@@ -42,7 +42,8 @@ public class Address {
     @Column(name = "zip", nullable = false)
     private String zip;         // zip
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.DETACH)
+    @JoinColumn(name = "company_id", foreignKey=@ForeignKey(name="FK_COMPANY_ADDRESS"))
     private Company company;
 
     // Constructors -----------------------------------------------------------
