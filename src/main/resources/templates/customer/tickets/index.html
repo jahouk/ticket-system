@@ -4,7 +4,7 @@
 
 <body class="container">
 <div th:replace="fragments/customerFragments :: masthead"></div>
-<hr />
+
 <div class="container-fluid">
     <div class="row content">
         <div class="col-sm-9">
@@ -20,7 +20,7 @@
                 <th>Status</th>
                 </thead>
                 <tr th:each="ticket : ${company.tickets}">
-                    <td><a th:href="@{|customer/tickets/${ticket.id}|}" th:text="${ticket.id}"></a></td>
+                    <td><a th:href="@{|/customer/tickets/${ticket.id}|}" th:text="${ticket.id}"></a></td>
                     <td th:text="${ticket.description}"></td>
                     <td th:text="@{|${ticket.owner.userInfo.fname} ${ticket.owner.userInfo.lname}|}"></td>
                     <td th:text="${ticket.status.status}"></td>
@@ -31,7 +31,6 @@
         </div>
 
         <div th:replace="fragments/customerFragments:: side-navigation" class="col-sm-3 sidenav" >
-
         </div>
     </div>
 </div>

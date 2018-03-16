@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments/customerFragments :: head"></head>
+
+<body class="container">
+<div th:replace="fragments/customerFragments :: masthead"></div>
+
+<div class="container-fluid">
+    <div class="row content">
+        <div class="col-sm-9">
+            <p th:inline="text">Site: [[${mySite.site}]]</p>
+            <p th:inline="text">Address: [[${mySite.address.address1}]]</p>
+            <p th:inline="text">Address 2: [[${mySite.address.address2}]]</p>
+            <p th:inline="text">City: [[${mySite.address.city}]]</p>
+            <p th:inline="text">State: [[${mySite.address.state}]]</p>
+            <p th:inline="text">Zip: [[${mySite.address.zip}]]</p>
+            <p th:inline="text">Phone: [[${mySite.phone}]]</p>
+            <p th:inline="text">Fax: [[${mySite.fax}]]</p>
+            <p>Site Contact: <a th:href="@{|/customer/users/${mySite.siteContact.id}|}" th:inline="text">
+                [[${mySite.siteContact.userInfo.fname}]] [[${mySite.siteContact.userInfo.lname}]]</a></p>
+            <p>&nbsp;</p>
+            <p><a th:href="@{|/customer/sites/${mySite.id}/edit_site/|}" >Edit Site</a></p>
+            <p>&nbsp;</p>
+            <table>
+                <tr>
+                    <th>Office </th>
+                    <tH>&nbsp; </tH>
+                </tr>
+                <tr th:each="office : ${mySite.offices}">
+                    <td th:text="${office.office}"></td>
+                    <td><a th:href="@{|/customer/offices/${office.id}/edit_office/|}"> Edit</a></td>
+                </tr>
+            </table>
+            <p>&nbsp;</p>
+            <form autocomplete="off" method="post" class="form-horizontal" role="form">
+                <fieldset>
+                    <div class="form-group">
+                        <div class="col-sm-9">
+                            <input type="text" name="office_name" placeholder="Office Name" class="form-control" />
+                        </div>
+                    </div> <div class="form-group">
+                    <div class="col-sm-9">
+                        <button type="submit" class="btn btn-primary btn-block">Add Office</button>
+                    </div>
+                </div>
+                </fieldset>
+            </form>
+
+        </div>
+        <div th:replace="fragments/customerFragments:: side-navigation" class="col-sm-3 sidenav" >
+        </div>
+    </div>
+</div>
+
+
+<footer th:replace="fragments/techFragments:: footer"></footer>
+</body>
+</html>

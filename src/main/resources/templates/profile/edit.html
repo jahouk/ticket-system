@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments/techFragments :: head"></head>
+
+<body class="container">
+
+
+<div th:unless="${isTech}"><div th:replace="fragments/customerFragments :: masthead"></div></div>
+
+<div th:if="${isTech}"><div th:replace="fragments/techFragments :: masthead"></div></div>
+
+<div class="container-fluid">
+    <div class="row content">
+        <div class="col-sm-9">
+            <form autocomplete="off"
+                  th:object="${editUserForm}" method="post" class="form-horizontal"
+                  role="form">
+
+                <fieldset>
+                    <legend>Edit Profile:</legend>
+                    <div class="form-group">
+                        <div class="col-sm-9">
+                            <input type="text" th:field="*{fname}" placeholder="First Name"
+                                   class="form-control" th:value="${editUserForm.fname}" /> <label
+                                th:if="${#fields.hasErrors('fname')}" th:errors="*{fname}"
+                                class="validation-message"></label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-9">
+                            <input type="text" th:field="*{lname}" placeholder="Last Name"
+                                   class="form-control" th:value="${editUserForm.lname}" /> <label
+                                th:if="${#fields.hasErrors('lname')}" th:errors="*{lname}"
+                                class="validation-message"></label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-9">
+                            <input type="email" th:field="*{email}" placeholder="Email"
+                                   class="form-control" th:value="${editUserForm.email}" /> <label
+                                th:if="${#fields.hasErrors('email')}" th:errors="*{email}"
+                                class="validation-message"></label>
+                        </div>
+                    </div>
+
+
+
+                    <div class="form-group">
+                        <div class="col-sm-9">
+                            <input type="text" th:field="*{title}" placeholder="Title"
+                                   class="form-control" th:value="${editUserForm.title}" /> <label
+                                th:if="${#fields.hasErrors('title')}" th:errors="*{title}"
+                                class="validation-message"></label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-9">
+                            <input type="text" th:field="*{office}" placeholder="Office Number or Room"
+                                   class="form-control" th:value="${editUserForm.office}" /> <label
+                                th:if="${#fields.hasErrors('office')}" th:errors="*{office}"
+                                class="validation-message"></label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-9">
+                            <input type="text" th:field="*{companyUsername}" placeholder="Company Username"
+                                   class="form-control" th:value="${editUserForm.companyUsername}" /> <label
+                                th:if="${#fields.hasErrors('companyUsername')}" th:errors="*{companyUsername}"
+                                class="validation-message"></label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-9">
+                            <input type="text" th:field="*{userPhone}" placeholder="Phone"
+                                   class="form-control" th:value="${editUserForm.userPhone}" /> <label
+                                th:if="${#fields.hasErrors('userPhone')}" th:errors="*{userPhone}"
+                                class="validation-message"></label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-9">
+                            <input type="text" th:field="*{cellPhone}" placeholder="Cell Phone"
+                                   class="form-control" th:value="${editUserForm.cellPhone}" /> <label
+                                th:if="${#fields.hasErrors('cellPhone')}" th:errors="*{cellPhone}"
+                                class="validation-message"></label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-9">
+                            <label th:laberfor="*{canText}">Can Text</label>
+                            <input type="checkbox" th:field="*{canText}" placeholder="Can Text"
+                                   class="form-control" /> <label
+                                th:if="${#fields.hasErrors('canText')}" th:errors="*{canText}"
+                                class="validation-message"></label>
+                        </div>
+                    </div>
+
+                </fieldset>
+
+                <div class="form-group">
+                    <div class="col-sm-9">
+                        <button type="submit" class="btn btn-primary btn-block">Update Profile</button>
+                        <button type="cancel" class="btn btn-primary btn-block">Cancel</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        
+        <div th:if="${isTech}"><div
+            th:replace="fragments/techFragments:: side-navigation"
+            class="col-sm-3 sidenav" ></div></div>
+        <div th:unless="${isTech}"><div
+                th:replace="fragments/customerFragments:: side-navigation"
+                class="col-sm-3 sidenav" ></div></div>
+    </div>
+</div>
+
+<footer th:replace="fragments/techFragments:: footer"></footer>
+
+</body>
+</html>

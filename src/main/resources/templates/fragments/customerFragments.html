@@ -11,11 +11,47 @@
 
 </head>
 <body>
+<div th:fragment="masthead">
+    <div class="row">
+        <h1 th:text="${techCompany.companyInfo.name}"></h1>
+        <nav>
+            <a href="/">Home</a> |
+            <a href="/logout" th:inline="text">Logout</a> |
+            <a href="/profile">My Profile</a> |
+            <a href="/profile/change_password">Change Password</a>
+        </nav>
 
-<nav th:fragment="navigation">
-    <a href="/">Home</a> |
-    <a href="/logout">Logout</a>
-</nav>
+        <div class="col-sm-6">
+            <p th:inline="text">Hello, [[${user.userInfo.fname}]] [[${user.userInfo.lname}]]  ([[${user.username}]])</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <p th:inline="text">Email/Username: [[${user.username}]]<br />
+                Company Username: [[${user.userInfo.companyUserName}]]<br/>
+                Office: [[${user.userInfo.office.office}]]</p>
+        </div>
+        <div class="col-sm-6">
+            <p th:inline="text">Company Phone: [[${user.userInfo.phone}]]<br />
+                Cell Phone: [[${user.userInfo.cellphone}]]</p>
+        </div>
+    </div>
+</div>
+
+<div th:fragment="side-navigation" class="col-sm-3 sidenav" >
+    <div><p>Links</p></div>
+    <div>
+        <p><a th:href="@{|/profile|}">My Profile</a></p>
+        <p><a th:href="@{|/profile/change_password|}">Change Password</a></p>
+        <p><a th:href="@{|/customer/tickets/|}">My Tickets</a></p>
+    </div>
+    <div th:if="${isUserAdmin}">
+        <p><a th:href="@{|/customer/sites/|}">My Sites</a></p>
+        <p><a th:href="@{|/customer/users|}">My Users</a></p>
+        <p><a th:href="@{|/customer/assets/|}">My Assets</a></p>
+    </div>
+</div>
+
 
 </body>
 </html>

@@ -73,11 +73,13 @@ public class Ticket {
     }
 
     public Ticket(AddTicketForm addTicketForm, Status status){
-        this(addTicketForm.getOwner(),
+        this(
+                addTicketForm.getOwner(),
                 status,
                 addTicketForm.getTitle(),
                 addTicketForm.getDescription(),
-                addTicketForm.getAsset());
+                addTicketForm.getAsset()
+        );
     }
 
     // Start of Getters and Setters -------------------------------------------

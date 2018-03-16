@@ -67,9 +67,11 @@ public class SetupController {
 
             // Seed the ROLES
             roleRepository.deleteAll();
-            seedUserRole(new Role("ADMIN","User with admin rights in addition to other role",99), roleRepository);
+            seedUserRole(new Role("ADMIN","Site Admin",99), roleRepository);
             seedUserRole(new Role("TECH", "Tech User", 10), roleRepository);
             seedUserRole(new Role("USER", "Customer / End-User", 1), roleRepository);
+            seedUserRole(new Role("USER-ADMIN", "Customer / End-User with Additional Rights", 2), roleRepository);
+
 
             // Seed TICKET_STATUSES
             statusRepository.deleteAll();

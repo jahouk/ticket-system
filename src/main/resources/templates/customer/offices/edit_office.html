@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments/customerFragments :: head"></head>
+
+<body class="container">
+<div th:replace="fragments/customerFragments :: masthead"></div>
+
+<div class="container-fluid">
+    <div class="row content">
+        <div class="col-sm-9">
+            <form autocomplete="off"
+                  th:object="${editOfficeForm}" method="post" class="form-horizontal"
+                  role="form">
+                <fieldset>
+                    <legend>Edit Office:</legend>
+                    <div class="col-sm-9">
+                        <input type="text" th:field="*{office}" placeholder="Office Name"
+                               class="form-control" th:value="${editOfficeForm.office}" /> <label
+                            th:if="${#fields.hasErrors('office')}" th:errors="*{office}"
+                            class="validation-message"></label>
+                    </div>
+                </fieldset>
+
+                <div class="form-group">
+                    <div class="col-sm-9">
+                        <button type="submit" class="btn btn-primary btn-block">Edit Office</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div th:replace="fragments/customerFragments:: side-navigation" class="col-sm-3 sidenav" >
+        </div>
+    </div>
+</div>
+
+<footer th:replace="fragments/techFragments:: footer"></footer>
+</body>
+</html>

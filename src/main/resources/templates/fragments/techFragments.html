@@ -17,7 +17,9 @@
     <hr />
     <nav>
         <a href="/">Home</a> |
-        <a href="/logout">Logout</a>
+        <a href="/logout">Logout</a> |
+        <a href="/profile">My Profile</a> |
+        <a href="/profile/change_password">Change Password</a>
     </nav>
     <hr />
     <h3 th:if="${company}"><a th:href="@{|/tech/${company.id}|}" th:text="${company.companyInfo.name}"></a></h3>

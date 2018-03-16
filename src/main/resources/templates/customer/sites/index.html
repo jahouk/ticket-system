@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments/customerFragments :: head"></head>
+
+<body class="container">
+<div th:replace="fragments/customerFragments :: masthead"></div>
+
+<div class="container-fluid">
+    <div class="row content">
+        <div class="col-sm-9">
+
+
+            <p><strong>Sites</strong></p>
+            <p th:unless="${company.sites} and ${company.sites.size()}">No sites found<br/></p>
+
+            <table th:if="${company.sites} and ${company.sites.size()}"  class="table">
+                <thead>
+                <th>Site Name</th>
+                <th>Street Address 1</th>
+                <th>City</th>
+                <th>State</th>
+                <th>Phone</th>
+                <th>Contact</th>
+                <th>&nbsp;</th>
+                </thead>
+                <tr th:each="site : ${company.sites}">
+                    <td><a th:href="@{|/customer/sites/${site.id}|}" th:text="${site.site}"></a></td>
+                    <td th:text="${site.address.address1}"></td>
+                    <td th:text="${site.address.city}"></td>
+                    <td th:text="${site.address.state}"></td>
+                    <td th:text="${site.phone}"></td>
+                    <td th:text="@{|${site.siteContact.userInfo.fname} ${site.siteContact.userInfo.lname}|}"></td>
+                    <td><a th:href="@{|/customer/sites/${site.id}/edit_site|}">Edit</a></td>
+                </tr>
+            </table>
+            <p><a th:href="@{|/customer/sites/add_site|}" >Add Site</a></p>
+
+
+        </div>
+
+        <div th:replace="fragments/customerFragments:: side-navigation" class="col-sm-3 sidenav" >
+        </div>
+    </div>
+</div>
+
+<footer th:replace="fragments/techFragments:: footer"></footer>
+</body>
+</html>
