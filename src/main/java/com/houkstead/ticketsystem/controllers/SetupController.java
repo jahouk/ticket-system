@@ -78,6 +78,7 @@ public class SetupController {
             seedTicketStatus(new Status("Open by Customer", 10), statusRepository);
             seedTicketStatus(new Status("Assigned to Tech", 20), statusRepository);
             seedTicketStatus(new Status("Waiting on Customer", 30), statusRepository);
+            seedTicketStatus(new Status("Updated by Customer", 35), statusRepository);
             seedTicketStatus(new Status("Escalated to Vendor", 40), statusRepository);
             seedTicketStatus(new Status("Closed Pending Customer", 50), statusRepository);
             seedTicketStatus(new Status("Closed by Customer", 60), statusRepository);
@@ -86,7 +87,6 @@ public class SetupController {
             model.addAttribute("addCompanyForm", addCompanyForm);
             model.addAttribute("roles", roleRepository.findAll());
             model.addAttribute("title","Tech Company and Admin User Setup");
-            model.addAttribute("action", "/setup/");
 
             return "setup/add_company";
         }else{
@@ -173,14 +173,14 @@ public class SetupController {
 
                 // Create admin User
                 userService.saveUser(new User(
-                        addCompanyForm.getUsername(),
+                        addCompanyForm.getCompanyUsername(),
                         addCompanyForm.getPassword(),
                         company,
                         new HashSet<Role>(Arrays.asList(
                                 roleRepository.findByRole("TECH"),
                                 roleRepository.findByRole("ADMIN")))
                 ));
-                user = userService.findUserByUsername(addCompanyForm.getUsername());
+                user = userService.findUserByUsername(addCompanyForm.getCompanyUsername());
 
 
 

@@ -9,7 +9,7 @@
 <div class="container">
     <div class="row">
         <div class="col-md-6 col-md-offset-3">
-            <form autocomplete="off" action="#" th:action="${action}"
+            <form autocomplete="off"
                   th:object="${addCompanyForm}" method="post" class="form-horizontal"
                   role="form">
                 <h2>Setup Company</h2>
@@ -17,7 +17,7 @@
                 <fieldset th:replace="fragments/addCompanyFragments :: companyForm">
                 </fieldset>
 
-                <fieldset th:replace="fragments/addCompanyFragments :: userForm">
+                <fieldset th:replace="fragments/addCompanyFragments :: techForm">
                 </fieldset>
 
                 <div class="form-group">

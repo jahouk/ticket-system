@@ -1,6 +1,5 @@
 package com.houkstead.ticketsystem.controllers.Tech;
 
-
 import com.houkstead.ticketsystem.UserService;
 import com.houkstead.ticketsystem.models.*;
 import com.houkstead.ticketsystem.models.forms.AddTicketForm;
@@ -18,17 +17,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.validation.Valid;
-
 import java.util.List;
 
-import static com.houkstead.ticketsystem.utilities.SecurityUtilities.isAdmin;
 import static com.houkstead.ticketsystem.utilities.SecurityUtilities.isTech;
+import static com.houkstead.ticketsystem.utilities.SecurityUtilities.isAdmin;
 import static com.houkstead.ticketsystem.utilities.SiteUtilities.getTechCompany;
 
-@Controller("tech tickets")
-@RequestMapping("tech/{companyId}/tickets")
-public class TicketsController {
-
+@Controller("tech mytickets")
+@RequestMapping("tech/mytickets")
+public class MyTicketsController {
     @Autowired
     private UserService userService;
 
@@ -51,13 +48,15 @@ public class TicketsController {
     private TicketUpdateRepository ticketUpdateRepository;
 
     @RequestMapping(value="", method = RequestMethod.GET)
-    public String index(Model model, @PathVariable int companyId){
-        Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
-        Company myCompany = companyRepository.findOne(companyId);
+    public String index(Model model){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findUserByUsername(auth.getName());
 
-        // Programatically verify that this is a tech
+        Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
+        Company myCompany = user.getCompany();
+
+
+        // Programatically verify that this is a user
         if(!isTech(user, roleRepository)) {
             return "redirect:/";
         }
@@ -66,33 +65,33 @@ public class TicketsController {
         model.addAttribute("isAdmin", isAdmin(user, roleRepository));
         model.addAttribute("company", myCompany);
         model.addAttribute("techCompany", techCompany);
-        return "tech/tickets/index";
+        return "tech/mytickets/index";
     }
 
     // Add ticket
     @RequestMapping(value="/add_ticket", method = RequestMethod.GET)
     public String addTicket(
-            Model model,
-            @PathVariable int companyId){
-        Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
-        Company myCompany = companyRepository.findOne(companyId);
+            Model model){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findUserByUsername(auth.getName());
+
+        Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
+        Company myCompany = user.getCompany();
+
         AddTicketForm addTicketForm = new AddTicketForm();
 
-        // Programatically verify that this is a tech, tech company is ok
-        if(!isTech(user, roleRepository) ||
-                myCompany == null) {
+        // Programatically verify that this is a user
+        if(!isTech(user, roleRepository)) {
             return "redirect:/";
         }
 
-        model.addAttribute("user", user);
+        model.addAttribute("user",user);
         model.addAttribute("isAdmin", isAdmin(user, roleRepository));
         model.addAttribute("company", myCompany);
-        model.addAttribute("addTicketForm", addTicketForm);
         model.addAttribute("techCompany", techCompany);
+        model.addAttribute("addTicketForm", addTicketForm);
 
-        return "tech/tickets/add_ticket";
+        return "tech/mytickets/add_ticket";
     }
 
     // This will display a specific site view and add offie from inline form
@@ -100,33 +99,31 @@ public class TicketsController {
     public String addTicket(
             @ModelAttribute @Valid AddTicketForm addTicketForm,
             Errors errors,
-            Model model,
-            @PathVariable int companyId
+            Model model
     ) {
-        Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
-        Company myCompany = companyRepository.findOne(companyId);
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findUserByUsername(auth.getName());
 
-        // Programatically verify that this is a tech, tech company is ok
-        if(!isTech(user, roleRepository) ||
-                myCompany == null) {
+        Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
+        Company myCompany = user.getCompany();
+
+        // Programatically verify that this is a user
+        if(!isTech(user, roleRepository)) {
             return "redirect:/";
-        } else if (errors.hasErrors()) {
-            model.addAttribute("user", user);
+        }else if (errors.hasErrors()) {
+            model.addAttribute("user",user);
             model.addAttribute("isAdmin", isAdmin(user, roleRepository));
             model.addAttribute("company", myCompany);
-            model.addAttribute("addTicketForm", addTicketForm);
             model.addAttribute("techCompany", techCompany);
-
-            return "tech/tickets/add_tickets";
+            model.addAttribute("addTicketForm", addTicketForm);
+            return "tech/mytickets/add_ticket";
         } else {
             Ticket newTicket = new Ticket(addTicketForm, statusRepository.findByStatus("Open by Customer"));
             ticketRepository.save(newTicket);
             myCompany.addTicket(newTicket);
             companyRepository.save(myCompany);
 
-            return "redirect:/tech/" + myCompany.getId() + "/tickets/" + newTicket.getId();
+            return "redirect:/tech/mytickets/" + newTicket.getId();
         }
     }
 
@@ -134,61 +131,57 @@ public class TicketsController {
     @RequestMapping(value="/{ticketId}", method = RequestMethod.GET)
     public String ticketView(
             Model model,
-            @PathVariable int companyId,
             @PathVariable int ticketId){
-        Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
-        Company myCompany = companyRepository.findOne(companyId);
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findUserByUsername(auth.getName());
+
+        Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
+        Company myCompany = user.getCompany();
+
         Ticket myTicket = ticketRepository.findOne(ticketId);
 
-        // Programatically verify that this is a tech, tech company is ok
-        if(!isTech(user, roleRepository) ||
-                myCompany == null ||
-                myCompany.getId() != myTicket.getAsset().getOffice().getSite().getCompany().getId()) {
+        // Programatically verify that this is a user
+        if(!isTech(user, roleRepository)) {
             return "redirect:/";
         }
-
 
         model.addAttribute("user",user);
         model.addAttribute("isAdmin", isAdmin(user, roleRepository));
         model.addAttribute("company", myCompany);
-        model.addAttribute("ticket", myTicket);
         model.addAttribute("techCompany", techCompany);
+        model.addAttribute("ticket", myTicket);
 
-        return "tech/tickets/view_ticket";
+        return "tech/mytickets/view_ticket";
     }
 
     @RequestMapping(value="/{ticketId}/add_update", method = RequestMethod.GET)
     public String addUpdate(
             Model model,
-            @PathVariable int companyId,
             @PathVariable int ticketId) {
-        Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
-        Company myCompany = companyRepository.findOne(companyId);
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findUserByUsername(auth.getName());
+
+        Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
+        Company myCompany = user.getCompany();
+
         Ticket myTicket = ticketRepository.findOne(ticketId);
         AddTicketUpdateForm addTicketUpdateForm = new AddTicketUpdateForm();
         List<Status> statuses = statusRepository.findAll();
 
-        // Programatically verify that this is a tech, tech company is ok
-        if(!isTech(user, roleRepository) ||
-                myCompany == null ||
-                myCompany.getId() != myTicket.getAsset().getOffice().getSite().getCompany().getId()) {
+        // Programatically verify that this is a user
+        if(!isTech(user, roleRepository)) {
             return "redirect:/";
         }
 
         model.addAttribute("user",user);
         model.addAttribute("isAdmin", isAdmin(user, roleRepository));
         model.addAttribute("company", myCompany);
-        model.addAttribute("ticket", myTicket);
         model.addAttribute("techCompany", techCompany);
         model.addAttribute("statuses", statuses);
+        model.addAttribute("ticket", myTicket);
         model.addAttribute("addTicketUpdateForm", addTicketUpdateForm);
 
-        return "tech/tickets/add_ticket_update";
-
+        return "tech/mytickets/add_ticket_update";
     }
 
     @RequestMapping(value="/{ticketId}/add_update", method = RequestMethod.POST)
@@ -196,30 +189,30 @@ public class TicketsController {
             @ModelAttribute @Valid AddTicketUpdateForm addTicketUpdateForm,
             Errors errors,
             Model model,
-            @PathVariable int companyId,
             @PathVariable int ticketId) {
-        Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
-        Company myCompany = companyRepository.findOne(companyId);
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findUserByUsername(auth.getName());
+
+        Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
+        Company myCompany = user.getCompany();
+
         Ticket myTicket = ticketRepository.findOne(ticketId);
         List<Status> statuses = statusRepository.findAll();
 
-        // Programatically verify that this is a tech, tech company is ok
-        if(!isTech(user, roleRepository) ||
-                myCompany == null ||
-                myCompany.getId() != myTicket.getAsset().getOffice().getSite().getCompany().getId()) {
+
+        // Programatically verify that this is a user
+        if(!isTech(user, roleRepository)) {
             return "redirect:/";
         } else if (errors.hasErrors()) {
             model.addAttribute("user",user);
             model.addAttribute("isAdmin", isAdmin(user, roleRepository));
             model.addAttribute("company", myCompany);
-            model.addAttribute("ticket", myTicket);
             model.addAttribute("techCompany", techCompany);
             model.addAttribute("statuses", statuses);
+            model.addAttribute("ticket", myTicket);
             model.addAttribute("addTicketUpdateForm", addTicketUpdateForm);
 
-            return "tech/tickets/add_tickets";
+            return "tech/mytickets/add_ticket_update";
         } else {
             TicketUpdate newTicketUpdate =
                     new TicketUpdate(myTicket, user, addTicketUpdateForm);
@@ -228,9 +221,7 @@ public class TicketsController {
             myTicket.addUpdate(newTicketUpdate);
             ticketRepository.save(myTicket);
 
-            return "redirect:/tech/" + myCompany.getId() + "/tickets/" + myTicket.getId();
+            return "redirect:/tech/mytickets/" + myTicket.getId();
         }
-
     }
 }
-

@@ -204,16 +204,7 @@ public class UsersController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findUserByUsername(auth.getName());
         User myUser = userRepository.findOne(myUserId);
-        EditUserForm editUser = new EditUserForm(
-                myUser.getUserInfo().getFname(),
-                myUser.getUserInfo().getLname(),
-                myUser.getUserInfo().getTitle(),
-                myUser.getUsername(),
-                myUser.getUserInfo().getCompanyUserName(),
-                myUser.getUserInfo().getOffice().getOffice(),
-                myUser.getUserInfo().getPhone(),
-                myUser.getUserInfo().getCellphone(),
-                myUser.getUserInfo().getCanText());
+        EditUserForm editUser = new EditUserForm(myUser);
 
         // Programatically verify that this is a tech and not tech company
         if(!isTech(user, roleRepository) ||
@@ -276,10 +267,6 @@ public class UsersController {
                 myUser.getUserInfo().setCompanyUserName(editUser.getCompanyUsername());
             }
 
-            // Email and username for customers are the same so setting both the same
-            if(!editUser.getEmail().equals(myUser.getUsername())){
-                myUser.setUsername(editUser.getEmail());
-            }
             if(!editUser.getEmail().equals(myUser.getUserInfo().getEmail())){
                 myUser.getUserInfo().setEmail(editUser.getEmail());
             }
@@ -302,6 +289,10 @@ public class UsersController {
 
             if(!editUser.getUserPhone().equals(myUser.getUserInfo().getPhone())) {
                 myUser.getUserInfo().setPhone(editUser.getUserPhone());
+            }
+
+            if(!myUser.getUsername().equals(myUser.getUserInfo().getEmail())){
+                myUser.setUsername(myUser.getUserInfo().getEmail());
             }
 
             if(password!=null && !(password.isEmpty())){

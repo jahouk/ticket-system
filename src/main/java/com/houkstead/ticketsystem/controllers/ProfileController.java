@@ -153,6 +153,9 @@ public class ProfileController {
             if(isUser(user,roleRepository) &&
                     !user.getUsername().equals(user.getUserInfo().getEmail())){
                 user.setUsername(user.getUserInfo().getEmail());
+            }else if(isTech(user,roleRepository) &&
+                    !user.getUsername().equals(user.getUserInfo().getCompanyUserName())){
+                user.setUsername(user.getUserInfo().getCompanyUserName());
             }
 
             userService.updateUser(user);

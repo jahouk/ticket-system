@@ -70,8 +70,19 @@ public class AddCompanyForm {
 
     //-------------------------------------------------------------------------
     // USER FIELDS
-   @NotEmpty(message = "*Username is required")
-    private String username;            // system username
+   //@NotEmpty(message = "*Username is required")
+   // private String username;            // system username
+
+    /* NOTE!!!
+        Username is removed since it is redundant
+
+        For techs, the username is the company username
+
+        For customers, the username is their email address
+
+        Not Empty Validation is now moved to Company Username
+
+     */
 
     @Length(min = 5, message = "*Your password must have at least 5 characters")
     @NotEmpty(message = "*Please provide your password")
@@ -94,6 +105,7 @@ public class AddCompanyForm {
 
     //-------------------------------------------------------------------------
     // USER_INFO FIELDS
+    @NotEmpty(message = "*Company Username is required")
     private String companyUsername;     // User's Login Name at their company /
                                         // company computer
 
@@ -222,13 +234,7 @@ public class AddCompanyForm {
         this.billingAddressZip = billingAddressZip;
     }
 
-    public String getUsername() {
-        return username;
-    }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
 
     public String getPassword() {
         return password;

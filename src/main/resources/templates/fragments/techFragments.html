@@ -26,10 +26,16 @@
 </div>
 
 <div th:fragment="side-navigation" class="col-sm-3 sidenav" >
+    <div>
+        <h4>Tickets</h4>
+        <p><a href="/tech/mytickets">My Tickets</a></p>
+        <p>&nbsp;</p>
+    </div>
     <div th:if="${isAdmin}">
         <h4>Admin Links</h4>
-        <p><a href="/admin/add_company">Add Company</a></p>
-        <p><a href="/admin/techs">Add/Edit Tech</a></p>
+        <p><a href="/admin/companies/add_company">Add Company</a></p>
+        <p><a href="/admin/techs">Manage Techs</a></p>
+        <p><a href="/admin">Tech Company</a></p>
         <p>&nbsp;</p>
     </div>
     <div>

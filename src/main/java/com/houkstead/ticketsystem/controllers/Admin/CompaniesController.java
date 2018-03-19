@@ -1,4 +1,4 @@
-package com.houkstead.ticketsystem.controllers;
+package com.houkstead.ticketsystem.controllers.Admin;
 
 import com.houkstead.ticketsystem.UserService;
 import com.houkstead.ticketsystem.models.*;
@@ -19,13 +19,15 @@ import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.HashSet;
 
+import static com.houkstead.ticketsystem.utilities.SecurityUtilities.isAdmin;
 import static com.houkstead.ticketsystem.utilities.SetupUtilities.*;
+import static com.houkstead.ticketsystem.utilities.SetupUtilities.createCompanyInfo;
 import static com.houkstead.ticketsystem.utilities.SetupUtilities.createUserInfo;
+import static com.houkstead.ticketsystem.utilities.SiteUtilities.getTechCompany;
 
-@Controller
-@RequestMapping("admin")
-public class AdminController {
-
+@Controller("admin company")
+@RequestMapping("admin/companies")
+public class CompaniesController {
     @Autowired
     private AddressRepository addressRepository;
 
@@ -53,36 +55,65 @@ public class AdminController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private TechCompanyRepository techCompanyRepository;
+
     @RequestMapping(value = "add_company", method = RequestMethod.GET)
     public String addCompany(Model model) {
-        //Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        //User users = userService.findUserByUsername(auth.getName());
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.findUserByUsername(auth.getName());
+
+        Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
+        Company myCompany = user.getCompany();
+
+        // Programatically verify that this is a user admin
+        if(!isAdmin(user, roleRepository)) {
+            return "redirect:/admin";
+        }
 
         AddCompanyForm addCompanyForm = new AddCompanyForm();
+
+        model.addAttribute("user",user);
+        model.addAttribute("isAdmin", isAdmin(user, roleRepository));
+        model.addAttribute("company", myCompany);
+        model.addAttribute("techCompany", techCompany);
         model.addAttribute("addCompanyForm", addCompanyForm);
         model.addAttribute("roles", roleRepository.findAll());
         model.addAttribute("title", "Setup New Customer Company");
-        model.addAttribute("action", "/admin/add_company");
 
-        return "admin/add_company";
+        return "admin/companies/add_company";
     }
 
     @RequestMapping(value = "add_company", method = RequestMethod.POST)
     public String addCompany(@ModelAttribute @Valid AddCompanyForm addCompanyForm,
                              Errors errors,
                              Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.findUserByUsername(auth.getName());
 
-        if (errors.hasErrors()) {
-            System.out.println("has errors");
+        Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
+        Company myCompany = user.getCompany();
+
+        // Programatically verify that this is a user admin
+        if(!isAdmin(user, roleRepository)) {
+            return "redirect:/admin";
+        }else if (errors.hasErrors()) {
+            model.addAttribute("user",user);
+            model.addAttribute("isAdmin", isAdmin(user, roleRepository));
+            model.addAttribute("company", myCompany);
+            model.addAttribute("techCompany", techCompany);
+            model.addAttribute("addCompanyForm", addCompanyForm);
             model.addAttribute("roles", roleRepository.findAll());
-            model.addAttribute("title", "Setup Customer Company");
-            model.addAttribute("action", "/admin/add_company");
+            model.addAttribute("title", "Setup New Customer Company");
 
-            return "admin/add_company";
+            return "admin/companies/add_company";
         } else {
             Company company = null;
             CompanyInfo companyInfo = null;
-            User user = null;
+            User myUser = null;
             Site site = null;
             Office office = null;
             Address billingAddress = null;
@@ -128,14 +159,14 @@ public class AdminController {
 
             // Create admin User
             userService.saveUser(new User(
-                    addCompanyForm.getUsername(),
+                    addCompanyForm.getEmail(),
                     addCompanyForm.getPassword(),
                     company,
                     new HashSet<Role>(Arrays.asList(
                             roleRepository.findByRole("USER"),
-                            roleRepository.findByRole("ADMIN")))
+                            roleRepository.findByRole("USER-ADMIN")))
             ));
-            user = userService.findUserByUsername(addCompanyForm.getUsername());
+            myUser = userService.findUserByUsername(addCompanyForm.getEmail());
 
 
             // Create SitesController
@@ -145,7 +176,7 @@ public class AdminController {
                             streetAddress,
                             addCompanyForm.getCompanyPhone(),
                             addCompanyForm.getFax(),
-                            user),
+                            myUser),
                     siteRepository
             );
 
@@ -157,7 +188,7 @@ public class AdminController {
 
             // User_Info
             userInfo = createUserInfo(new UserInfo(
-                    user,
+                    myUser,
                     addCompanyForm.getFname(),
                     addCompanyForm.getLname(),
                     addCompanyForm.getTitle(),
@@ -182,45 +213,14 @@ public class AdminController {
             company.setCompanyInfo(companyInfo);
 
             // update User (User Info)
-            user.setUserInfo(userInfo);
-            user.setPassword(addCompanyForm.getPassword());
-            userService.saveUser(user);
-            company.addUser(user);
+            myUser.setUserInfo(userInfo);
+            myUser.setPassword(addCompanyForm.getPassword());
+            userService.saveUser(myUser);
+            company.addUser(myUser);
 
             companyRepository.save(company);
 
-            return "redirect:/tech";
+            return "redirect:/tech/"+company.getId();
         }
     }
-
-    @RequestMapping(value = "techs", method = RequestMethod.GET)
-    public String viewAllTechs(Model model) {
-
-
-        return "admin/view_all_techs";
-    }
-
-
-    @RequestMapping(value = "techs/add_tech", method = RequestMethod.GET)
-    public String addTech(Model model) {
-
-
-        return "admin/view_all_techs";
-    }
-
-    @RequestMapping(value = "techs/edit_tech", method = RequestMethod.GET)
-    public String editTech(Model model) {
-
-
-        return "admin/view_all_techs";
-    }
-
-    @RequestMapping(value = "tech/{tech_id}", method = RequestMethod.GET)
-    public String viewTech(Model model) {
-
-
-        return "admin/view_all_techs";
-    }
-
-
 }

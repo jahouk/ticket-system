@@ -9,16 +9,16 @@
     <div class="row content">
         <div class="col-sm-9">
             <form autocomplete="off"
-                  th:object="${addTechForm}" method="post" class="form-horizontal"
+                  th:object="${editUser}" method="post" class="form-horizontal"
                   role="form">
 
 
                 <fieldset>
-                    <legend>Add Tech:</legend>
+                    <legend>Edit User:</legend>
                     <div class="form-group">
                         <div class="col-sm-9">
                             <input type="text" th:field="*{fname}" placeholder="First Name"
-                                   class="form-control" th:value="${addTechForm.fname}" /> <label
+                                   class="form-control" th:value="${editUser.fname}" /> <label
                                 th:if="${#fields.hasErrors('fname')}" th:errors="*{fname}"
                                 class="validation-message"></label>
                         </div>
@@ -26,17 +26,8 @@
                     <div class="form-group">
                         <div class="col-sm-9">
                             <input type="text" th:field="*{lname}" placeholder="Last Name"
-                                   class="form-control" th:value="${addTechForm.lname}" /> <label
+                                   class="form-control" th:value="${editUser.lname}" /> <label
                                 th:if="${#fields.hasErrors('lname')}" th:errors="*{lname}"
-                                class="validation-message"></label>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <div class="col-sm-9">
-                            <input type="text" th:field="*{username}" placeholder="Username"
-                                   class="form-control" th:value="${addCompanyForm.username}" /> <label
-                                th:if="${#fields.hasErrors('username')}" th:errors="*{username}"
                                 class="validation-message"></label>
                         </div>
                     </div>
@@ -44,7 +35,7 @@
                     <div class="form-group">
                         <div class="col-sm-9">
                             <input type="email" th:field="*{email}" placeholder="Email"
-                                   class="form-control" th:value="${addTechForm.email}" /> <label
+                                   class="form-control" th:value="${editUser.email}" /> <label
                                 th:if="${#fields.hasErrors('email')}" th:errors="*{email}"
                                 class="validation-message"></label>
                         </div>
@@ -55,7 +46,7 @@
                     <div class="form-group">
                         <div class="col-sm-9">
                             <input type="text" th:field="*{title}" placeholder="Title"
-                                   class="form-control" th:value="${addTechForm.title}" /> <label
+                                   class="form-control" th:value="${editUser.title}" /> <label
                                 th:if="${#fields.hasErrors('title')}" th:errors="*{title}"
                                 class="validation-message"></label>
                         </div>
@@ -64,26 +55,30 @@
 
                     <div class="form-group">
                         <div class="col-sm-9">
-                            <input type="password" th:field="*{password}"
+                            <input type="password" name="password"
                                    placeholder="Password" class="form-control" />
-                            <label
-                                    th:if="${#fields.hasErrors('password')}" th:errors="*{password}"
-                                    class="validation-message"></label>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-sm-9">
                             <input type="text" th:field="*{office}" placeholder="Office Number or Room"
-                                   class="form-control" th:value="${addTechForm.office}" /> <label
+                                   class="form-control" th:value="${editUser.office}" /> <label
                                 th:if="${#fields.hasErrors('office')}" th:errors="*{office}"
                                 class="validation-message"></label>
                         </div>
                     </div>
-                    
+                    <div class="form-group">
+                        <div class="col-sm-9">
+                            <input type="text" th:field="*{companyUsername}" placeholder="Company Username"
+                                   class="form-control" th:value="${editUser.companyUsername}" /> <label
+                                th:if="${#fields.hasErrors('companyUsername')}" th:errors="*{companyUsername}"
+                                class="validation-message"></label>
+                        </div>
+                    </div>
                     <div class="form-group">
                         <div class="col-sm-9">
                             <input type="text" th:field="*{userPhone}" placeholder="Phone"
-                                   class="form-control" th:value="${addTechForm.userPhone}" /> <label
+                                   class="form-control" th:value="${editUser.userPhone}" /> <label
                                 th:if="${#fields.hasErrors('userPhone')}" th:errors="*{userPhone}"
                                 class="validation-message"></label>
                         </div>
@@ -91,7 +86,7 @@
                     <div class="form-group">
                         <div class="col-sm-9">
                             <input type="text" th:field="*{cellPhone}" placeholder="Cell Phone"
-                                   class="form-control" th:value="${addTechForm.cellPhone}" /> <label
+                                   class="form-control" th:value="${editUser.cellPhone}" /> <label
                                 th:if="${#fields.hasErrors('cellPhone')}" th:errors="*{cellPhone}"
                                 class="validation-message"></label>
                         </div>
@@ -110,7 +105,7 @@
 
                 <div class="form-group">
                     <div class="col-sm-9">
-                        <button type="submit" class="btn btn-primary btn-block">Add User</button>
+                        <button type="submit" class="btn btn-primary btn-block">Update User</button>
                     </div>
                 </div>
             </form>

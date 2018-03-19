@@ -1,4 +1,4 @@
-package com.houkstead.ticketsystem.controllers.Customer;
+package com.houkstead.ticketsystem.controllers.Admin;
 
 import com.houkstead.ticketsystem.UserService;
 import com.houkstead.ticketsystem.models.*;
@@ -18,16 +18,13 @@ import java.util.Arrays;
 import java.util.HashSet;
 
 import static com.houkstead.ticketsystem.utilities.SecurityUtilities.isAdmin;
-import static com.houkstead.ticketsystem.utilities.SecurityUtilities.isTech;
-import static com.houkstead.ticketsystem.utilities.SecurityUtilities.isUserAdmin;
 import static com.houkstead.ticketsystem.utilities.SetupUtilities.createOffice;
 import static com.houkstead.ticketsystem.utilities.SetupUtilities.createUserInfo;
 import static com.houkstead.ticketsystem.utilities.SiteUtilities.getTechCompany;
 
-@Controller("customer users")
-@RequestMapping("customer/users")
-public class UsersController {
-
+@Controller("admin techs")
+@RequestMapping("admin/techs")
+public class TechsController {
     @Autowired
     private UserService userService;
 
@@ -58,16 +55,16 @@ public class UsersController {
         Company myCompany = user.getCompany();
 
         // Programatically verify that this is a user admin
-        if(!isUserAdmin(user, roleRepository)) {
+        if(!isAdmin(user, roleRepository)) {
             return "redirect:/";
         }
 
         model.addAttribute("user",user);
-        model.addAttribute("isUserAdmin", isUserAdmin(user, roleRepository));
+        model.addAttribute("isAdmin", isAdmin(user, roleRepository));
         model.addAttribute("company", myCompany);
         model.addAttribute("techCompany", techCompany);
 
-        return "customer/users/index";
+        return "admin/techs/index";
     }
 
 
@@ -85,22 +82,22 @@ public class UsersController {
         User myUser = userRepository.findOne(myUserId);
 
         // Programatically verify that this is a user admin
-        if(!isUserAdmin(user, roleRepository) ||
+        if(!isAdmin(user, roleRepository) ||
                 user.getCompany().getId() != myUser.getCompany().getId()) {
             return "redirect:/";
         }
 
         model.addAttribute("user",user);
-        model.addAttribute("isUserAdmin", isUserAdmin(user, roleRepository));
+        model.addAttribute("isAdmin", isAdmin(user, roleRepository));
         model.addAttribute("company", myCompany);
         model.addAttribute("techCompany", techCompany);
         model.addAttribute("myUser", myUser);
 
-        return "customer/users/view_user";
+        return "admin/techs/view_tech";
     }
 
     // This will add a user
-    @RequestMapping(value="/add_user", method = RequestMethod.GET)
+    @RequestMapping(value="/add_tech", method = RequestMethod.GET)
     public String addUser(Model model){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findUserByUsername(auth.getName());
@@ -111,24 +108,24 @@ public class UsersController {
         AddUserForm addUserForm = new AddUserForm();
 
         // Programatically verify that this is a user admin
-        if(!isUserAdmin(user, roleRepository)) {
+        if(!isAdmin(user, roleRepository)) {
             return "redirect:/";
         }
         model.addAttribute("user",user);
-        model.addAttribute("isUserAdmin", isUserAdmin(user, roleRepository));
+        model.addAttribute("isAdmin", isAdmin(user, roleRepository));
         model.addAttribute("company", myCompany);
         model.addAttribute("techCompany", techCompany);
         model.addAttribute("roles", roleRepository.findAll());
         model.addAttribute("addUserForm", addUserForm);
 
-        return "customer/users/add_user";
+        return "admin/techs/add_tech";
     }
 
     // This will add a user
-    @RequestMapping(value="/add_user", method = RequestMethod.POST)
+    @RequestMapping(value="/add_tech", method = RequestMethod.POST)
     public String addUser(@ModelAttribute @Valid AddUserForm addUserForm,
-                           Errors errors,
-                           Model model) {
+                          Errors errors,
+                          Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findUserByUsername(auth.getName());
 
@@ -136,26 +133,26 @@ public class UsersController {
         Company myCompany = user.getCompany();
 
         // Programatically verify that this is a user admin
-        if(!isUserAdmin(user, roleRepository)) {
-            return "redirect:/";
+        if(!isAdmin(user, roleRepository)) {
+            return "redirect:/admin";
         }else if (errors.hasErrors()) {        // Programatically verify that this is a user admin
             model.addAttribute("user",user);
-            model.addAttribute("isUserAdmin", isUserAdmin(user, roleRepository));
+            model.addAttribute("isAdmin", isAdmin(user, roleRepository));
             model.addAttribute("company", myCompany);
             model.addAttribute("techCompany", techCompany);
             model.addAttribute("roles", roleRepository.findAll());
             model.addAttribute("addUserForm", addUserForm);
-            return "customer/users/add_user";
+            return "admin/techs/add_tech";
         } else {
             User newUser = null;
 
             userService.saveUser(new User(
-                            addUserForm.getEmail(),
-                            addUserForm.getPassword(),
-                            myCompany,
-                            new HashSet<Role>(Arrays.asList(
-                                    roleRepository.findByRole("USER")))
-                    ));
+                    addUserForm.getCompanyUsername(),
+                    addUserForm.getPassword(),
+                    myCompany,
+                    new HashSet<Role>(Arrays.asList(
+                            roleRepository.findByRole("USER")))
+            ));
             newUser = userService.findUserByUsername(addUserForm.getEmail());
 
             Office newOffice = createOffice(new Office(myCompany.getCompanyInfo().getPrimarySite(),
@@ -185,12 +182,12 @@ public class UsersController {
 
             companyRepository.save(myCompany);
 
-            return "redirect:/customer/users";
+            return "redirect:/admin/techs";
         }
     }
 
     // This will edit a user
-    @RequestMapping(value="/{myUserId}/edit_user", method = RequestMethod.GET)
+    @RequestMapping(value="/{myUserId}/edit_tech", method = RequestMethod.GET)
     public String editUser(
             Model model,
             @PathVariable int myUserId){
@@ -202,33 +199,24 @@ public class UsersController {
 
         User myUser = userRepository.findOne(myUserId);
 
-        EditUserForm editUser = new EditUserForm(
-                myUser.getUserInfo().getFname(),
-                myUser.getUserInfo().getLname(),
-                myUser.getUserInfo().getTitle(),
-                myUser.getUsername(),
-                myUser.getUserInfo().getCompanyUserName(),
-                myUser.getUserInfo().getOffice().getOffice(),
-                myUser.getUserInfo().getPhone(),
-                myUser.getUserInfo().getCellphone(),
-                myUser.getUserInfo().getCanText());
+        EditUserForm editUser = new EditUserForm(myUser);
 
         // Programatically verify that this is a user admin
-        if(!isUserAdmin(user, roleRepository) ||
+        if(!isAdmin(user, roleRepository) ||
                 user.getCompany().getId() != myUser.getCompany().getId()) {
             return "redirect:/";
         }
         model.addAttribute("user",user);
-        model.addAttribute("isUserAdmin", isUserAdmin(user, roleRepository));
+        model.addAttribute("isAdmin", isAdmin(user, roleRepository));
         model.addAttribute("company", myCompany);
         model.addAttribute("techCompany", techCompany);
         model.addAttribute("editUser", editUser);
         model.addAttribute("roles", roleRepository.findAll());
-        return "customer/users/edit_user";
+        return "admin/techs/edit_tech";
     }
 
     // This will edit a user
-    @RequestMapping(value="/{myUserId}/edit_user", method = RequestMethod.POST)
+    @RequestMapping(value="/{myUserId}/edit_tech", method = RequestMethod.POST)
     public String editUser(@ModelAttribute @Valid EditUserForm editUser,
                            Errors errors,
                            Model model,
@@ -243,18 +231,18 @@ public class UsersController {
         User myUser = userRepository.findOne(myUserId);
 
         // Programatically verify that this is a user admin
-        if(!isUserAdmin(user, roleRepository) ||
+        if(!isAdmin(user, roleRepository) ||
                 user.getCompany().getId() != myUser.getCompany().getId()) {
             return "redirect:/";
         }else if (errors.hasErrors()) {
             model.addAttribute("user",user);
-            model.addAttribute("isUserAdmin", isUserAdmin(user, roleRepository));
+            model.addAttribute("isAdmin", isAdmin(user, roleRepository));
             model.addAttribute("company", myCompany);
             model.addAttribute("techCompany", techCompany);
             model.addAttribute("editUser", editUser);
             model.addAttribute("roles", roleRepository.findAll());
 
-            return "customer/users/edit_user";
+            return "admin/techs/edit_tech";
         }else{
             if(!editUser.getCanText().equals(myUser.getUserInfo().getCanText())){
                 myUser.getUserInfo().setCanText(editUser.getCanText());
@@ -293,7 +281,7 @@ public class UsersController {
             }
 
             if(!myUser.getUsername().equals(myUser.getUserInfo().getEmail())){
-                myUser.setUsername(myUser.getUserInfo().getEmail());
+                myUser.setUsername(myUser.getUserInfo().getCompanyUserName());
             }
 
             if(password!=null && !(password.isEmpty())){
@@ -302,7 +290,7 @@ public class UsersController {
                 userService.updateUser(myUser);
             }
 
-            return "redirect:/customer/users/"+myUser.getId();
+            return "redirect:/admin/techs/"+myUser.getId();
         }
     }
 }

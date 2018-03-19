@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments/techFragments :: head"></head>
+
+<body class="container">
+<div th:replace="fragments/techFragments :: masthead"></div>
+
+<div class="container-fluid">
+    <div class="row content">
+        <div class="col-sm-9">
+            <h3 th:inline="text">Manage [[${company.companyInfo.name}]]:</h3>
+            <ul>
+            <li><a href="/admin/techs">Techs</a></li>
+
+            <li><a href="/admin/sites">Sites</a></li>
+
+            <li><a href="/admin/assets">Assets</a></li>
+
+            <li><a href="/tech/mytickets">Tickets</a></li>
+            </ul>
+        </div>
+        <div th:replace="fragments/techFragments:: side-navigation" class="col-sm-3 sidenav" >
+        </div>
+    </div>
+</div>
+
+<footer th:replace="fragments/techFragments:: footer"></footer>
+</body>
+</html>

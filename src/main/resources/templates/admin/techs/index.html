@@ -8,7 +8,7 @@
 <div class="container-fluid">
     <div class="row content">
         <div class="col-sm-9">
-            <p><strong>Admin Users</strong></p>
+            <p><strong>Users</strong></p>
             <p th:unless="${company.users} and ${company.users.size()}">No users found<br/></p>
 
             <table th:if="${company.users} and ${company.users.size()}"  class="table">
@@ -19,13 +19,13 @@
                 <th>Edit</th>
                 </thead>
                 <tr th:each="companyUser : ${company.users}">
-                    <td><a th:href="@{|/tech/${company.id}/users/${companyUser.id}|}" th:text="${companyUser.username}"></a></td>
+                    <td><a th:href="@{|/admin/techs/${companyUser.id}|}" th:text="${companyUser.username}"></a></td>
                     <td th:text="${companyUser.userInfo.fname}"></td>
                     <td th:text="${companyUser.userInfo.lname}"></td>
-                    <td><a th:href="@{|/tech/${company.id}/users/${companyUser.id}/edit_user|}">Edit</a></td>
+                    <td><a th:href="@{|/admin/techs/${companyUser.id}/edit_tech|}">Edit</a></td>
                 </tr>
             </table>
-            <p><a th:href="@{|/admin/add_tech/|}" >Add Tech</a></p>
+            <p><a th:href="@{|/admin/techs/add_tech/|}" >Add Tech</a></p>
         </div>
 
         <div th:replace="fragments/techFragments:: side-navigation" class="col-sm-3 sidenav" >

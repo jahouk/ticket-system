@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments/techFragments :: head"></head>
+
+<body class="container">
+<div th:replace="fragments/techFragments :: masthead"></div>
+
+<div class="container-fluid">
+    <div class="row content">
+        <div class="col-sm-9">
+            <form autocomplete="off"
+                  th:object="${addAssetForm}" method="post" class="form-horizontal"
+                  role="form">
+                <fieldset>
+                    <legend>Edit Asset (Computer):</legend>
+                    <div class="col-sm-9">
+                        <input type="text" th:field="*{name}" placeholder="Asset Name"
+                               class="form-control" th:value="${addAssetForm.name}" /> <label
+                            th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
+                            class="validation-message"></label>
+                    </div>
+                    <div class="col-sm-9">
+                        <label th:for="offices">Office</label>
+                        <select name="office">
+                            <option th:if="${addAssetForm.office == office }"
+                                    th:each="office : ${offices}"
+                                    th:text="@{|${office.office} at ${office.site.site}|}"
+                                    th:value="${office.id}"
+                                    selected="selected">
+                            </option>
+                            <option th:unless="${office == addAssetForm.office}"
+                                    th:each="office : ${offices}"
+                                    th:text="@{|${office.office} at ${office.site.site}|}"
+                                    th:value="${office.id}">
+                            </option>
+                        </select>
+                    </div>
+                </fieldset>
+
+                <div class="form-group">
+                    <div class="col-sm-9">
+                        <button type="submit" class="btn btn-primary btn-block">Update Asset</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div th:replace="fragments/techFragments:: side-navigation" class="col-sm-3 sidenav" >
+        </div>
+    </div>
+</div>
+
+<footer th:replace="fragments/techFragments:: footer"></footer>
+</body>
+</html>

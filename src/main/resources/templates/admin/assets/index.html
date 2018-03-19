@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments/techFragments :: head"></head>
+
+<body class="container">
+<div th:replace="fragments/techFragments :: masthead"></div>
+
+<div class="container-fluid">
+    <div class="row content">
+        <div class="col-sm-9">
+
+            <p><strong>Assets (Computers)</strong></p>
+            <p th:unless="${company.assets} and ${company.assets.size()}">No assets found<br/></p>
+
+            <table th:if="${company.assets} and ${company.assets.size()}"  class="table">
+                <thead>
+                <th>Asset</th>
+                <th>Office</th>
+                <th>Site</th>
+                <th>&nbsp;</th>
+                </thead>
+                <tr th:each="asset : ${company.assets}">
+                    <td><a th:href="@{|/admin/assets/${asset.id}|}" th:text="${asset.name}"></a></td>
+                    <td th:text="${asset.office.office}"></td>
+                    <td th:text="${asset.office.site.site}"></td>
+                    <td><a th:href="@{|/admin/assets/${asset.id}/edit_asset|}">Edit</a></td>
+                </tr>
+            </table>
+            <p><a th:href="@{|/admin/assets/add_asset|}" >Add Asset</a></p>
+
+        </div>
+
+        <div th:replace="fragments/techFragments:: side-navigation" class="col-sm-3 sidenav" >
+        </div>
+    </div>
+</div>
+
+<footer th:replace="fragments/techFragments:: footer"></footer>
+</body>
+</html>

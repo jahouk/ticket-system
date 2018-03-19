@@ -21,6 +21,7 @@ public class AddUserForm {
 
     //-------------------------------------------------------------------------
     // USER_INFO FIELDS
+    @NotEmpty(message = "*Company Username is required")
     private String companyUsername;     // User's Login Name at their company /
 
 
