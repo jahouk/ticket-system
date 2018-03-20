@@ -153,7 +153,7 @@ public class TechsController {
                     new HashSet<Role>(Arrays.asList(
                             roleRepository.findByRole("USER")))
             ));
-            newUser = userService.findUserByUsername(addUserForm.getEmail());
+            newUser = userService.findUserByUsername(addUserForm.getCompanyUsername());
 
             Office newOffice = createOffice(new Office(myCompany.getCompanyInfo().getPrimarySite(),
                     addUserForm.getOffice()), officeRepository);
@@ -161,25 +161,14 @@ public class TechsController {
             myCompany.getCompanyInfo().getPrimarySite().addOffice(newOffice);
 
             // User_Info
-            UserInfo userInfo = createUserInfo(new UserInfo(
-                    user,
-                    addUserForm.getFname(),
-                    addUserForm.getLname(),
-                    addUserForm.getTitle(),
-                    addUserForm.getEmail(),
-                    addUserForm.getUserPhone(),
-                    addUserForm.getCompanyUsername(),
-                    addUserForm.getCellPhone(),
-                    addUserForm.getCanText(),
-                    newOffice
-            ), userInfoRepository);
-
+            UserInfo userInfo = createUserInfo(
+                    new UserInfo(newUser, addUserForm, newOffice),
+                    userInfoRepository);
             // update User (User Info)
             newUser.setUserInfo(userInfo);
             newUser.setPassword(addUserForm.getPassword());
             userService.saveUser(newUser);
             myCompany.addUser(newUser);
-
             companyRepository.save(myCompany);
 
             return "redirect:/admin/techs";

@@ -14,7 +14,7 @@
 
 
                 <fieldset>
-                    <legend>Add User:</legend>
+                    <legend>Add Tech:</legend>
                     <div class="form-group">
                         <div class="col-sm-9">
                             <input type="text" th:field="*{fname}" placeholder="First Name"
@@ -29,6 +29,25 @@
                                    class="form-control" th:value="${addUserForm.lname}" /> <label
                                 th:if="${#fields.hasErrors('lname')}" th:errors="*{lname}"
                                 class="validation-message"></label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-9">
+                            <input type="text" th:field="*{companyUsername}" placeholder="Company Username"
+                                   class="form-control" th:value="${addUserForm.companyUsername}" /> <label
+                                th:if="${#fields.hasErrors('companyUsername')}" th:errors="*{companyUsername}"
+                                class="validation-message"></label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-9">
+                            <input type="password" th:field="*{password}"
+                                   placeholder="Password" class="form-control" />
+                            <label
+                                    th:if="${#fields.hasErrors('password')}" th:errors="*{password}"
+                                    class="validation-message"></label>
                         </div>
                     </div>
 
@@ -53,15 +72,7 @@
                     </div>
 
 
-                    <div class="form-group">
-                        <div class="col-sm-9">
-                            <input type="password" th:field="*{password}"
-                                   placeholder="Password" class="form-control" />
-                            <label
-                                    th:if="${#fields.hasErrors('password')}" th:errors="*{password}"
-                                    class="validation-message"></label>
-                        </div>
-                    </div>
+
                     <div class="form-group">
                         <div class="col-sm-9">
                             <input type="text" th:field="*{office}" placeholder="Office Number or Room"
@@ -70,14 +81,7 @@
                                 class="validation-message"></label>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <div class="col-sm-9">
-                            <input type="text" th:field="*{companyUsername}" placeholder="Company Username"
-                                   class="form-control" th:value="${addUserForm.companyUsername}" /> <label
-                                th:if="${#fields.hasErrors('companyUsername')}" th:errors="*{companyUsername}"
-                                class="validation-message"></label>
-                        </div>
-                    </div>
+
                     <div class="form-group">
                         <div class="col-sm-9">
                             <input type="text" th:field="*{userPhone}" placeholder="Phone"

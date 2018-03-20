@@ -164,18 +164,9 @@ public class UsersController {
             myCompany.getCompanyInfo().getPrimarySite().addOffice(newOffice);
 
             // User_Info
-            UserInfo userInfo = createUserInfo(new UserInfo(
-                    user,
-                    addUserForm.getFname(),
-                    addUserForm.getLname(),
-                    addUserForm.getTitle(),
-                    addUserForm.getEmail(),
-                    addUserForm.getUserPhone(),
-                    addUserForm.getCompanyUsername(),
-                    addUserForm.getCellPhone(),
-                    addUserForm.getCanText(),
-                    newOffice
-            ), userInfoRepository);
+            UserInfo userInfo = createUserInfo(
+                    new UserInfo( newUser, addUserForm, newOffice),
+                    userInfoRepository);
 
             // update User (User Info)
             newUser.setUserInfo(userInfo);

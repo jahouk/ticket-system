@@ -1,0 +1,36 @@
+// TODO - 1) Refactor code so that my prefix is used for logged in user
+
+// TODO - 2) Change USER/TECH forms so that they use drop down list of offices
+
+// TODO - 3) Change some form text fields to textareas where appropriate
+// https://stackoverflow.com/questions/30394419/thymeleaf-spring-how-to-keep-line-break
+
+// TODO - 4) Add photo to user profile
+
+// TODO - 5) Make tech profile viewable
+
+// TODO - 6) Add assigned tech to ticket
+
+// TODO - 7) Add status, updated by customer
+
+// TODO - 8) On customer view of ticket updates, remove status and
+//        automatically set to updated by customer unless close checkbox is checked.
+
+// TODO - 9) Add Google Map to tech portal site view
+
+// TODO - 10) Add is admin checkbox to edit tech under admin view
+
+// TODO - 11) Add is user admin checkbox to edit user in user-admin view
+//        note: leaving that setting with the customer and not the tech
+
+// TODO - 12) Add ability to change billing address and primary site to company
+
+// TODO - 13) Add audit trail to changes to company and user info, maybe to a log
+//        Preserve origonal info in log file
+
+// TODO - 14) Add ability to disable users and companies.
+//        note: do not delete users so that associated entries are preserved
+
+// TODO - 15) Add email functionality to send emails when tickets are created / updated
+
+// TODO - 16) Redo the UIX to make nicer

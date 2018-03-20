@@ -1,5 +1,6 @@
 package com.houkstead.ticketsystem.models;
 
+import com.houkstead.ticketsystem.models.forms.AddUserForm;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -74,6 +75,19 @@ public class UserInfo {
         setCompanyUserName(companyUserName);
         setCellphone(cellphone);
         setCanText(canText);
+        setOffice(office);
+    }
+
+    public UserInfo(User user, AddUserForm addUserForm, Office office){
+        setUserId(user);
+        setFname(addUserForm.getFname());
+        setLname(addUserForm.getLname());
+        setTitle(addUserForm.getTitle());
+        setEmail(addUserForm.getEmail());
+        setPhone(addUserForm.getUserPhone());
+        setCompanyUserName(addUserForm.getCompanyUsername());
+        setCellphone(addUserForm.getCellPhone());
+        setCanText(addUserForm.getCanText());
         setOffice(office);
     }
 

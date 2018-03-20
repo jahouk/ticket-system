@@ -25,4 +25,6 @@ nbdist/
 .nb-gradle/
 
 ### Database Info ###
-application.properties
+/src/main/resources/application.properties
+
+/src/main/resources/notes.txt

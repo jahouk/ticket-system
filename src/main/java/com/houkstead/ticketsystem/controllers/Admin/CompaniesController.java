@@ -169,7 +169,7 @@ public class CompaniesController {
             myUser = userService.findUserByUsername(addCompanyForm.getEmail());
 
 
-            // Create SitesController
+            // Create Sites
             site = createSite(new Site(
                             addCompanyForm.getSite(),
                             company,
