@@ -1,3 +1,27 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2018 Jason Houk
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 package com.houkstead.ticketsystem.controllers.Tech;
 
 
@@ -55,15 +79,15 @@ public class TicketsController {
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
         Company myCompany = companyRepository.findOne(companyId);
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.findUserByUsername(auth.getName());
+        User myUser = userService.findUserByUsername(auth.getName());
 
         // Programatically verify that this is a tech
-        if(!isTech(user, roleRepository)) {
+        if(!isTech(myUser, roleRepository)) {
             return "redirect:/";
         }
 
-        model.addAttribute("user",user);
-        model.addAttribute("isAdmin", isAdmin(user, roleRepository));
+        model.addAttribute("user",myUser);
+        model.addAttribute("isAdmin", isAdmin(myUser, roleRepository));
         model.addAttribute("company", myCompany);
         model.addAttribute("techCompany", techCompany);
         return "tech/tickets/index";
@@ -77,17 +101,17 @@ public class TicketsController {
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
         Company myCompany = companyRepository.findOne(companyId);
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.findUserByUsername(auth.getName());
+        User myUser = userService.findUserByUsername(auth.getName());
         AddTicketForm addTicketForm = new AddTicketForm();
 
         // Programatically verify that this is a tech, tech company is ok
-        if(!isTech(user, roleRepository) ||
+        if(!isTech(myUser, roleRepository) ||
                 myCompany == null) {
             return "redirect:/";
         }
 
-        model.addAttribute("user", user);
-        model.addAttribute("isAdmin", isAdmin(user, roleRepository));
+        model.addAttribute("user", myUser);
+        model.addAttribute("isAdmin", isAdmin(myUser, roleRepository));
         model.addAttribute("company", myCompany);
         model.addAttribute("addTicketForm", addTicketForm);
         model.addAttribute("techCompany", techCompany);
@@ -106,15 +130,15 @@ public class TicketsController {
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
         Company myCompany = companyRepository.findOne(companyId);
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.findUserByUsername(auth.getName());
+        User myUser = userService.findUserByUsername(auth.getName());
 
         // Programatically verify that this is a tech, tech company is ok
-        if(!isTech(user, roleRepository) ||
+        if(!isTech(myUser, roleRepository) ||
                 myCompany == null) {
             return "redirect:/";
         } else if (errors.hasErrors()) {
-            model.addAttribute("user", user);
-            model.addAttribute("isAdmin", isAdmin(user, roleRepository));
+            model.addAttribute("user", myUser);
+            model.addAttribute("isAdmin", isAdmin(myUser, roleRepository));
             model.addAttribute("company", myCompany);
             model.addAttribute("addTicketForm", addTicketForm);
             model.addAttribute("techCompany", techCompany);
@@ -139,19 +163,19 @@ public class TicketsController {
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
         Company myCompany = companyRepository.findOne(companyId);
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.findUserByUsername(auth.getName());
+        User myUser = userService.findUserByUsername(auth.getName());
         Ticket myTicket = ticketRepository.findOne(ticketId);
 
         // Programatically verify that this is a tech, tech company is ok
-        if(!isTech(user, roleRepository) ||
+        if(!isTech(myUser, roleRepository) ||
                 myCompany == null ||
                 myCompany.getId() != myTicket.getAsset().getOffice().getSite().getCompany().getId()) {
             return "redirect:/";
         }
 
 
-        model.addAttribute("user",user);
-        model.addAttribute("isAdmin", isAdmin(user, roleRepository));
+        model.addAttribute("user",myUser);
+        model.addAttribute("isAdmin", isAdmin(myUser, roleRepository));
         model.addAttribute("company", myCompany);
         model.addAttribute("ticket", myTicket);
         model.addAttribute("techCompany", techCompany);
@@ -167,20 +191,20 @@ public class TicketsController {
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
         Company myCompany = companyRepository.findOne(companyId);
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.findUserByUsername(auth.getName());
+        User myUser = userService.findUserByUsername(auth.getName());
         Ticket myTicket = ticketRepository.findOne(ticketId);
         AddTicketUpdateForm addTicketUpdateForm = new AddTicketUpdateForm();
         List<Status> statuses = statusRepository.findAll();
 
         // Programatically verify that this is a tech, tech company is ok
-        if(!isTech(user, roleRepository) ||
+        if(!isTech(myUser, roleRepository) ||
                 myCompany == null ||
                 myCompany.getId() != myTicket.getAsset().getOffice().getSite().getCompany().getId()) {
             return "redirect:/";
         }
 
-        model.addAttribute("user",user);
-        model.addAttribute("isAdmin", isAdmin(user, roleRepository));
+        model.addAttribute("user",myUser);
+        model.addAttribute("isAdmin", isAdmin(myUser, roleRepository));
         model.addAttribute("company", myCompany);
         model.addAttribute("ticket", myTicket);
         model.addAttribute("techCompany", techCompany);
@@ -201,18 +225,18 @@ public class TicketsController {
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
         Company myCompany = companyRepository.findOne(companyId);
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.findUserByUsername(auth.getName());
+        User myUser = userService.findUserByUsername(auth.getName());
         Ticket myTicket = ticketRepository.findOne(ticketId);
         List<Status> statuses = statusRepository.findAll();
 
         // Programatically verify that this is a tech, tech company is ok
-        if(!isTech(user, roleRepository) ||
+        if(!isTech(myUser, roleRepository) ||
                 myCompany == null ||
                 myCompany.getId() != myTicket.getAsset().getOffice().getSite().getCompany().getId()) {
             return "redirect:/";
         } else if (errors.hasErrors()) {
-            model.addAttribute("user",user);
-            model.addAttribute("isAdmin", isAdmin(user, roleRepository));
+            model.addAttribute("user",myUser);
+            model.addAttribute("isAdmin", isAdmin(myUser, roleRepository));
             model.addAttribute("company", myCompany);
             model.addAttribute("ticket", myTicket);
             model.addAttribute("techCompany", techCompany);
@@ -222,7 +246,7 @@ public class TicketsController {
             return "tech/tickets/add_tickets";
         } else {
             TicketUpdate newTicketUpdate =
-                    new TicketUpdate(myTicket, user, addTicketUpdateForm);
+                    new TicketUpdate(myTicket, myUser, addTicketUpdateForm);
             ticketUpdateRepository.save(newTicketUpdate);
             myTicket.setStatus(addTicketUpdateForm.getStatus());
             myTicket.addUpdate(newTicketUpdate);

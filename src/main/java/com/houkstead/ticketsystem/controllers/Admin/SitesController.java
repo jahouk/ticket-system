@@ -1,3 +1,27 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2018 Jason Houk
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 package com.houkstead.ticketsystem.controllers.Admin;
 
 import com.houkstead.ticketsystem.UserService;
@@ -52,18 +76,18 @@ public class SitesController {
     @RequestMapping(value="", method = RequestMethod.GET)
     public String index(Model model){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.findUserByUsername(auth.getName());
+        User myUser = userService.findUserByUsername(auth.getName());
 
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
-        Company myCompany = user.getCompany();
+        Company myCompany = myUser.getCompany();
 
         // Programatically verify that this is a user admin
-        if(!isAdmin(user, roleRepository)) {
+        if(!isAdmin(myUser, roleRepository)) {
             return "redirect:/admin";
         }
 
-        model.addAttribute("user",user);
-        model.addAttribute("isAdmin", isAdmin(user, roleRepository));
+        model.addAttribute("user",myUser);
+        model.addAttribute("isAdmin", isAdmin(myUser, roleRepository));
         model.addAttribute("company", myCompany);
         model.addAttribute("techCompany", techCompany);
 
@@ -76,20 +100,20 @@ public class SitesController {
             Model model,
             @PathVariable int mySiteId){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.findUserByUsername(auth.getName());
+        User myUser = userService.findUserByUsername(auth.getName());
 
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
-        Company myCompany = user.getCompany();
+        Company myCompany = myUser.getCompany();
 
         Site mySite = siteRepository.findOne(mySiteId);
 
         // Programatically verify that this is a user admin
-        if(!isAdmin(user, roleRepository)) {
+        if(!isAdmin(myUser, roleRepository)) {
             return "redirect:/admin";
         }
 
-        model.addAttribute("user",user);
-        model.addAttribute("isAdmin", isAdmin(user, roleRepository));
+        model.addAttribute("user",myUser);
+        model.addAttribute("isAdmin", isAdmin(myUser, roleRepository));
         model.addAttribute("company", myCompany);
         model.addAttribute("techCompany", techCompany);
         model.addAttribute("mySite", mySite);
@@ -105,15 +129,15 @@ public class SitesController {
             @RequestParam String office_name){
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.findUserByUsername(auth.getName());
+        User myUser = userService.findUserByUsername(auth.getName());
 
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
-        Company myCompany = user.getCompany();
+        Company myCompany = myUser.getCompany();
 
         Site mySite = siteRepository.findOne(mySiteId);
 
         // Programatically verify that this is a user admin
-        if(!isAdmin(user, roleRepository)) {
+        if(!isAdmin(myUser, roleRepository)) {
             return "redirect:/admin";
         }
 
@@ -125,8 +149,8 @@ public class SitesController {
         mySite.addOffice(newOffice);
         siteRepository.save(mySite);
 
-        model.addAttribute("user",user);
-        model.addAttribute("isAdmin", isAdmin(user, roleRepository));
+        model.addAttribute("user",myUser);
+        model.addAttribute("isAdmin", isAdmin(myUser, roleRepository));
         model.addAttribute("company", myCompany);
         model.addAttribute("techCompany", techCompany);
         model.addAttribute("mySite", mySite);
@@ -138,20 +162,20 @@ public class SitesController {
     @RequestMapping(value="/add_site", method = RequestMethod.GET)
     public String addSite(Model model){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.findUserByUsername(auth.getName());
+        User myUser = userService.findUserByUsername(auth.getName());
 
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
-        Company myCompany = user.getCompany();
+        Company myCompany = myUser.getCompany();
 
         AddSiteForm addSiteForm = new AddSiteForm();
 
         // Programatically verify that this is a user admin
-        if(!isAdmin(user, roleRepository)) {
+        if(!isAdmin(myUser, roleRepository)) {
             return "redirect:/admin";
         }
 
-        model.addAttribute("user",user);
-        model.addAttribute("isAdmin", isAdmin(user, roleRepository));
+        model.addAttribute("user",myUser);
+        model.addAttribute("isAdmin", isAdmin(myUser, roleRepository));
         model.addAttribute("company", myCompany);
         model.addAttribute("techCompany", techCompany);
         model.addAttribute("addSiteForm", addSiteForm);
@@ -167,17 +191,17 @@ public class SitesController {
             Model model
     ) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.findUserByUsername(auth.getName());
+        User myUser = userService.findUserByUsername(auth.getName());
 
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
-        Company myCompany = user.getCompany();
+        Company myCompany = myUser.getCompany();
 
         // Programatically verify that this is a user admin
-        if(!isAdmin(user, roleRepository)) {
+        if(!isAdmin(myUser, roleRepository)) {
             return "redirect:/admin";
         } else if (errors.hasErrors()) {
-            model.addAttribute("user",user);
-            model.addAttribute("isAdmin", isAdmin(user, roleRepository));
+            model.addAttribute("user",myUser);
+            model.addAttribute("isAdmin", isAdmin(myUser, roleRepository));
             model.addAttribute("company", myCompany);
             model.addAttribute("techCompany", techCompany);
             model.addAttribute("addSiteForm", addSiteForm);
@@ -220,10 +244,10 @@ public class SitesController {
             Model model,
             @PathVariable int siteId){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.findUserByUsername(auth.getName());
+        User myUser = userService.findUserByUsername(auth.getName());
 
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
-        Company myCompany = user.getCompany();
+        Company myCompany = myUser.getCompany();
 
         Site mySite = siteRepository.findOne(siteId);
 
@@ -239,11 +263,11 @@ public class SitesController {
                 mySite.getSiteContact());
 
         // Programatically verify that this is a user admin
-        if(!isAdmin(user, roleRepository)) {
+        if(!isAdmin(myUser, roleRepository)) {
             return "redirect:/admin";
         }
-        model.addAttribute("user",user);
-        model.addAttribute("isAdmin", isAdmin(user, roleRepository));
+        model.addAttribute("user",myUser);
+        model.addAttribute("isAdmin", isAdmin(myUser, roleRepository));
         model.addAttribute("company", myCompany);
         model.addAttribute("techCompany", techCompany);
         model.addAttribute("addSiteForm", addSiteForm);
@@ -260,19 +284,19 @@ public class SitesController {
             @PathVariable int siteId
     ) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.findUserByUsername(auth.getName());
+        User myUser = userService.findUserByUsername(auth.getName());
 
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
-        Company myCompany = user.getCompany();
+        Company myCompany = myUser.getCompany();
 
         Site mySite = siteRepository.findOne(siteId);
 
         // Programatically verify that this is a user admin
-        if(!isAdmin(user, roleRepository)) {
+        if(!isAdmin(myUser, roleRepository)) {
             return "redirect:/admin";
         }else if (errors.hasErrors()) {
-            model.addAttribute("user",user);
-            model.addAttribute("isAdmin", isAdmin(user, roleRepository));
+            model.addAttribute("user",myUser);
+            model.addAttribute("isAdmin", isAdmin(myUser, roleRepository));
             model.addAttribute("company", myCompany);
             model.addAttribute("techCompany", techCompany);
             model.addAttribute("addSiteForm", addSiteForm);

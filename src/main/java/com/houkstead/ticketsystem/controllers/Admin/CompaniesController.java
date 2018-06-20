@@ -1,3 +1,27 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2018 Jason Houk
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 package com.houkstead.ticketsystem.controllers.Admin;
 
 import com.houkstead.ticketsystem.UserService;
@@ -64,20 +88,20 @@ public class CompaniesController {
     @RequestMapping(value = "add_company", method = RequestMethod.GET)
     public String addCompany(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.findUserByUsername(auth.getName());
+        User myUser = userService.findUserByUsername(auth.getName());
 
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
-        Company myCompany = user.getCompany();
+        Company myCompany = myUser.getCompany();
 
         // Programatically verify that this is a user admin
-        if(!isAdmin(user, roleRepository)) {
+        if(!isAdmin(myUser, roleRepository)) {
             return "redirect:/admin";
         }
 
         AddCompanyForm addCompanyForm = new AddCompanyForm();
 
-        model.addAttribute("user",user);
-        model.addAttribute("isAdmin", isAdmin(user, roleRepository));
+        model.addAttribute("user",myUser);
+        model.addAttribute("isAdmin", isAdmin(myUser, roleRepository));
         model.addAttribute("company", myCompany);
         model.addAttribute("techCompany", techCompany);
         model.addAttribute("addCompanyForm", addCompanyForm);
@@ -92,17 +116,17 @@ public class CompaniesController {
                              Errors errors,
                              Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.findUserByUsername(auth.getName());
+        User myUser = userService.findUserByUsername(auth.getName());
 
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
-        Company myCompany = user.getCompany();
+        Company myCompany = myUser.getCompany();
 
         // Programatically verify that this is a user admin
-        if(!isAdmin(user, roleRepository)) {
+        if(!isAdmin(myUser, roleRepository)) {
             return "redirect:/admin";
         }else if (errors.hasErrors()) {
-            model.addAttribute("user",user);
-            model.addAttribute("isAdmin", isAdmin(user, roleRepository));
+            model.addAttribute("user",myUser);
+            model.addAttribute("isAdmin", isAdmin(myUser, roleRepository));
             model.addAttribute("company", myCompany);
             model.addAttribute("techCompany", techCompany);
             model.addAttribute("addCompanyForm", addCompanyForm);
@@ -113,7 +137,7 @@ public class CompaniesController {
         } else {
             Company company = null;
             CompanyInfo companyInfo = null;
-            User myUser = null;
+            User newUser = null;
             Site site = null;
             Office office = null;
             Address billingAddress = null;
@@ -166,7 +190,7 @@ public class CompaniesController {
                             roleRepository.findByRole("USER"),
                             roleRepository.findByRole("USER-ADMIN")))
             ));
-            myUser = userService.findUserByUsername(addCompanyForm.getEmail());
+            newUser = userService.findUserByUsername(addCompanyForm.getEmail());
 
 
             // Create Sites
@@ -176,7 +200,7 @@ public class CompaniesController {
                             streetAddress,
                             addCompanyForm.getCompanyPhone(),
                             addCompanyForm.getFax(),
-                            myUser),
+                            newUser),
                     siteRepository
             );
 
@@ -188,7 +212,7 @@ public class CompaniesController {
 
             // User_Info
             userInfo = createUserInfo(new UserInfo(
-                    myUser,
+                    newUser,
                     addCompanyForm.getFname(),
                     addCompanyForm.getLname(),
                     addCompanyForm.getTitle(),
@@ -213,10 +237,10 @@ public class CompaniesController {
             company.setCompanyInfo(companyInfo);
 
             // update User (User Info)
-            myUser.setUserInfo(userInfo);
-            myUser.setPassword(addCompanyForm.getPassword());
-            userService.saveUser(myUser);
-            company.addUser(myUser);
+            newUser.setUserInfo(userInfo);
+            newUser.setPassword(addCompanyForm.getPassword());
+            userService.saveUser(newUser);
+            company.addUser(newUser);
 
             companyRepository.save(company);
 

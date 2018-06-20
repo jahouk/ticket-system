@@ -1,4 +1,4 @@
-// TODO - 1) Refactor code so that my prefix is used for logged in user
+// TO DO - 1) Refactor code so that my prefix is used for logged in user
 
 // TODO - 2) Change USER/TECH forms so that they use drop down list of offices
 

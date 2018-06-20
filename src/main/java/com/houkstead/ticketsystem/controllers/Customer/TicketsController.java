@@ -1,3 +1,27 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2018 Jason Houk
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 package com.houkstead.ticketsystem.controllers.Customer;
 
 
@@ -51,19 +75,19 @@ public class TicketsController {
     @RequestMapping(value="", method = RequestMethod.GET)
     public String index(Model model){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.findUserByUsername(auth.getName());
+        User myUser = userService.findUserByUsername(auth.getName());
 
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
-        Company myCompany = user.getCompany();
+        Company myCompany = myUser.getCompany();
 
 
         // Programatically verify that this is a user
-        if(!isUser(user, roleRepository)) {
+        if(!isUser(myUser, roleRepository)) {
             return "redirect:/";
         }
 
-        model.addAttribute("user",user);
-        model.addAttribute("isUserAdmin", isUserAdmin(user, roleRepository));
+        model.addAttribute("user",myUser);
+        model.addAttribute("isUserAdmin", isUserAdmin(myUser, roleRepository));
         model.addAttribute("company", myCompany);
         model.addAttribute("techCompany", techCompany);
         return "customer/tickets/index";
@@ -74,20 +98,20 @@ public class TicketsController {
     public String addTicket(
             Model model){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.findUserByUsername(auth.getName());
+        User myUser = userService.findUserByUsername(auth.getName());
 
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
-        Company myCompany = user.getCompany();
+        Company myCompany = myUser.getCompany();
 
         AddTicketForm addTicketForm = new AddTicketForm();
 
         // Programatically verify that this is a user
-        if(!isUser(user, roleRepository)) {
+        if(!isUser(myUser, roleRepository)) {
             return "redirect:/";
         }
 
-        model.addAttribute("user",user);
-        model.addAttribute("isUserAdmin", isUserAdmin(user, roleRepository));
+        model.addAttribute("user",myUser);
+        model.addAttribute("isUserAdmin", isUserAdmin(myUser, roleRepository));
         model.addAttribute("company", myCompany);
         model.addAttribute("techCompany", techCompany);
         model.addAttribute("addTicketForm", addTicketForm);
@@ -103,17 +127,17 @@ public class TicketsController {
             Model model
     ) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.findUserByUsername(auth.getName());
+        User myUser = userService.findUserByUsername(auth.getName());
 
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
-        Company myCompany = user.getCompany();
+        Company myCompany = myUser.getCompany();
 
         // Programatically verify that this is a user
-        if(!isUser(user, roleRepository)) {
+        if(!isUser(myUser, roleRepository)) {
             return "redirect:/";
         }else if (errors.hasErrors()) {
-            model.addAttribute("user",user);
-            model.addAttribute("isUserAdmin", isUserAdmin(user, roleRepository));
+            model.addAttribute("user",myUser);
+            model.addAttribute("isUserAdmin", isUserAdmin(myUser, roleRepository));
             model.addAttribute("company", myCompany);
             model.addAttribute("techCompany", techCompany);
             model.addAttribute("addTicketForm", addTicketForm);
@@ -134,20 +158,20 @@ public class TicketsController {
             Model model,
             @PathVariable int ticketId){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.findUserByUsername(auth.getName());
+        User myUser = userService.findUserByUsername(auth.getName());
 
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
-        Company myCompany = user.getCompany();
+        Company myCompany = myUser.getCompany();
 
         Ticket myTicket = ticketRepository.findOne(ticketId);
 
         // Programatically verify that this is a user
-        if(!isUser(user, roleRepository)) {
+        if(!isUser(myUser, roleRepository)) {
             return "redirect:/";
         }
 
-        model.addAttribute("user",user);
-        model.addAttribute("isUserAdmin", isUserAdmin(user, roleRepository));
+        model.addAttribute("user",myUser);
+        model.addAttribute("isUserAdmin", isUserAdmin(myUser, roleRepository));
         model.addAttribute("company", myCompany);
         model.addAttribute("techCompany", techCompany);
         model.addAttribute("ticket", myTicket);
@@ -160,22 +184,22 @@ public class TicketsController {
             Model model,
             @PathVariable int ticketId) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.findUserByUsername(auth.getName());
+        User myUser = userService.findUserByUsername(auth.getName());
 
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
-        Company myCompany = user.getCompany();
+        Company myCompany = myUser.getCompany();
 
         Ticket myTicket = ticketRepository.findOne(ticketId);
         AddTicketUpdateForm addTicketUpdateForm = new AddTicketUpdateForm();
         List<Status> statuses = statusRepository.findAll();
 
         // Programatically verify that this is a user
-        if(!isUser(user, roleRepository)) {
+        if(!isUser(myUser, roleRepository)) {
             return "redirect:/";
         }
 
-        model.addAttribute("user",user);
-        model.addAttribute("isUserAdmin", isUserAdmin(user, roleRepository));
+        model.addAttribute("user",myUser);
+        model.addAttribute("isUserAdmin", isUserAdmin(myUser, roleRepository));
         model.addAttribute("company", myCompany);
         model.addAttribute("techCompany", techCompany);
         model.addAttribute("statuses", statuses);
@@ -192,21 +216,21 @@ public class TicketsController {
             Model model,
             @PathVariable int ticketId) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.findUserByUsername(auth.getName());
+        User myUser = userService.findUserByUsername(auth.getName());
 
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
-        Company myCompany = user.getCompany();
+        Company myCompany = myUser.getCompany();
 
         Ticket myTicket = ticketRepository.findOne(ticketId);
         List<Status> statuses = statusRepository.findAll();
 
 
         // Programatically verify that this is a user
-        if(!isUser(user, roleRepository)) {
+        if(!isUser(myUser, roleRepository)) {
             return "redirect:/";
         } else if (errors.hasErrors()) {
-            model.addAttribute("user",user);
-            model.addAttribute("isUserAdmin", isUserAdmin(user, roleRepository));
+            model.addAttribute("user",myUser);
+            model.addAttribute("isUserAdmin", isUserAdmin(myUser, roleRepository));
             model.addAttribute("company", myCompany);
             model.addAttribute("techCompany", techCompany);
             model.addAttribute("statuses", statuses);
@@ -216,7 +240,7 @@ public class TicketsController {
             return "customer/tickets/add_ticket_update";
         } else {
             TicketUpdate newTicketUpdate =
-                    new TicketUpdate(myTicket, user, addTicketUpdateForm);
+                    new TicketUpdate(myTicket, myUser, addTicketUpdateForm);
             ticketUpdateRepository.save(newTicketUpdate);
             myTicket.setStatus(addTicketUpdateForm.getStatus());
             myTicket.addUpdate(newTicketUpdate);

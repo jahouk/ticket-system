@@ -1,3 +1,27 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2018 Jason Houk
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 package com.houkstead.ticketsystem.controllers.Admin;
 
 
@@ -48,18 +72,18 @@ public class AssetsController {
     @RequestMapping(value="", method = RequestMethod.GET)
     public String index(Model model){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.findUserByUsername(auth.getName());
+        User myUser = userService.findUserByUsername(auth.getName());
 
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
-        Company myCompany = user.getCompany();
+        Company myCompany = myUser.getCompany();
 
         // Programatically verify that this is a user admin
-        if(!isAdmin(user, roleRepository)) {
+        if(!isAdmin(myUser, roleRepository)) {
             return "redirect:/admin";
         }
 
-        model.addAttribute("user",user);
-        model.addAttribute("isAdmin", isAdmin(user, roleRepository));
+        model.addAttribute("user",myUser);
+        model.addAttribute("isAdmin", isAdmin(myUser, roleRepository));
         model.addAttribute("company", myCompany);
         model.addAttribute("techCompany", techCompany);
 
@@ -72,22 +96,22 @@ public class AssetsController {
     public String viewasset(Model model,
                             @PathVariable int assetId){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.findUserByUsername(auth.getName());
+        User myUser = userService.findUserByUsername(auth.getName());
 
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
-        Company myCompany = user.getCompany();
+        Company myCompany = myUser.getCompany();
 
         Asset myAsset = assetRepository.findOne(assetId);
 
         // Programatically verify that this is a user admin
-        if(!isAdmin(user, roleRepository) ||
-                user.getCompany().getId() !=
+        if(!isAdmin(myUser, roleRepository) ||
+                myUser.getCompany().getId() !=
                         myAsset.getOffice().getSite().getCompany().getId()) {
             return "redirect:/admin";
         }
 
-        model.addAttribute("user",user);
-        model.addAttribute("isAdmin", isAdmin(user, roleRepository));
+        model.addAttribute("user",myUser);
+        model.addAttribute("isAdmin", isAdmin(myUser, roleRepository));
         model.addAttribute("company", myCompany);
         model.addAttribute("techCompany", techCompany);
         model.addAttribute("asset", myAsset);
@@ -99,10 +123,10 @@ public class AssetsController {
     @RequestMapping(value="/add_asset", method = RequestMethod.GET)
     public String addasset(Model model){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.findUserByUsername(auth.getName());
+        User myUser = userService.findUserByUsername(auth.getName());
 
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
-        Company myCompany = user.getCompany();
+        Company myCompany = myUser.getCompany();
 
         AddAssetForm addAssetForm = new AddAssetForm();
         List<Office> myOffices = new ArrayList<>();
@@ -114,12 +138,12 @@ public class AssetsController {
         }
 
         // Programatically verify that this is a user admin
-        if(!isAdmin(user, roleRepository)) {
+        if(!isAdmin(myUser, roleRepository)) {
             return "redirect:/admin";
         }
 
-        model.addAttribute("user",user);
-        model.addAttribute("isAdmin", isAdmin(user, roleRepository));
+        model.addAttribute("user",myUser);
+        model.addAttribute("isAdmin", isAdmin(myUser, roleRepository));
         model.addAttribute("company", myCompany);
         model.addAttribute("techCompany", techCompany);
         model.addAttribute("addAssetForm", addAssetForm);
@@ -136,10 +160,10 @@ public class AssetsController {
             Errors errors,
             Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.findUserByUsername(auth.getName());
+        User myUser = userService.findUserByUsername(auth.getName());
 
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
-        Company myCompany = user.getCompany();
+        Company myCompany = myUser.getCompany();
 
         List<Office> myOffices = new ArrayList<Office>();
 
@@ -150,11 +174,11 @@ public class AssetsController {
         }
 
         // Programatically verify that this is a user admin
-        if(!isAdmin(user, roleRepository)) {
+        if(!isAdmin(myUser, roleRepository)) {
             return "redirect:/admin";
         }else if (errors.hasErrors()) {
-            model.addAttribute("user",user);
-            model.addAttribute("isAdmin", isAdmin(user, roleRepository));
+            model.addAttribute("user",myUser);
+            model.addAttribute("isAdmin", isAdmin(myUser, roleRepository));
             model.addAttribute("company", myCompany);
             model.addAttribute("techCompany", techCompany);
             model.addAttribute("addAssetForm", addAssetForm);
@@ -178,10 +202,10 @@ public class AssetsController {
             Model model,
             @PathVariable int assetId){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.findUserByUsername(auth.getName());
+        User myUser = userService.findUserByUsername(auth.getName());
 
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
-        Company myCompany = user.getCompany();
+        Company myCompany = myUser.getCompany();
 
         Asset myAsset = assetRepository.findOne(assetId);
         AddAssetForm addAssetForm = new AddAssetForm(myAsset);
@@ -194,14 +218,14 @@ public class AssetsController {
         }
 
         // Programatically verify that this is a user admin
-        if(!isAdmin(user, roleRepository) ||
-                user.getCompany().getId() !=
+        if(!isAdmin(myUser, roleRepository) ||
+                myUser.getCompany().getId() !=
                         myAsset.getOffice().getSite().getCompany().getId()) {
             return "redirect:/admin";
         }
 
-        model.addAttribute("user",user);
-        model.addAttribute("isAdmin", isAdmin(user, roleRepository));
+        model.addAttribute("user",myUser);
+        model.addAttribute("isAdmin", isAdmin(myUser, roleRepository));
         model.addAttribute("company", myCompany);
         model.addAttribute("techCompany", techCompany);
         model.addAttribute("offices", myOffices);
@@ -220,10 +244,10 @@ public class AssetsController {
             @PathVariable int assetId
     ) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.findUserByUsername(auth.getName());
+        User myUser = userService.findUserByUsername(auth.getName());
 
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
-        Company myCompany = user.getCompany();
+        Company myCompany = myUser.getCompany();
 
         Asset myAsset = assetRepository.findOne(assetId);
         List<Office> myOffices = new ArrayList<Office>();
@@ -235,13 +259,13 @@ public class AssetsController {
         }
 
         // Programatically verify that this is a user admin
-        if(!isAdmin(user, roleRepository) ||
-                user.getCompany().getId() !=
+        if(!isAdmin(myUser, roleRepository) ||
+                myUser.getCompany().getId() !=
                         myAsset.getOffice().getSite().getCompany().getId()) {
             return "redirect:/admin";
         } else if (errors.hasErrors()) {
-            model.addAttribute("user",user);
-            model.addAttribute("isAdmin", isAdmin(user, roleRepository));
+            model.addAttribute("user",myUser);
+            model.addAttribute("isAdmin", isAdmin(myUser, roleRepository));
             model.addAttribute("company", myCompany);
             model.addAttribute("techCompany", techCompany);
             model.addAttribute("offices", myOffices);
@@ -271,16 +295,16 @@ public class AssetsController {
                             @RequestParam String specName,
                             @RequestParam String specValue) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.findUserByUsername(auth.getName());
+        User myUser = userService.findUserByUsername(auth.getName());
 
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
-        Company myCompany = user.getCompany();
+        Company myCompany = myUser.getCompany();
 
         Asset myAsset = assetRepository.findOne(assetId);
 
         // Programatically verify that this is a user admin
-        if(!isAdmin(user, roleRepository) ||
-                user.getCompany().getId() !=
+        if(!isAdmin(myUser, roleRepository) ||
+                myUser.getCompany().getId() !=
                         myAsset.getOffice().getSite().getCompany().getId()) {
             return "redirect:/admin";
         }

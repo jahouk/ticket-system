@@ -1,3 +1,27 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2018 Jason Houk
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 package com.houkstead.ticketsystem.controllers.Customer;
 
 import com.houkstead.ticketsystem.UserService;
@@ -52,18 +76,18 @@ public class UsersController {
     @RequestMapping(value="", method = RequestMethod.GET)
     public String index(Model model){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.findUserByUsername(auth.getName());
+        User myUser = userService.findUserByUsername(auth.getName());
 
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
-        Company myCompany = user.getCompany();
+        Company myCompany = myUser.getCompany();
 
         // Programatically verify that this is a user admin
-        if(!isUserAdmin(user, roleRepository)) {
+        if(!isUserAdmin(myUser, roleRepository)) {
             return "redirect:/";
         }
 
-        model.addAttribute("user",user);
-        model.addAttribute("isUserAdmin", isUserAdmin(user, roleRepository));
+        model.addAttribute("user",myUser);
+        model.addAttribute("isUserAdmin", isUserAdmin(myUser, roleRepository));
         model.addAttribute("company", myCompany);
         model.addAttribute("techCompany", techCompany);
 
@@ -72,29 +96,29 @@ public class UsersController {
 
 
     // This will display a specific user view
-    @RequestMapping(value="/{myUserId}", method = RequestMethod.GET)
+    @RequestMapping(value="/{userId}", method = RequestMethod.GET)
     public String userView(
             Model model,
-            @PathVariable int myUserId){
+            @PathVariable int userId){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.findUserByUsername(auth.getName());
+        User myUser = userService.findUserByUsername(auth.getName());
 
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
-        Company myCompany = user.getCompany();
+        Company myCompany = myUser.getCompany();
 
-        User myUser = userRepository.findOne(myUserId);
+        User user = userRepository.findOne(userId);
 
         // Programatically verify that this is a user admin
-        if(!isUserAdmin(user, roleRepository) ||
-                user.getCompany().getId() != myUser.getCompany().getId()) {
+        if(!isUserAdmin(myUser, roleRepository) ||
+                myUser.getCompany().getId() != user.getCompany().getId()) {
             return "redirect:/";
         }
 
-        model.addAttribute("user",user);
-        model.addAttribute("isUserAdmin", isUserAdmin(user, roleRepository));
+        model.addAttribute("user",myUser);
+        model.addAttribute("isUserAdmin", isUserAdmin(myUser, roleRepository));
         model.addAttribute("company", myCompany);
         model.addAttribute("techCompany", techCompany);
-        model.addAttribute("myUser", myUser);
+        model.addAttribute("myUser", user);
 
         return "customer/users/view_user";
     }
@@ -103,19 +127,19 @@ public class UsersController {
     @RequestMapping(value="/add_user", method = RequestMethod.GET)
     public String addUser(Model model){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.findUserByUsername(auth.getName());
+        User myUser = userService.findUserByUsername(auth.getName());
 
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
-        Company myCompany = user.getCompany();
+        Company myCompany = myUser.getCompany();
 
         AddUserForm addUserForm = new AddUserForm();
 
         // Programatically verify that this is a user admin
-        if(!isUserAdmin(user, roleRepository)) {
+        if(!isUserAdmin(myUser, roleRepository)) {
             return "redirect:/";
         }
-        model.addAttribute("user",user);
-        model.addAttribute("isUserAdmin", isUserAdmin(user, roleRepository));
+        model.addAttribute("user",myUser);
+        model.addAttribute("isUserAdmin", isUserAdmin(myUser, roleRepository));
         model.addAttribute("company", myCompany);
         model.addAttribute("techCompany", techCompany);
         model.addAttribute("roles", roleRepository.findAll());
@@ -130,17 +154,17 @@ public class UsersController {
                            Errors errors,
                            Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.findUserByUsername(auth.getName());
+        User myUser = userService.findUserByUsername(auth.getName());
 
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
-        Company myCompany = user.getCompany();
+        Company myCompany = myUser.getCompany();
 
         // Programatically verify that this is a user admin
-        if(!isUserAdmin(user, roleRepository)) {
+        if(!isUserAdmin(myUser, roleRepository)) {
             return "redirect:/";
         }else if (errors.hasErrors()) {        // Programatically verify that this is a user admin
-            model.addAttribute("user",user);
-            model.addAttribute("isUserAdmin", isUserAdmin(user, roleRepository));
+            model.addAttribute("user",myUser);
+            model.addAttribute("isUserAdmin", isUserAdmin(myUser, roleRepository));
             model.addAttribute("company", myCompany);
             model.addAttribute("techCompany", techCompany);
             model.addAttribute("roles", roleRepository.findAll());
@@ -181,36 +205,36 @@ public class UsersController {
     }
 
     // This will edit a user
-    @RequestMapping(value="/{myUserId}/edit_user", method = RequestMethod.GET)
+    @RequestMapping(value="/{userId}/edit_user", method = RequestMethod.GET)
     public String editUser(
             Model model,
-            @PathVariable int myUserId){
+            @PathVariable int userId){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.findUserByUsername(auth.getName());
+        User myUser = userService.findUserByUsername(auth.getName());
 
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
-        Company myCompany = user.getCompany();
+        Company myCompany = myUser.getCompany();
 
-        User myUser = userRepository.findOne(myUserId);
+        User user = userRepository.findOne(userId);
 
         EditUserForm editUser = new EditUserForm(
-                myUser.getUserInfo().getFname(),
-                myUser.getUserInfo().getLname(),
-                myUser.getUserInfo().getTitle(),
-                myUser.getUsername(),
-                myUser.getUserInfo().getCompanyUserName(),
-                myUser.getUserInfo().getOffice().getOffice(),
-                myUser.getUserInfo().getPhone(),
-                myUser.getUserInfo().getCellphone(),
-                myUser.getUserInfo().getCanText());
+                user.getUserInfo().getFname(),
+                user.getUserInfo().getLname(),
+                user.getUserInfo().getTitle(),
+                user.getUsername(),
+                user.getUserInfo().getCompanyUserName(),
+                user.getUserInfo().getOffice().getOffice(),
+                user.getUserInfo().getPhone(),
+                user.getUserInfo().getCellphone(),
+                user.getUserInfo().getCanText());
 
         // Programatically verify that this is a user admin
-        if(!isUserAdmin(user, roleRepository) ||
-                user.getCompany().getId() != myUser.getCompany().getId()) {
+        if(!isUserAdmin(myUser, roleRepository) ||
+                myUser.getCompany().getId() != user.getCompany().getId()) {
             return "redirect:/";
         }
-        model.addAttribute("user",user);
-        model.addAttribute("isUserAdmin", isUserAdmin(user, roleRepository));
+        model.addAttribute("user",myUser);
+        model.addAttribute("isUserAdmin", isUserAdmin(myUser, roleRepository));
         model.addAttribute("company", myCompany);
         model.addAttribute("techCompany", techCompany);
         model.addAttribute("editUser", editUser);
@@ -219,27 +243,27 @@ public class UsersController {
     }
 
     // This will edit a user
-    @RequestMapping(value="/{myUserId}/edit_user", method = RequestMethod.POST)
+    @RequestMapping(value="/{userId}/edit_user", method = RequestMethod.POST)
     public String editUser(@ModelAttribute @Valid EditUserForm editUser,
                            Errors errors,
                            Model model,
-                           @PathVariable int myUserId,
+                           @PathVariable int userId,
                            @RequestParam String password){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.findUserByUsername(auth.getName());
+        User myUser = userService.findUserByUsername(auth.getName());
 
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
-        Company myCompany = user.getCompany();
+        Company myCompany = myUser.getCompany();
 
-        User myUser = userRepository.findOne(myUserId);
+        User user = userRepository.findOne(userId);
 
         // Programatically verify that this is a user admin
-        if(!isUserAdmin(user, roleRepository) ||
-                user.getCompany().getId() != myUser.getCompany().getId()) {
+        if(!isUserAdmin(myUser, roleRepository) ||
+                myUser.getCompany().getId() != user.getCompany().getId()) {
             return "redirect:/";
         }else if (errors.hasErrors()) {
-            model.addAttribute("user",user);
-            model.addAttribute("isUserAdmin", isUserAdmin(user, roleRepository));
+            model.addAttribute("user",myUser);
+            model.addAttribute("isUserAdmin", isUserAdmin(myUser, roleRepository));
             model.addAttribute("company", myCompany);
             model.addAttribute("techCompany", techCompany);
             model.addAttribute("editUser", editUser);
@@ -247,53 +271,53 @@ public class UsersController {
 
             return "customer/users/edit_user";
         }else{
-            if(!editUser.getCanText().equals(myUser.getUserInfo().getCanText())){
-                myUser.getUserInfo().setCanText(editUser.getCanText());
+            if(!editUser.getCanText().equals(user.getUserInfo().getCanText())){
+                user.getUserInfo().setCanText(editUser.getCanText());
             }
 
-            if(!editUser.getCellPhone().equals(myUser.getUserInfo().getCellphone())){
-                myUser.getUserInfo().setCellphone(editUser.getCellPhone());
+            if(!editUser.getCellPhone().equals(user.getUserInfo().getCellphone())){
+                user.getUserInfo().setCellphone(editUser.getCellPhone());
             }
 
-            if(!editUser.getCompanyUsername().equals(myUser.getUserInfo().getCompanyUserName())){
-                myUser.getUserInfo().setCompanyUserName(editUser.getCompanyUsername());
+            if(!editUser.getCompanyUsername().equals(user.getUserInfo().getCompanyUserName())){
+                user.getUserInfo().setCompanyUserName(editUser.getCompanyUsername());
             }
 
-            if(!editUser.getEmail().equals(myUser.getUserInfo().getEmail())){
-                myUser.getUserInfo().setEmail(editUser.getEmail());
+            if(!editUser.getEmail().equals(user.getUserInfo().getEmail())){
+                user.getUserInfo().setEmail(editUser.getEmail());
             }
 
-            if(!editUser.getFname().equals(myUser.getUserInfo().getFname()))  {
-                myUser.getUserInfo().setFname(editUser.getFname());
+            if(!editUser.getFname().equals(user.getUserInfo().getFname()))  {
+                user.getUserInfo().setFname(editUser.getFname());
             }
 
-            if(!editUser.getLname().equals(myUser.getUserInfo().getLname())){
-                myUser.getUserInfo().setLname(editUser.getLname());
+            if(!editUser.getLname().equals(user.getUserInfo().getLname())){
+                user.getUserInfo().setLname(editUser.getLname());
             }
 
-            if(!editUser.getOffice().equals(myUser.getUserInfo().getOffice().getOffice())){
-                myUser.getUserInfo().getOffice().setOffice(editUser.getOffice());
+            if(!editUser.getOffice().equals(user.getUserInfo().getOffice().getOffice())){
+                user.getUserInfo().getOffice().setOffice(editUser.getOffice());
             }
 
-            if(!editUser.getTitle().equals(myUser.getUserInfo().getTitle())) {
-                myUser.getUserInfo().setTitle(editUser.getTitle());
+            if(!editUser.getTitle().equals(user.getUserInfo().getTitle())) {
+                user.getUserInfo().setTitle(editUser.getTitle());
             }
 
-            if(!editUser.getUserPhone().equals(myUser.getUserInfo().getPhone())) {
-                myUser.getUserInfo().setPhone(editUser.getUserPhone());
+            if(!editUser.getUserPhone().equals(user.getUserInfo().getPhone())) {
+                user.getUserInfo().setPhone(editUser.getUserPhone());
             }
 
-            if(!myUser.getUsername().equals(myUser.getUserInfo().getEmail())){
-                myUser.setUsername(myUser.getUserInfo().getEmail());
+            if(!user.getUsername().equals(user.getUserInfo().getEmail())){
+                user.setUsername(user.getUserInfo().getEmail());
             }
 
             if(password!=null && !(password.isEmpty())){
-                userService.updateUser(myUser, password);
+                userService.updateUser(user, password);
             }else{
-                userService.updateUser(myUser);
+                userService.updateUser(user);
             }
 
-            return "redirect:/customer/users/"+myUser.getId();
+            return "redirect:/customer/users/"+user.getId();
         }
     }
 }

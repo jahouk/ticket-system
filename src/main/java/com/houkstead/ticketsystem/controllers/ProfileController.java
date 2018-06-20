@@ -1,3 +1,27 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2018 Jason Houk
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 package com.houkstead.ticketsystem.controllers;
 
 import com.houkstead.ticketsystem.UserService;
@@ -51,15 +75,15 @@ public class ProfileController {
     @RequestMapping(value="", method = RequestMethod.GET)
     public String index(Model model){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.findUserByUsername(auth.getName());
+        User myUser = userService.findUserByUsername(auth.getName());
 
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
-        Company myCompany = user.getCompany();
+        Company myCompany = myUser.getCompany();
 
-        model.addAttribute("user",user);
-        model.addAttribute("isTech",isTech(user, roleRepository));
-        model.addAttribute("isAdmin", isAdmin(user, roleRepository));
-        model.addAttribute("isUserAdmin", isUserAdmin(user, roleRepository));
+        model.addAttribute("user",myUser);
+        model.addAttribute("isTech",isTech(myUser, roleRepository));
+        model.addAttribute("isAdmin", isAdmin(myUser, roleRepository));
+        model.addAttribute("isUserAdmin", isUserAdmin(myUser, roleRepository));
         model.addAttribute("company", myCompany);
         model.addAttribute("techCompany", techCompany);
 
@@ -71,17 +95,17 @@ public class ProfileController {
     @RequestMapping(value="/edit", method = RequestMethod.GET)
     public String editProfile(Model model){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.findUserByUsername(auth.getName());
+        User myUser = userService.findUserByUsername(auth.getName());
 
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
-        Company myCompany = user.getCompany();
+        Company myCompany = myUser.getCompany();
 
-        EditUserForm editUserForm = new EditUserForm(user);
+        EditUserForm editUserForm = new EditUserForm(myUser);
 
-        model.addAttribute("user",user);
-        model.addAttribute("isTech",isTech(user, roleRepository));
-        model.addAttribute("isAdmin", isAdmin(user, roleRepository));
-        model.addAttribute("isUserAdmin", isUserAdmin(user, roleRepository));
+        model.addAttribute("user",myUser);
+        model.addAttribute("isTech",isTech(myUser, roleRepository));
+        model.addAttribute("isAdmin", isAdmin(myUser, roleRepository));
+        model.addAttribute("isUserAdmin", isUserAdmin(myUser, roleRepository));
         model.addAttribute("company", myCompany);
         model.addAttribute("techCompany", techCompany);
         model.addAttribute("editUserForm", editUserForm);
@@ -97,68 +121,68 @@ public class ProfileController {
                           Errors errors,
                           Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.findUserByUsername(auth.getName());
+        User myUser = userService.findUserByUsername(auth.getName());
 
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
-        Company myCompany = user.getCompany();
+        Company myCompany = myUser.getCompany();
 
         // Programatically verify that this is a tech and not tech company
         if (errors.hasErrors()) {
-            model.addAttribute("user",user);
-            model.addAttribute("isTech",isTech(user, roleRepository));
-            model.addAttribute("isAdmin", isAdmin(user, roleRepository));
-            model.addAttribute("isUserAdmin", isUserAdmin(user, roleRepository));
+            model.addAttribute("user",myUser);
+            model.addAttribute("isTech",isTech(myUser, roleRepository));
+            model.addAttribute("isAdmin", isAdmin(myUser, roleRepository));
+            model.addAttribute("isUserAdmin", isUserAdmin(myUser, roleRepository));
             model.addAttribute("company", myCompany);
             model.addAttribute("techCompany", techCompany);
             model.addAttribute("editUserForm", editUserForm);
 
             return "profile/edit";
         } else {
-            if(!editUserForm.getEmail().equals(user.getUserInfo().getEmail())){
-                user.getUserInfo().setEmail(editUserForm.getEmail());
+            if(!editUserForm.getEmail().equals(myUser.getUserInfo().getEmail())){
+                myUser.getUserInfo().setEmail(editUserForm.getEmail());
             }
 
-            if(!editUserForm.getFname().equals(user.getUserInfo().getFname())){
-                user.getUserInfo().setFname(editUserForm.getFname());
+            if(!editUserForm.getFname().equals(myUser.getUserInfo().getFname())){
+                myUser.getUserInfo().setFname(editUserForm.getFname());
             }
 
-            if(!editUserForm.getLname().equals(user.getUserInfo().getLname())){
-                user.getUserInfo().setLname(editUserForm.getLname());
+            if(!editUserForm.getLname().equals(myUser.getUserInfo().getLname())){
+                myUser.getUserInfo().setLname(editUserForm.getLname());
             }
 
-            if(!editUserForm.getTitle().equals(user.getUserInfo().getTitle())){
-                user.getUserInfo().setTitle(editUserForm.getTitle());
+            if(!editUserForm.getTitle().equals(myUser.getUserInfo().getTitle())){
+                myUser.getUserInfo().setTitle(editUserForm.getTitle());
             }
 
-            if(!editUserForm.getCompanyUsername().equals(user.getUserInfo().getCompanyUserName())){
-                user.getUserInfo().setTitle(editUserForm.getCompanyUsername());
+            if(!editUserForm.getCompanyUsername().equals(myUser.getUserInfo().getCompanyUserName())){
+                myUser.getUserInfo().setTitle(editUserForm.getCompanyUsername());
             }
 
-            if(!editUserForm.getOffice().equals(user.getUserInfo().getOffice().getOffice())){
+            if(!editUserForm.getOffice().equals(myUser.getUserInfo().getOffice().getOffice())){
                 // TODO - impliment way to add office if doesn't exist.
             }
 
-            if(!editUserForm.getUserPhone().equals(user.getUserInfo().getPhone())){
-                user.getUserInfo().setPhone(editUserForm.getUserPhone());
+            if(!editUserForm.getUserPhone().equals(myUser.getUserInfo().getPhone())){
+                myUser.getUserInfo().setPhone(editUserForm.getUserPhone());
             }
 
-            if(!editUserForm.getCellPhone().equals(user.getUserInfo().getCellphone())){
-                user.getUserInfo().setCellphone(editUserForm.getCellPhone());
+            if(!editUserForm.getCellPhone().equals(myUser.getUserInfo().getCellphone())){
+                myUser.getUserInfo().setCellphone(editUserForm.getCellPhone());
             }
 
-            if(!editUserForm.getCanText().equals(user.getUserInfo().getCanText())){
-                user.getUserInfo().setCanText(editUserForm.getCanText());
+            if(!editUserForm.getCanText().equals(myUser.getUserInfo().getCanText())){
+                myUser.getUserInfo().setCanText(editUserForm.getCanText());
             }
 
-            if(isUser(user,roleRepository) &&
-                    !user.getUsername().equals(user.getUserInfo().getEmail())){
-                user.setUsername(user.getUserInfo().getEmail());
-            }else if(isTech(user,roleRepository) &&
-                    !user.getUsername().equals(user.getUserInfo().getCompanyUserName())){
-                user.setUsername(user.getUserInfo().getCompanyUserName());
+            if(isUser(myUser,roleRepository) &&
+                    !myUser.getUsername().equals(myUser.getUserInfo().getEmail())){
+                myUser.setUsername(myUser.getUserInfo().getEmail());
+            }else if(isTech(myUser,roleRepository) &&
+                    !myUser.getUsername().equals(myUser.getUserInfo().getCompanyUserName())){
+                myUser.setUsername(myUser.getUserInfo().getCompanyUserName());
             }
 
-            userService.updateUser(user);
+            userService.updateUser(myUser);
 
             return "redirect:/profile";
         }
@@ -169,16 +193,16 @@ public class ProfileController {
     public String changePassword(
             Model model){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.findUserByUsername(auth.getName());
+        User myUser = userService.findUserByUsername(auth.getName());
 
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
-        Company myCompany = user.getCompany();
+        Company myCompany = myUser.getCompany();
 
 
-        model.addAttribute("user",user);
-        model.addAttribute("isTech",isTech(user, roleRepository));
-        model.addAttribute("isAdmin", isAdmin(user, roleRepository));
-        model.addAttribute("isUserAdmin", isUserAdmin(user, roleRepository));
+        model.addAttribute("user",myUser);
+        model.addAttribute("isTech",isTech(myUser, roleRepository));
+        model.addAttribute("isAdmin", isAdmin(myUser, roleRepository));
+        model.addAttribute("isUserAdmin", isUserAdmin(myUser, roleRepository));
         model.addAttribute("company", myCompany);
         model.addAttribute("techCompany", techCompany);
 
