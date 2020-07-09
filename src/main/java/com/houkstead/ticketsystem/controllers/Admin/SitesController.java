@@ -105,7 +105,7 @@ public class SitesController {
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
         Company myCompany = myUser.getCompany();
 
-        Site mySite = siteRepository.findOne(mySiteId);
+        Site mySite = siteRepository.findById(mySiteId).get();
 
         // Programatically verify that this is a user admin
         if(!isAdmin(myUser, roleRepository)) {
@@ -134,7 +134,7 @@ public class SitesController {
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
         Company myCompany = myUser.getCompany();
 
-        Site mySite = siteRepository.findOne(mySiteId);
+        Site mySite = siteRepository.findById(mySiteId).get();
 
         // Programatically verify that this is a user admin
         if(!isAdmin(myUser, roleRepository)) {
@@ -208,7 +208,7 @@ public class SitesController {
 
             return "admin/sites/add_site";
         } else {
-            User newSiteContact = userRepository.findOne(addSiteForm.getSiteContact().getId());
+            User newSiteContact = userRepository.findById(addSiteForm.getSiteContact().getId()).get();
             Address newSiteAddress = duplicateAddressCheck( new TestAddress(
                             addSiteForm.getStreetAddress1(),
                             addSiteForm.getStreetAddress2(),
@@ -249,7 +249,7 @@ public class SitesController {
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
         Company myCompany = myUser.getCompany();
 
-        Site mySite = siteRepository.findOne(siteId);
+        Site mySite = siteRepository.findById(siteId).get();
 
         AddSiteForm addSiteForm = new AddSiteForm(
                 mySite.getAddress().getAddress1(),
@@ -289,7 +289,7 @@ public class SitesController {
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
         Company myCompany = myUser.getCompany();
 
-        Site mySite = siteRepository.findOne(siteId);
+        Site mySite = siteRepository.findById(siteId).get();
 
         // Programatically verify that this is a user admin
         if(!isAdmin(myUser, roleRepository)) {
@@ -304,7 +304,7 @@ public class SitesController {
             return "admin/sites/edit_site";
         } else {
             if(addSiteForm.getSiteContact().getId() != mySite.getSiteContact().getId()){
-                mySite.setSiteContact(userRepository.findOne(addSiteForm.getSiteContact().getId()));
+                mySite.setSiteContact(userRepository.findById(addSiteForm.getSiteContact().getId()).get());
             }
 
             if (!addSiteForm.getStreetAddress1().equals(mySite.getAddress().getAddress1())) {

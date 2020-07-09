@@ -162,7 +162,7 @@ public class MyTicketsController {
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
         Company myCompany = myUser.getCompany();
 
-        Ticket myTicket = ticketRepository.findOne(ticketId);
+        Ticket myTicket = ticketRepository.findById(ticketId).get();
 
         // Programatically verify that this is a user
         if(!isTech(myUser, roleRepository)) {
@@ -188,7 +188,7 @@ public class MyTicketsController {
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
         Company myCompany = myUser.getCompany();
 
-        Ticket myTicket = ticketRepository.findOne(ticketId);
+        Ticket myTicket = ticketRepository.findById(ticketId).get();
         AddTicketUpdateForm addTicketUpdateForm = new AddTicketUpdateForm();
         List<Status> statuses = statusRepository.findAll();
 
@@ -220,7 +220,7 @@ public class MyTicketsController {
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
         Company myCompany = myUser.getCompany();
 
-        Ticket myTicket = ticketRepository.findOne(ticketId);
+        Ticket myTicket = ticketRepository.findById(ticketId).get();
         List<Status> statuses = statusRepository.findAll();
 
 

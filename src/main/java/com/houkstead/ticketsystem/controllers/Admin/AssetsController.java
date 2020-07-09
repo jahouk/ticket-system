@@ -101,7 +101,7 @@ public class AssetsController {
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
         Company myCompany = myUser.getCompany();
 
-        Asset myAsset = assetRepository.findOne(assetId);
+        Asset myAsset = assetRepository.findById(assetId).get();
 
         // Programatically verify that this is a user admin
         if(!isAdmin(myUser, roleRepository) ||
@@ -207,7 +207,7 @@ public class AssetsController {
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
         Company myCompany = myUser.getCompany();
 
-        Asset myAsset = assetRepository.findOne(assetId);
+        Asset myAsset = assetRepository.findById(assetId).get();
         AddAssetForm addAssetForm = new AddAssetForm(myAsset);
         List<Office> myOffices = new ArrayList<Office>();
 
@@ -249,7 +249,7 @@ public class AssetsController {
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
         Company myCompany = myUser.getCompany();
 
-        Asset myAsset = assetRepository.findOne(assetId);
+        Asset myAsset = assetRepository.findById(assetId).get();
         List<Office> myOffices = new ArrayList<Office>();
 
         for (Site site: myCompany.getSites()) {
@@ -278,7 +278,7 @@ public class AssetsController {
             }
 
             if(addAssetForm.getOffice().getId() != myAsset.getOffice().getId()){
-                myAsset.setOffice(officeRepository.findOne(addAssetForm.getOffice().getId()));
+                myAsset.setOffice(officeRepository.findById(addAssetForm.getOffice().getId()).get());
             }
 
             assetRepository.save(myAsset);
@@ -300,7 +300,7 @@ public class AssetsController {
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
         Company myCompany = myUser.getCompany();
 
-        Asset myAsset = assetRepository.findOne(assetId);
+        Asset myAsset = assetRepository.findById(assetId).get();
 
         // Programatically verify that this is a user admin
         if(!isAdmin(myUser, roleRepository) ||

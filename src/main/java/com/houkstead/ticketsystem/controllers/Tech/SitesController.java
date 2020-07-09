@@ -77,7 +77,7 @@ public class SitesController {
     @RequestMapping(value="", method = RequestMethod.GET)
     public String index(Model model, @PathVariable int companyId){
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
-        Company myCompany = companyRepository.findOne(companyId);
+        Company myCompany = companyRepository.findById(companyId).get();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User myUser = userService.findUserByUsername(auth.getName());
 
@@ -101,10 +101,10 @@ public class SitesController {
             @PathVariable int companyId,
             @PathVariable int mySiteId){
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
-        Company myCompany = companyRepository.findOne(companyId);
+        Company myCompany = companyRepository.findById(companyId).get();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User myUser = userService.findUserByUsername(auth.getName());
-        Site mySite = siteRepository.findOne(mySiteId);
+        Site mySite = siteRepository.findById(mySiteId).get();
 
         // Programatically verify that this is a tech and not tech company
         if(!isTech(myUser, roleRepository) ||
@@ -131,10 +131,10 @@ public class SitesController {
             @PathVariable int mySiteId,
             @RequestParam String office_name){
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
-        Company myCompany = companyRepository.findOne(companyId);
+        Company myCompany = companyRepository.findById(companyId).get();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User myUser = userService.findUserByUsername(auth.getName());
-        Site mySite = siteRepository.findOne(mySiteId);
+        Site mySite = siteRepository.findById(mySiteId).get();
 
         // Programatically verify that this is a tech and not tech company
         if(!isTech(myUser, roleRepository) ||
@@ -167,7 +167,7 @@ public class SitesController {
             Model model,
             @PathVariable int companyId){
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
-        Company myCompany = companyRepository.findOne(companyId);
+        Company myCompany = companyRepository.findById(companyId).get();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User myUser = userService.findUserByUsername(auth.getName());
         AddSiteForm addSiteForm = new AddSiteForm();
@@ -197,7 +197,7 @@ public class SitesController {
             @PathVariable int companyId
             ) {
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
-        Company myCompany = companyRepository.findOne(companyId);
+        Company myCompany = companyRepository.findById(companyId).get();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User myUser = userService.findUserByUsername(auth.getName());
 
@@ -215,7 +215,7 @@ public class SitesController {
 
             return "tech/sites/add_site";
         } else {
-            User newSiteContact = userRepository.findOne(addSiteForm.getSiteContact().getId());
+            User newSiteContact = userRepository.findById(addSiteForm.getSiteContact().getId()).get();
             Address newSiteAddress = duplicateAddressCheck( new TestAddress(
                             addSiteForm.getStreetAddress1(),
                             addSiteForm.getStreetAddress2(),
@@ -254,10 +254,10 @@ public class SitesController {
             @PathVariable int companyId,
             @PathVariable int siteId){
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
-        Company myCompany = companyRepository.findOne(companyId);
+        Company myCompany = companyRepository.findById(companyId).get();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User myUser = userService.findUserByUsername(auth.getName());
-        Site mySite = siteRepository.findOne(siteId);
+        Site mySite = siteRepository.findById(siteId).get();
         AddSiteForm addSiteForm = new AddSiteForm(
                 mySite.getAddress().getAddress1(),
                 mySite.getAddress().getAddress2(),
@@ -296,10 +296,10 @@ public class SitesController {
             @PathVariable int siteId
     ) {
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
-        Company myCompany = companyRepository.findOne(companyId);
+        Company myCompany = companyRepository.findById(companyId).get();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User myUser = userService.findUserByUsername(auth.getName());
-        Site mySite = siteRepository.findOne(siteId);
+        Site mySite = siteRepository.findById(siteId).get();
 
         // Programatically verify that this is a tech and not tech company
         if (!isTech(myUser, roleRepository) ||
@@ -317,7 +317,7 @@ public class SitesController {
             return "tech/sites/edit_site";
         } else {
             if(addSiteForm.getSiteContact().getId() != mySite.getSiteContact().getId()){
-                mySite.setSiteContact(userRepository.findOne(addSiteForm.getSiteContact().getId()));
+                mySite.setSiteContact(userRepository.findById(addSiteForm.getSiteContact().getId()).get());
             }
 
             if (!addSiteForm.getStreetAddress1().equals(mySite.getAddress().getAddress1())) {
