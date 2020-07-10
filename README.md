@@ -1,5 +1,5 @@
 # ticket-system
-Technical Support Tucket System
+Technical Support Ticket System
 
 This application allows a tech support company to track customer issues, allowing the customer to access a customer portal and the techs through a tech portal.
 
