@@ -76,7 +76,7 @@ public class UsersController {
     @RequestMapping(value="", method = RequestMethod.GET)
     public String index(Model model, @PathVariable int companyId){
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
-        Company myCompany = companyRepository.findOne(companyId);
+        Company myCompany = companyRepository.findById(companyId).get();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findUserByUsername(auth.getName());
 
@@ -100,10 +100,10 @@ public class UsersController {
             @PathVariable int companyId,
             @PathVariable int userId){
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
-        Company myCompany = companyRepository.findOne(companyId);
+        Company myCompany = companyRepository.findById(companyId).get();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User myUser = userService.findUserByUsername(auth.getName());
-        User user = userRepository.findOne(userId);
+        User user = userRepository.findById(userId).get();
 
         // Programatically verify that this is a tech and not tech company
         if(!isTech(myUser, roleRepository) ||
@@ -128,7 +128,7 @@ public class UsersController {
             Model model,
             @PathVariable int companyId){
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
-        Company myCompany = companyRepository.findOne(companyId);
+        Company myCompany = companyRepository.findById(companyId).get();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User myUser = userService.findUserByUsername(auth.getName());
         AddUserForm addUserForm = new AddUserForm();
@@ -157,7 +157,7 @@ public class UsersController {
                            Model model,
                            @PathVariable int companyId) {
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
-        Company myCompany = companyRepository.findOne(companyId);
+        Company myCompany = companyRepository.findById(companyId).get();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User myUser = userService.findUserByUsername(auth.getName());
 
@@ -224,10 +224,10 @@ public class UsersController {
             @PathVariable int companyId,
             @PathVariable int userId){
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
-        Company myCompany = companyRepository.findOne(companyId);
+        Company myCompany = companyRepository.findById(companyId).get();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User myUser = userService.findUserByUsername(auth.getName());
-        User user = userRepository.findOne(userId);
+        User user = userRepository.findById(userId).get();
         EditUserForm editUser = new EditUserForm(user);
 
         // Programatically verify that this is a tech and not tech company
@@ -258,10 +258,10 @@ public class UsersController {
                            @PathVariable int userId,
                            @RequestParam String password){
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
-        Company myCompany = companyRepository.findOne(companyId);
+        Company myCompany = companyRepository.findById(companyId).get();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User myUser = userService.findUserByUsername(auth.getName());
-        User user = userRepository.findOne(userId);
+        User user = userRepository.findById(userId).get();
 
         // Programatically verify that this is a tech and not tech company
         if(!isTech(myUser, roleRepository) ||

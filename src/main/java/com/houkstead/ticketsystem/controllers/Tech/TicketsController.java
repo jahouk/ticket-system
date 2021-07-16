@@ -77,7 +77,7 @@ public class TicketsController {
     @RequestMapping(value="", method = RequestMethod.GET)
     public String index(Model model, @PathVariable int companyId){
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
-        Company myCompany = companyRepository.findOne(companyId);
+        Company myCompany = companyRepository.findById(companyId).get();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User myUser = userService.findUserByUsername(auth.getName());
 
@@ -99,7 +99,7 @@ public class TicketsController {
             Model model,
             @PathVariable int companyId){
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
-        Company myCompany = companyRepository.findOne(companyId);
+        Company myCompany = companyRepository.findById(companyId).get();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User myUser = userService.findUserByUsername(auth.getName());
         AddTicketForm addTicketForm = new AddTicketForm();
@@ -128,7 +128,7 @@ public class TicketsController {
             @PathVariable int companyId
     ) {
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
-        Company myCompany = companyRepository.findOne(companyId);
+        Company myCompany = companyRepository.findById(companyId).get();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User myUser = userService.findUserByUsername(auth.getName());
 
@@ -161,10 +161,10 @@ public class TicketsController {
             @PathVariable int companyId,
             @PathVariable int ticketId){
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
-        Company myCompany = companyRepository.findOne(companyId);
+        Company myCompany = companyRepository.findById(companyId).get();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User myUser = userService.findUserByUsername(auth.getName());
-        Ticket myTicket = ticketRepository.findOne(ticketId);
+        Ticket myTicket = ticketRepository.findById(ticketId).get();
 
         // Programatically verify that this is a tech, tech company is ok
         if(!isTech(myUser, roleRepository) ||
@@ -189,10 +189,10 @@ public class TicketsController {
             @PathVariable int companyId,
             @PathVariable int ticketId) {
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
-        Company myCompany = companyRepository.findOne(companyId);
+        Company myCompany = companyRepository.findById(companyId).get();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User myUser = userService.findUserByUsername(auth.getName());
-        Ticket myTicket = ticketRepository.findOne(ticketId);
+        Ticket myTicket = ticketRepository.findById(ticketId).get();
         AddTicketUpdateForm addTicketUpdateForm = new AddTicketUpdateForm();
         List<Status> statuses = statusRepository.findAll();
 
@@ -223,10 +223,10 @@ public class TicketsController {
             @PathVariable int companyId,
             @PathVariable int ticketId) {
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
-        Company myCompany = companyRepository.findOne(companyId);
+        Company myCompany = companyRepository.findById(companyId).get();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User myUser = userService.findUserByUsername(auth.getName());
-        Ticket myTicket = ticketRepository.findOne(ticketId);
+        Ticket myTicket = ticketRepository.findById(ticketId).get();
         List<Status> statuses = statusRepository.findAll();
 
         // Programatically verify that this is a tech, tech company is ok

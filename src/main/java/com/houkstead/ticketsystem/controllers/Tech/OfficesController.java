@@ -79,7 +79,7 @@ public class OfficesController {
             @PathVariable int companyId,
             @PathVariable int officeId){
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
-        Company myCompany = companyRepository.findOne(companyId);
+        Company myCompany = companyRepository.findById(companyId).get();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User myUser = userService.findUserByUsername(auth.getName());
         Office myOffice = officeRepository.getOne(officeId);
@@ -112,7 +112,7 @@ public class OfficesController {
             @PathVariable int officeId
     ) {
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
-        Company myCompany = companyRepository.findOne(companyId);
+        Company myCompany = companyRepository.findById(companyId).get();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User myUser = userService.findUserByUsername(auth.getName());
         Office myOffice = officeRepository.getOne(officeId);

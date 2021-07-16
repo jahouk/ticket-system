@@ -44,7 +44,8 @@ public class SiteUtilities {
 
         if(returnCompany == null){
             // Hardcoded fail over in case something is wrong
-            returnCompany = companyRepository.findOne(1);
+            System.out.println("It's here!!!");
+            returnCompany = companyRepository.getById(1);
         }
 
         return returnCompany;

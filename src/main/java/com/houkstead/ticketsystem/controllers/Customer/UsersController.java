@@ -106,7 +106,7 @@ public class UsersController {
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
         Company myCompany = myUser.getCompany();
 
-        User user = userRepository.findOne(userId);
+        User user = userRepository.findById(userId).get();
 
         // Programatically verify that this is a user admin
         if(!isUserAdmin(myUser, roleRepository) ||
@@ -215,7 +215,7 @@ public class UsersController {
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
         Company myCompany = myUser.getCompany();
 
-        User user = userRepository.findOne(userId);
+        User user = userRepository.findById(userId).get();
 
         EditUserForm editUser = new EditUserForm(
                 user.getUserInfo().getFname(),
@@ -255,7 +255,7 @@ public class UsersController {
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
         Company myCompany = myUser.getCompany();
 
-        User user = userRepository.findOne(userId);
+        User user = userRepository.findById(userId).get();
 
         // Programatically verify that this is a user admin
         if(!isUserAdmin(myUser, roleRepository) ||

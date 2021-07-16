@@ -25,7 +25,10 @@
 package com.houkstead.ticketsystem.repository;
 
 import com.houkstead.ticketsystem.models.Asset;
+import org.springframework.data.domain.Example;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.Optional;
 
 public interface AssetRepository extends JpaRepository<Asset, Integer>{
 

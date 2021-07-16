@@ -93,7 +93,7 @@ public class HomeController {
     @RequestMapping(value="/{companyId}", method = RequestMethod.GET)
     public String companyView(Model model, @PathVariable int companyId){
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
-        Company myCompany = companyRepository.findOne(companyId);
+        Company myCompany = companyRepository.findById(companyId).get();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User myUser = userService.findUserByUsername(auth.getName());
 

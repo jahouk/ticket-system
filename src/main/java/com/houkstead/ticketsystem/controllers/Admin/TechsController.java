@@ -103,7 +103,7 @@ public class TechsController {
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
         Company myCompany = myUser.getCompany();
 
-        User user = userRepository.findOne(userId);
+        User user = userRepository.findById(userId).get();
 
         // Programatically verify that this is a user admin
         if(!isAdmin(myUser, roleRepository) ||
@@ -210,7 +210,7 @@ public class TechsController {
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
         Company myCompany = myUser.getCompany();
 
-        User user = userRepository.findOne(userId);
+        User user = userRepository.findById(userId).get();
 
         EditUserForm editUser = new EditUserForm(user);
 
@@ -241,7 +241,7 @@ public class TechsController {
         Company techCompany = getTechCompany(techCompanyRepository, companyRepository);
         Company myCompany = myUser.getCompany();
 
-        User user = userRepository.findOne(userId);
+        User user = userRepository.findById(userId).get();
 
         // Programatically verify that this is a user admin
         if(!isAdmin(myUser, roleRepository) ||
