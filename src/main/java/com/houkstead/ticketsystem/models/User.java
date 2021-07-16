@@ -32,7 +32,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 @Entity
-@Table(name = "USER",uniqueConstraints = @UniqueConstraint(columnNames = "user_id", name = "USER_PK_CONSTRAINT"))
+@Table(name = "SITE_USER",uniqueConstraints = @UniqueConstraint(columnNames = "user_id", name = "USER_PK_CONSTRAINT"))
 public class User {
 
     @Id
